@@ -103,6 +103,16 @@
             {
                 this.AddError(ErrorType.MemberNameIsAType, this.name.Text);
             }
+
+            if (this.ModifierType == MemberModifierType.Abstract && this.block != null)
+            {
+                this.AddError(ErrorType.AbstractMemberHasBody, this.name.Text);
+            }
+
+            if (this.ModifierType != MemberModifierType.Abstract && this.block == null)
+            {
+                this.AddError(ErrorType.MissingBodyOfNonAbstractMember, this.name.Text);
+            }
         }
     }
 }

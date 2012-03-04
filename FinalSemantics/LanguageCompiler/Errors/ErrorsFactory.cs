@@ -21,21 +21,36 @@
         /// </summary>
         static ErrorsFactory()
         {
-            //// No error string for ErrorType.SyntaxError.
-            //// No error string for ErrorType.InternalError.
-            ErrorsFactory.errorsDic.Add(ErrorType.CyclicInheritence, "The class {0} contains a cyclic inheritence list.");
-            ErrorsFactory.errorsDic.Add(ErrorType.MultipleTypesWithSameName, "There exists more than one class with the name {0}");
+            //// Level One: Parser Errors and Others
+            {
+                ErrorsFactory.errorsDic.Add(ErrorType.SyntaxError, "The parser failed to produce a valid parse tree.");
+                ErrorsFactory.errorsDic.Add(ErrorType.InternalError, "An internal error happened in the compiler. Cannot recover");
+                ErrorsFactory.errorsDic.Add(ErrorType.MultipleTypesWithSameName, "There exists more than one class with the name {0}");
+                ErrorsFactory.errorsDic.Add(ErrorType.TypeNotFound, "The type {0} cannot be found");
+            }
+
+            //// Level Two: Class Definitions
+            {
+                ErrorsFactory.errorsDic.Add(ErrorType.CyclicInheritence, "The class {0} contains a cyclic inheritence list.");
+                ErrorsFactory.errorsDic.Add(ErrorType.MultipleMembersWithSameName, "Multiple members with the name {0} exist within class {1}.");
+                ErrorsFactory.errorsDic.Add(ErrorType.ConcreteBase, "The base of class {0} is concrete.");
+                ErrorsFactory.errorsDic.Add(ErrorType.ScreenModifierNotNormal, "Screen {0} cannot be labeled abstract or concrete.");
+                ErrorsFactory.errorsDic.Add(ErrorType.ScreenCannotInherit, "Screen {0} cannot inherit another type.");
+            }
+
+            //// Level Three: Member Definitions
+            {
+                ErrorsFactory.errorsDic.Add(ErrorType.FieldInvalidModifier, "Field cannot be marked abstract, virtual, or override.");
+                ErrorsFactory.errorsDic.Add(ErrorType.AbstractMemberHasBody, "Method or Operator {0} is marked as abstract and cannot have a body.");
+                ErrorsFactory.errorsDic.Add(ErrorType.MissingBodyOfNonAbstractMember, "Non Abstract member {0} must declare a body.");
+                ErrorsFactory.errorsDic.Add(ErrorType.MemberNameIsAType, "Member {0} has the same name as an existing type.");
+                ErrorsFactory.errorsDic.Add(ErrorType.OperatorInvalidParameters, "This Operator {0} has an invalid number of parameters");
+                ErrorsFactory.errorsDic.Add(ErrorType.OperatorNotOverloadable, "Cannot overload the operator {0}.");
+                ErrorsFactory.errorsDic.Add(ErrorType.OperatorInvalidReturnType, "Operator {0} has an invalid return type.");
+            }
+
             ErrorsFactory.errorsDic.Add(ErrorType.IdentifierIsReservedWord, "The identifier {0} cannot have a value of a reserved word.");
             ErrorsFactory.errorsDic.Add(ErrorType.IdentifierNameTooLong, "This identifier {0}'s name is too long.");
-            ErrorsFactory.errorsDic.Add(ErrorType.TypeNotFound, "The type {0} cannot be found");
-
-            ErrorsFactory.errorsDic.Add(ErrorType.ConcreteBase, "The base of class {0} is concrete.");
-            ErrorsFactory.errorsDic.Add(ErrorType.ScreenModifierNotNormal, "Screen {0} cannot be labeled abstract or concrete.");
-            ErrorsFactory.errorsDic.Add(ErrorType.ScreenCannotInherit, "Screen {0} cannot inherit another type.");
-            ErrorsFactory.errorsDic.Add(ErrorType.MultipleMembersWithSameName, "Multiple members with the name {0} exist within class {1}.");
-
-            ErrorsFactory.errorsDic.Add(ErrorType.MemberNameIsAType, "Member {0} has the same name as an existing type.");
-            ErrorsFactory.errorsDic.Add(ErrorType.PostfixOperatorsCannotHaveParameters, "Postfix Operator {0} cannot have parameters");
         }
 
         /// <summary>

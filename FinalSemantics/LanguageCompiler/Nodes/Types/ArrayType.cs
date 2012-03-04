@@ -20,6 +20,14 @@
         private int indexes;
 
         /// <summary>
+        /// Gets the type of this array.
+        /// </summary>
+        public Identifier Type
+        {
+            get { return this.type; }
+        }
+
+        /// <summary>
         /// Forms a valid tree node representing this object.
         /// </summary>
         /// <returns>The formed tree node.</returns>

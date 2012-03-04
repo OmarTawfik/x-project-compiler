@@ -101,6 +101,14 @@
         }
 
         /// <summary>
+        /// Gets the modifier type for this member.
+        /// </summary>
+        public MemberModifierType ModifierType
+        {
+            get { return this.modifierType; }
+        }
+
+        /// <summary>
         /// Forms a valid tree node representing this object.
         /// </summary>
         /// <returns>The formed tree node.</returns>

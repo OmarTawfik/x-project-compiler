@@ -70,19 +70,9 @@
         private Identifier classBase;
 
         /// <summary>
-        /// Methods of this class.
+        /// Members of this class.
         /// </summary>
-        private List<MethodDefinition> methods = new List<MethodDefinition>();
-
-        /// <summary>
-        /// Operators of this class.
-        /// </summary>
-        private List<OperatorDefinition> operators = new List<OperatorDefinition>();
-
-        /// <summary>
-        /// Fields of this class.
-        /// </summary>
-        private List<FieldDefinition> fields = new List<FieldDefinition>();
+        private List<MemberDefinition> members = new List<MemberDefinition>();
 
         /// <summary>
         /// Gets the name of this class.
@@ -117,27 +107,13 @@
                 classNode.Text += " extends " + this.classBase.Text;
             }
 
-            TreeNode methods = new TreeNode("Methods: Count = " + this.methods.Count);
-            foreach (MethodDefinition method in this.methods)
+            TreeNode membersNode = new TreeNode("Members: Count = " + this.members.Count);
+            foreach (MemberDefinition member in this.members)
             {
-                methods.Nodes.Add(method.GetGUINode());
+                membersNode.Nodes.Add(member.GetGUINode());
             }
 
-            TreeNode operators = new TreeNode("Operators: Count = " + this.operators.Count);
-            foreach (OperatorDefinition op in this.operators)
-            {
-                operators.Nodes.Add(op.GetGUINode());
-            }
-
-            TreeNode fields = new TreeNode("Fields: Count = " + this.fields.Count);
-            foreach (FieldDefinition field in this.fields)
-            {
-                fields.Nodes.Add(field.GetGUINode());
-            }
-
-            classNode.Nodes.Add(methods);
-            classNode.Nodes.Add(operators);
-            classNode.Nodes.Add(fields);
+            classNode.Nodes.Add(membersNode);
             return classNode;
         }
 
@@ -188,26 +164,24 @@
                 this.classBase.RecieveData(node.ChildNodes[3].ChildNodes[1]);
             }
 
-            foreach (ParseTreeNode member in node.ChildNodes[5].ChildNodes)
+            foreach (ParseTreeNode memberNode in node.ChildNodes[5].ChildNodes)
             {
-                if (member.Term.Name == LanguageGrammar.MethodDefinition.Name)
+                MemberDefinition member = null;
+                if (memberNode.Term.Name == LanguageGrammar.MethodDefinition.Name)
                 {
-                    MethodDefinition method = new MethodDefinition();
-                    method.RecieveData(member);
-                    this.methods.Add(method);
+                    member = new MethodDefinition();
                 }
-                else if (member.Term.Name == LanguageGrammar.OperatorDefinition.Name)
+                else if (memberNode.Term.Name == LanguageGrammar.OperatorDefinition.Name)
                 {
-                    OperatorDefinition op = new OperatorDefinition();
-                    op.RecieveData(member);
-                    this.operators.Add(op);
+                    member = new OperatorDefinition();
                 }
-                else if (member.Term.Name == LanguageGrammar.FieldDefinition.Name)
+                else if (memberNode.Term.Name == LanguageGrammar.FieldDefinition.Name)
                 {
-                    FieldDefinition field = new FieldDefinition();
-                    field.RecieveData(member);
-                    this.fields.Add(field);
+                    member = new FieldDefinition();
                 }
+
+                member.RecieveData(memberNode);
+                this.members.Add(member);
             }
 
             this.EndLocation = node.ChildNodes[node.ChildNodes.Count - 1].Token.Location;
@@ -243,21 +217,11 @@
                 this.AddError(ErrorType.ScreenModifierNotNormal, this.name.Text);
             }
 
-            if (this.MultipleMembersExist() == false)
+            if (this.CheckMultipleMembers() == false)
             {
-                foreach (FieldDefinition field in this.fields)
+                foreach (MemberDefinition member in this.members)
                 {
-                    field.CheckSemantics();
-                }
-
-                foreach (MethodDefinition method in this.methods)
-                {
-                    method.CheckSemantics();
-                }
-
-                foreach (OperatorDefinition op in this.operators)
-                {
-                    op.CheckSemantics();
+                    member.CheckSemantics();
                 }
             }
         }
@@ -266,49 +230,52 @@
         /// Checks if multiple members with the same name exist.
         /// </summary>
         /// <returns>True if multiple members with the same name exist, false otherwise.</returns>
-        private bool MultipleMembersExist()
+        private bool CheckMultipleMembers()
         {
-            List<string> members = new List<string>();
-            foreach (FieldDefinition field in this.fields)
+            List<string> memberNames = new List<string>();
+            foreach (MemberDefinition member in this.members)
             {
-                foreach (FieldAtom atom in field.Atoms)
+                if (member is FieldDefinition)
                 {
-                    if (members.Contains(atom.Name.Text))
+                    FieldDefinition field = member as FieldDefinition;
+                    foreach (FieldAtom atom in field.Atoms)
                     {
-                        this.AddError(ErrorType.MultipleMembersWithSameName, atom.Name.Text, this.name.Text);
+                        if (memberNames.Contains(atom.Name.Text))
+                        {
+                            this.AddError(ErrorType.MultipleMembersWithSameName, atom.Name.Text, this.name.Text);
+                            return true;
+                        }
+                        else
+                        {
+                            memberNames.Add(atom.Name.Text);
+                        }
+                    }
+                }
+                else if (member is MethodDefinition)
+                {
+                    MethodDefinition method = member as MethodDefinition;
+                    if (memberNames.Contains(method.Name.Text))
+                    {
+                        this.AddError(ErrorType.MultipleMembersWithSameName, method.Name.Text, this.name.Text);
                         return true;
                     }
                     else
                     {
-                        members.Add(atom.Name.Text);
+                        memberNames.Add(method.Name.Text);
                     }
                 }
-            }
-
-            foreach (MethodDefinition method in this.methods)
-            {
-                if (members.Contains(method.Name.Text))
+                else if (member is OperatorDefinition)
                 {
-                    this.AddError(ErrorType.MultipleMembersWithSameName, method.Name.Text, this.name.Text);
-                    return true;
-                }
-                else
-                {
-                    members.Add(method.Name.Text);
-                }
-            }
-
-            List<string> operators = new List<string>();
-            foreach (OperatorDefinition op in this.operators)
-            {
-                if (operators.Contains(op.OperatorDefined))
-                {
-                    this.AddError(ErrorType.MultipleMembersWithSameName, op.OperatorDefined, this.name.Text);
-                    return true;
-                }
-                else
-                {
-                    operators.Add(op.OperatorDefined);
+                    OperatorDefinition op = member as OperatorDefinition;
+                    if (memberNames.Contains(op.OperatorDefined))
+                    {
+                        this.AddError(ErrorType.MultipleMembersWithSameName, op.OperatorDefined, this.name.Text);
+                        return true;
+                    }
+                    else
+                    {
+                        memberNames.Add(op.OperatorDefined);
+                    }
                 }
             }
 

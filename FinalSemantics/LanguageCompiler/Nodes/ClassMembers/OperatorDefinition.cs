@@ -5,12 +5,33 @@
     using Irony.Parsing;
     using LanguageCompiler.Errors;
     using LanguageCompiler.Nodes.Statements;
+    using LanguageCompiler.Nodes.Types;
 
     /// <summary>
     /// Holds all data related to a "Operator Definition" rule.
     /// </summary>
     public class OperatorDefinition : MemberDefinition
     {
+        /// <summary>
+        /// Operators that are non overloadable.
+        /// </summary>
+        private static List<string> nonOverloadableOperators = new List<string>();
+
+        /// <summary>
+        /// Operators that don't take parameters.
+        /// </summary>
+        private static List<string> noParameterOperators = new List<string>();
+
+        /// <summary>
+        /// Operators that take only one parameter.
+        /// </summary>
+        private static List<string> oneParameterOperators = new List<string>();
+
+        /// <summary>
+        /// Assignment operators that return the containing type.
+        /// </summary>
+        private static List<string> assignmentOperators = new List<string>();
+
         /// <summary>
         /// Operator of this method.
         /// </summary>
@@ -25,6 +46,17 @@
         /// Code block of this method.
         /// </summary>
         private Block block;
+
+        /// <summary>
+        /// Initializes static members of the OperatorDefinition class.
+        /// </summary>
+        static OperatorDefinition()
+        {
+            OperatorDefinition.nonOverloadableOperators.AddRange(new string[] { "==", "!=", "not", "and", "or" });
+            OperatorDefinition.noParameterOperators.AddRange(new string[] { "++", "--" });
+            OperatorDefinition.oneParameterOperators.AddRange(new string[] { "<", ">", "<=", ">=", "+", "-", "*", "/", "%" });
+            OperatorDefinition.assignmentOperators.AddRange(new string[] { "=", "+=", "-=", "*=", "/=", "%=" });
+        }
 
         /// <summary>
         /// Gets the operator of this method.
@@ -87,7 +119,7 @@
             else
             {
                 this.block = null;
-                this.EndLocation = node.ChildNodes[6].Token.Location;
+                this.EndLocation = node.ChildNodes[node.ChildNodes.Count - 1].Token.Location;
             }
         }
 
@@ -96,9 +128,37 @@
         /// </summary>
         public override void CheckSemantics()
         {
-            if (this.parameters.Count > 0 && (this.operatorDefined == "++" || this.operatorDefined == "--"))
+            if (OperatorDefinition.nonOverloadableOperators.Contains(this.operatorDefined))
             {
-                this.AddError(ErrorType.PostfixOperatorsCannotHaveParameters, this.operatorDefined);
+                this.AddError(ErrorType.OperatorNotOverloadable, this.operatorDefined);
+            }
+            
+            if (OperatorDefinition.noParameterOperators.Contains(this.operatorDefined) && this.parameters.Count != 0)
+            {
+                this.AddError(ErrorType.OperatorInvalidParameters, this.operatorDefined);
+            }
+
+            if (OperatorDefinition.oneParameterOperators.Contains(this.operatorDefined) && this.parameters.Count != 1)
+            {
+                this.AddError(ErrorType.OperatorInvalidParameters, this.operatorDefined);
+            }
+
+            if (this.operatorDefined == "<" || this.operatorDefined == ">" || this.operatorDefined == "<=" || this.operatorDefined == ">=")
+            {
+                if ((this.Type is Identifier) == false || (this.Type as Identifier).Text != Literal.Bool)
+                {
+                    this.AddError(ErrorType.OperatorInvalidReturnType, this.operatorDefined);
+                }
+            }
+
+            if (this.ModifierType == MemberModifierType.Abstract && this.block != null)
+            {
+                this.AddError(ErrorType.AbstractMemberHasBody, this.operatorDefined);
+            }
+
+            if (this.ModifierType != MemberModifierType.Abstract && this.block == null)
+            {
+                this.AddError(ErrorType.MissingBodyOfNonAbstractMember, this.operatorDefined);
             }
         }
     }

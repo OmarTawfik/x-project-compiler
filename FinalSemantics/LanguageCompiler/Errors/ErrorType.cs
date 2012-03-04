@@ -66,8 +66,33 @@
         MemberNameIsAType,
 
         /// <summary>
-        /// This postfix operator cannot have parameters.
+        /// This operator has an invalid number of parameters.
         /// </summary>
-        PostfixOperatorsCannotHaveParameters,
+        OperatorInvalidParameters,
+
+        /// <summary>
+        /// A field cannot be marked abstract, virtual, or override.
+        /// </summary>
+        FieldInvalidModifier,
+
+        /// <summary>
+        /// A method or operator marked as abstract cannot have a body.
+        /// </summary>
+        AbstractMemberHasBody,
+
+        /// <summary>
+        /// Cannot overload this operator.
+        /// </summary>
+        OperatorNotOverloadable,
+
+        /// <summary>
+        /// All Non Abstract members must declare a body.
+        /// </summary>
+        MissingBodyOfNonAbstractMember,
+
+        /// <summary>
+        /// This operator has an invalid return type.
+        /// </summary>
+        OperatorInvalidReturnType,
     }
 }

@@ -1,11 +1,9 @@
 ﻿namespace LanguageCompiler.Nodes.ClassMembers
 {
-    using System;
     using System.Collections.Generic;
     using System.Windows.Forms;
     using Irony.Parsing;
-    using LanguageCompiler.Nodes.Statements;
-    using LanguageCompiler.Nodes.Types;
+    using LanguageCompiler.Errors;
 
     /// <summary>
     /// Holds all data related to a "Field Definition" rule.
@@ -66,6 +64,11 @@
         /// </summary>
         public override void CheckSemantics()
         {
+            if (this.ModifierType != MemberModifierType.Normal)
+            {
+                this.AddError(ErrorType.FieldInvalidModifier);
+            }
+
             foreach (FieldAtom atom in this.atoms)
             {
                 atom.CheckSemantics();
