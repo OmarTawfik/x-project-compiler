@@ -104,5 +104,25 @@
         /// An incorrect number found in numerical literal.
         /// </summary>
         IncorrectNumberLiteral,
+
+        /// <summary>
+        /// Expression assigned to this variable doesn't match its type.
+        /// </summary>
+        ExpressionDoesnotMatchType,
+
+        /// <summary>
+        /// Only assignment, call, increment, decrement, and new object expressions can be used as a statement.
+        /// </summary>
+        InvalidExpressionStatement,
+
+        /// <summary>
+        /// Break and Continue Statements must appear within a loop.
+        /// </summary>
+        StatementMustAppearInLoop,
+
+        /// <summary>
+        /// This expression must be a boolean type.
+        /// </summary>
+        ExpressionNotBoolean,
     }
 }

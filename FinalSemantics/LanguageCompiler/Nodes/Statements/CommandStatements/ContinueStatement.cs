@@ -2,7 +2,8 @@
 {
     using System.Windows.Forms;
     using Irony.Parsing;
-    using LanguageCompiler.Nodes.Types;
+    using LanguageCompiler.Errors;
+    using LanguageCompiler.Semantics;
 
     /// <summary>
     /// Holds all data related to a "ContinueStatement" rule.
@@ -35,6 +36,24 @@
         /// <param name="node">The irony ParseTreeNode.</param>
         public override void RecieveData(ParseTreeNode node)
         {
+        }
+
+        /// <summary>
+        /// Checks for semantic errors within this node.
+        /// </summary>
+        /// <param name="scopeStack">The scope stack associated with this node.</param>
+        /// <returns>True if errors are found, false otherwise.</returns>
+        public override bool CheckSemanticErrors(ScopeStack scopeStack)
+        {
+            if (scopeStack.CheckParentScopes(ScopeType.Loop) == false)
+            {
+                this.AddError(ErrorType.StatementMustAppearInLoop);
+                return false;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

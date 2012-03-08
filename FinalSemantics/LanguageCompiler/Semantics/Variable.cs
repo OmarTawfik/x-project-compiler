@@ -16,7 +16,7 @@
         /// <summary>
         /// Name of this variable.
         /// </summary>
-        private Identifier name;
+        private string name;
 
         /// <summary>
         /// Indicates if this variable is initialized.
@@ -29,7 +29,7 @@
         /// <param name="type">Type of this variable.</param>
         /// <param name="name">Name of this variable.</param>
         /// <param name="isInitialized">Indicates if this variable is initialized.</param>
-        public Variable(BaseNode type, Identifier name, bool isInitialized)
+        public Variable(BaseNode type, string name, bool isInitialized)
         {
             this.type = type;
             this.name = name;
@@ -47,7 +47,7 @@
         /// <summary>
         /// Gets the name of this variable.
         /// </summary>
-        public Identifier Name
+        public string Name
         {
             get { return this.name; }
         }

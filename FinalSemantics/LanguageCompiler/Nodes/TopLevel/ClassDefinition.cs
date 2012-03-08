@@ -193,9 +193,9 @@
         /// </summary>
         /// <param name="scopeStack">The scope stack associated with this node.</param>
         /// <returns>True if errors are found, false otherwise.</returns>
-        public override bool HaveSemanticErrors(ScopeStack scopeStack)
+        public override bool CheckSemanticErrors(ScopeStack scopeStack)
         {
-            if (this.name.HaveSemanticErrors(scopeStack))
+            if (this.name.CheckSemanticErrors(scopeStack))
             {
                 return true;
             }
@@ -209,12 +209,9 @@
                     return true;
                 }
 
-                if (this.classBase.HaveSemanticErrors(scopeStack))
-                {
-                    foundErrors = true;
-                }
-
+                foundErrors |= this.classBase.CheckSemanticErrors(scopeStack);
                 ClassDefinition parent = CompilerService.Instance.ClassesList[this.classBase.Text];
+
                 if (this.label == ClassLabel.Screen)
                 {
                     this.AddError(ErrorType.ScreenCannotInherit, this.name.Text);
@@ -233,17 +230,28 @@
                 foundErrors = true;
             }
 
-            if (this.CheckMultipleMembers() == false)
+            scopeStack.AddLevel(ScopeType.Class);
+            foreach (MemberDefinition member in this.members)
             {
-                foreach (MemberDefinition member in this.members)
+                if (member is FieldDefinition)
                 {
-                    if (member.HaveSemanticErrors(scopeStack))
+                    FieldDefinition field = member as FieldDefinition;
+                    foreach (FieldAtom atom in field.Atoms)
                     {
-                        foundErrors = true;
+                        scopeStack.DeclareVariable(new Variable(member.Type, atom.Name.Text, atom.Value != null), this);
                     }
                 }
             }
 
+            if (this.CheckMultipleMembers() == false)
+            {
+                foreach (MemberDefinition member in this.members)
+                {
+                    foundErrors |= member.CheckSemanticErrors(scopeStack);
+                }
+            }
+
+            scopeStack.DeleteLevel();
             return foundErrors;
         }
 

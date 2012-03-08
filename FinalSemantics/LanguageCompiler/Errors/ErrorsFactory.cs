@@ -49,10 +49,25 @@
                 ErrorsFactory.errorsDic.Add(ErrorType.OperatorInvalidReturnType, "Operator {0} has an invalid return type.");
             }
 
-            ErrorsFactory.errorsDic.Add(ErrorType.IdentifierIsReservedWord, "The identifier {0} cannot have a value of a reserved word.");
-            ErrorsFactory.errorsDic.Add(ErrorType.IdentifierNameTooLong, "This identifier {0}'s name is too long.");
-            ErrorsFactory.errorsDic.Add(ErrorType.IncorrectEscapeSequence, "Incorrect escape sequence {0} found in char or string literal.");
-            ErrorsFactory.errorsDic.Add(ErrorType.IncorrectNumberLiteral, "Incorrect number {0} found in numerical literal.");
+            //// Level Four: Members With Scope
+            {
+            }
+
+            //// Level Five: Statements
+            {
+                ErrorsFactory.errorsDic.Add(ErrorType.ExpressionDoesnotMatchType, "Expression assigned to this variable doesn't match its type.");
+                ErrorsFactory.errorsDic.Add(ErrorType.StatementMustAppearInLoop, "Break and Continue Statements must appear within a loop.");
+                ErrorsFactory.errorsDic.Add(ErrorType.InvalidExpressionStatement, "Only assignment, call, increment, decrement, and new object expressions can be used as a statement.");
+                ErrorsFactory.errorsDic.Add(ErrorType.ExpressionNotBoolean, "This expression must be a boolean type.");
+            }
+
+            //// Level Six: Expressions
+            {
+                ErrorsFactory.errorsDic.Add(ErrorType.IdentifierIsReservedWord, "The identifier {0} cannot have a value of a reserved word.");
+                ErrorsFactory.errorsDic.Add(ErrorType.IdentifierNameTooLong, "This identifier {0}'s name is too long.");
+                ErrorsFactory.errorsDic.Add(ErrorType.IncorrectEscapeSequence, "Incorrect escape sequence {0} found in char or string literal.");
+                ErrorsFactory.errorsDic.Add(ErrorType.IncorrectNumberLiteral, "Incorrect number {0} found in numerical literal.");
+            }
         }
 
         /// <summary>

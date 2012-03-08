@@ -5,14 +5,14 @@
     using LanguageCompiler.Nodes;
 
     /// <summary>
-    /// baf asd asd.
+    /// A stack of scopes (used in semantic checking).
     /// </summary>
     public class ScopeStack
     {
         /// <summary>
         /// Holds all variables defined within a stack of scopes.
         /// </summary>
-        private Stack<List<Variable>> stack = new Stack<List<Variable>>();
+        private Stack<Scope> stack = new Stack<Scope>();
 
         /// <summary>
         /// Declares a variable in this scope.
@@ -24,7 +24,7 @@
         {
             if (this.Containes(v) == false)
             {
-                this.stack.Peek().Add(v);
+                this.stack.Peek().Variables.Add(v);
                 return true;
             }
             else
@@ -32,7 +32,7 @@
                 CompilerService.Instance.Errors.Add(ErrorsFactory.SemanticError(
                     ErrorType.ItemAlreadyDefined,
                     parent,
-                    v.Name.Text));
+                    v.Name));
                 return false;
             }
         }
@@ -40,9 +40,10 @@
         /// <summary>
         /// Adds a new level to the stack.
         /// </summary>
-        public void AddLevel()
+        /// <param name="type">ScopeType to be added.</param>
+        public void AddLevel(ScopeType type)
         {
-            this.stack.Push(new List<Variable>());
+            this.stack.Push(new Scope(type));
         }
 
         /// <summary>
@@ -60,9 +61,48 @@
         /// <returns>True if the variable exists in the stack, false otherwise.</returns>
         public bool Containes(Variable v)
         {
-            foreach (List<Variable> scope in this.stack)
+            foreach (Scope scope in this.stack)
             {
-                if (scope.Contains(v))
+                if (scope.Variables.Contains(v))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Gets a variable from the scope stack.
+        /// </summary>
+        /// <param name="name">Name of this variable.</param>
+        /// <returns>The variable found, or null if not found.</returns>
+        public Variable GetVariable(string name)
+        {
+            foreach (Scope scope in this.stack)
+            {
+                foreach (Variable variable in scope.Variables)
+                {
+                    if (variable.Name == name)
+                    {
+                        return variable;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Checks if this type exists in the scope stack.
+        /// </summary>
+        /// <param name="type">Type to be checked.</param>
+        /// <returns>True if type was found, false otherwise.</returns>
+        public bool CheckParentScopes(ScopeType type)
+        {
+            foreach (Scope scope in this.stack)
+            {
+                if (scope.Type == type)
                 {
                     return true;
                 }

@@ -31,6 +31,14 @@
         }
 
         /// <summary>
+        /// Gets the value of this atom.
+        /// </summary>
+        public BaseNode Value
+        {
+            get { return this.value; }
+        }
+
+        /// <summary>
         /// Forms a valid tree node representing this object.
         /// </summary>
         /// <returns>The formed tree node.</returns>
@@ -73,15 +81,20 @@
         /// </summary>
         /// <param name="scopeStack">The scope stack associated with this node.</param>
         /// <returns>True if errors are found, false otherwise.</returns>
-        public override bool HaveSemanticErrors(ScopeStack scopeStack)
+        public override bool CheckSemanticErrors(ScopeStack scopeStack)
         {
+            bool foundErrors = false;
+
+            foundErrors |= this.name.CheckSemanticErrors(scopeStack);
+            foundErrors |= this.value.CheckSemanticErrors(scopeStack);
+
             if (this.name.CheckTypeExists(false))
             {
                 this.AddError(ErrorType.MemberNameIsAType, this.name.Text);
-                return true;
+                foundErrors = true;
             }
 
-            return false;
+            return foundErrors;
         }
     }
 }

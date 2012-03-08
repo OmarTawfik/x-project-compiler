@@ -129,7 +129,7 @@
         /// </summary>
         /// <param name="scopeStack">The scope stack associated with this node.</param>
         /// <returns>True if errors are found, false otherwise.</returns>
-        public override bool HaveSemanticErrors(ScopeStack scopeStack)
+        public override bool CheckSemanticErrors(ScopeStack scopeStack)
         {
             if (this.type == Literal.Char)
             {

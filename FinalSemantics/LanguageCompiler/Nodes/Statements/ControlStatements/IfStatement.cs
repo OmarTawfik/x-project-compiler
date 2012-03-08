@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Windows.Forms;
     using Irony.Parsing;
+    using LanguageCompiler.Semantics;
 
     /// <summary>
     /// Holds all data related to a "IfStatement" rule.
@@ -39,7 +40,7 @@
             {
                 result.Nodes.Add("No Else!");
             }
-            
+
             return result;
         }
 
@@ -64,6 +65,28 @@
 
             this.StartLocation = node.ChildNodes[0].Token.Location;
             this.StartLocation = node.ChildNodes[node.ChildNodes.Count - 1].Token.Location;
+        }
+
+        /// <summary>
+        /// Checks for semantic errors within this node.
+        /// </summary>
+        /// <param name="scopeStack">The scope stack associated with this node.</param>
+        /// <returns>True if errors are found, false otherwise.</returns>
+        public override bool CheckSemanticErrors(ScopeStack scopeStack)
+        {
+            bool foundErrors = false;
+
+            foreach (IfBody body in this.bodies)
+            {
+                foundErrors |= body.CheckSemanticErrors(scopeStack);
+            }
+
+            if (this.elseBody != null)
+            {
+                foundErrors |= this.elseBody.CheckSemanticErrors(scopeStack);
+            }
+
+            return foundErrors;
         }
     }
 }

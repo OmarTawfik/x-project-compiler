@@ -129,7 +129,7 @@
         /// </summary>
         /// <param name="scopeStack">The scope stack associated with this node.</param>
         /// <returns>True if errors are found, false otherwise.</returns>
-        public override bool HaveSemanticErrors(ScopeStack scopeStack)
+        public override bool CheckSemanticErrors(ScopeStack scopeStack)
         {
             bool foundErrors = false;
             if (OperatorDefinition.nonOverloadableOperators.Contains(this.operatorDefined))
@@ -137,7 +137,7 @@
                 this.AddError(ErrorType.OperatorNotOverloadable, this.operatorDefined);
                 foundErrors = true;
             }
-            
+
             if (OperatorDefinition.noParameterOperators.Contains(this.operatorDefined) && this.parameters.Count != 0)
             {
                 this.AddError(ErrorType.OperatorInvalidParameters, this.operatorDefined);
@@ -159,16 +159,29 @@
                 }
             }
 
-            if (this.ModifierType == MemberModifierType.Abstract && this.block != null)
+            if (this.block != null)
             {
-                this.AddError(ErrorType.AbstractMemberHasBody, this.operatorDefined);
-                foundErrors = true;
-            }
+                if (this.ModifierType == MemberModifierType.Abstract)
+                {
+                    this.AddError(ErrorType.AbstractMemberHasBody, this.operatorDefined);
+                    foundErrors = true;
+                }
 
-            if (this.ModifierType != MemberModifierType.Abstract && this.block == null)
-            {
-                this.AddError(ErrorType.MissingBodyOfNonAbstractMember, this.operatorDefined);
-                foundErrors = true;
+                if (this.ModifierType != MemberModifierType.Abstract)
+                {
+                    this.AddError(ErrorType.MissingBodyOfNonAbstractMember, this.operatorDefined);
+                    foundErrors = true;
+                }
+
+                scopeStack.AddLevel(ScopeType.Function);
+                foreach (Parameter param in this.parameters)
+                {
+                    foundErrors |= param.CheckSemanticErrors(scopeStack);
+                    foundErrors |= scopeStack.DeclareVariable(new Variable(param.Type, param.Name.Text, true), this);
+                }
+
+                this.block.CheckSemanticErrors(scopeStack);
+                scopeStack.DeleteLevel();
             }
 
             return foundErrors;

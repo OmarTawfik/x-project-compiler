@@ -3,8 +3,10 @@
     using System.Collections.Generic;
     using System.Windows.Forms;
     using Irony.Parsing;
+    using LanguageCompiler.Errors;
     using LanguageCompiler.Nodes.ClassMembers;
     using LanguageCompiler.Nodes.Types;
+    using LanguageCompiler.Semantics;
 
     /// <summary>
     /// Holds all data related to a "DeclarationStatement" rule.
@@ -20,6 +22,22 @@
         /// Atoms of this field.
         /// </summary>
         private List<FieldAtom> atoms = new List<FieldAtom>();
+
+        /// <summary>
+        /// Gets the type of this statement.
+        /// </summary>
+        public BaseNode Type
+        {
+            get { return this.type; }
+        }
+
+        /// <summary>
+        /// Gets the atoms of this field.
+        /// </summary>
+        public List<FieldAtom> Atoms
+        {
+            get { return this.atoms; }
+        }
 
         /// <summary>
         /// Forms a valid tree node representing this object.
@@ -63,6 +81,29 @@
 
             this.StartLocation = this.type.StartLocation;
             this.StartLocation = node.ChildNodes[node.ChildNodes.Count - 1].Token.Location;
+        }
+
+        /// <summary>
+        /// Checks for semantic errors within this node.
+        /// </summary>
+        /// <param name="scopeStack">The scope stack associated with this node.</param>
+        /// <returns>True if errors are found, false otherwise.</returns>
+        public override bool CheckSemanticErrors(ScopeStack scopeStack)
+        {
+            bool foundErrors = false;
+
+            foreach (FieldAtom atom in this.atoms)
+            {
+                foundErrors |= atom.CheckSemanticErrors(scopeStack);
+
+                if (this.Type.GetDataType() != atom.Value.GetDataType())
+                {
+                    this.AddError(ErrorType.ExpressionDoesnotMatchType);
+                    foundErrors = true;
+                }
+            }
+
+            return foundErrors;
         }
     }
 }

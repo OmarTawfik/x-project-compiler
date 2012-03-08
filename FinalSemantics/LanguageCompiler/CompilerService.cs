@@ -110,7 +110,7 @@
             {
                 foreach (KeyValuePair<string, ClassDefinition> pair in this.classesList)
                 {
-                    pair.Value.HaveSemanticErrors(new ScopeStack());
+                    pair.Value.CheckSemanticErrors(new ScopeStack());
                 }
             }
         }

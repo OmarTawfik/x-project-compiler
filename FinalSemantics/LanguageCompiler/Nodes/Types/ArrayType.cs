@@ -56,9 +56,9 @@ using LanguageCompiler.Semantics;
         /// </summary>
         /// <param name="scopeStack">The scope stack associated with this node.</param>
         /// <returns>True if errors are found, false otherwise.</returns>
-        public override bool HaveSemanticErrors(ScopeStack scopeStack)
+        public override bool CheckSemanticErrors(ScopeStack scopeStack)
         {
-            return this.type.CheckTypeExists() || this.type.HaveSemanticErrors(scopeStack);
+            return this.type.CheckTypeExists() || this.type.CheckSemanticErrors(scopeStack);
         }
     }
 }

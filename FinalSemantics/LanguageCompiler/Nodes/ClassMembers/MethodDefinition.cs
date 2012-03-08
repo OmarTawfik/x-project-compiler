@@ -100,7 +100,7 @@
         /// </summary>
         /// <param name="scopeStack">The scope stack associated with this node.</param>
         /// <returns>True if errors are found, false otherwise.</returns>
-        public override bool HaveSemanticErrors(ScopeStack scopeStack)
+        public override bool CheckSemanticErrors(ScopeStack scopeStack)
         {
             bool foundErrors = false;
             if (this.name.CheckTypeExists(false))
@@ -119,6 +119,19 @@
             {
                 this.AddError(ErrorType.MissingBodyOfNonAbstractMember, this.name.Text);
                 foundErrors = true;
+            }
+
+            if (this.block != null)
+            {
+                scopeStack.AddLevel(ScopeType.Function);
+                foreach (Parameter param in this.parameters)
+                {
+                    foundErrors |= param.CheckSemanticErrors(scopeStack);
+                    foundErrors |= scopeStack.DeclareVariable(new Variable(param.Type, param.Name.Text, true), this);
+                }
+
+                this.block.CheckSemanticErrors(scopeStack);
+                scopeStack.DeleteLevel();
             }
 
             return foundErrors;

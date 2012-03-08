@@ -3,10 +3,11 @@
     using System.Collections.Generic;
     using System.Windows.Forms;
     using Irony.Parsing;
+    using LanguageCompiler.Errors;
     using LanguageCompiler.Nodes.ClassMembers;
     using LanguageCompiler.Nodes.Expressions;
-    using LanguageCompiler.Nodes.Statements.CommandStatements;
     using LanguageCompiler.Nodes.Types;
+    using LanguageCompiler.Semantics;
 
     /// <summary>
     /// Holds all data related to a "ForStatement" rule.
@@ -118,6 +119,38 @@
 
             this.StartLocation = node.ChildNodes[0].Token.Location;
             this.StartLocation = node.ChildNodes[node.ChildNodes.Count - 1].Token.Location;
+        }
+
+        /// <summary>
+        /// Checks for semantic errors within this node.
+        /// </summary>
+        /// <param name="scopeStack">The scope stack associated with this node.</param>
+        /// <returns>True if errors are found, false otherwise.</returns>
+        public override bool CheckSemanticErrors(ScopeStack scopeStack)
+        {
+            bool foundErrors = false;
+
+            foreach (FieldAtom atom in this.firstPartList)
+            {
+                foundErrors |= atom.CheckSemanticErrors(scopeStack);
+            }
+
+            if (this.secondPart.GetDataType() != Literal.Bool)
+            {
+                this.AddError(ErrorType.ExpressionNotBoolean);
+                foundErrors = true;
+            }
+
+            foreach (BaseNode node in this.thidPartList)
+            {
+                foundErrors |= node.CheckSemanticErrors(scopeStack);
+            }
+
+            scopeStack.AddLevel(ScopeType.Loop);
+            this.body.CheckSemanticErrors(scopeStack);
+            scopeStack.DeleteLevel();
+
+            return foundErrors;
         }
     }
 }

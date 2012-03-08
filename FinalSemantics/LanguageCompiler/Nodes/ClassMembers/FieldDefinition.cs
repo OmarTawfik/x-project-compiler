@@ -65,9 +65,10 @@
         /// </summary>
         /// <param name="scopeStack">The scope stack associated with this node.</param>
         /// <returns>True if errors are found, false otherwise.</returns>
-        public override bool HaveSemanticErrors(ScopeStack scopeStack)
+        public override bool CheckSemanticErrors(ScopeStack scopeStack)
         {
             bool foundErrors = false;
+
             if (this.ModifierType != MemberModifierType.Normal)
             {
                 this.AddError(ErrorType.FieldInvalidModifier);
@@ -76,8 +77,11 @@
 
             foreach (FieldAtom atom in this.atoms)
             {
-                if (atom.HaveSemanticErrors(scopeStack))
+                foundErrors |= atom.CheckSemanticErrors(scopeStack);
+
+                if (this.Type.GetDataType() != atom.Value.GetDataType())
                 {
+                    this.AddError(ErrorType.ExpressionDoesnotMatchType);
                     foundErrors = true;
                 }
             }

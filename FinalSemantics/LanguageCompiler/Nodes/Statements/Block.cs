@@ -3,8 +3,10 @@
     using System.Collections.Generic;
     using System.Windows.Forms;
     using Irony.Parsing;
+    using LanguageCompiler.Nodes.ClassMembers;
     using LanguageCompiler.Nodes.Statements.CommandStatements;
     using LanguageCompiler.Nodes.Statements.ControlStatements;
+    using LanguageCompiler.Semantics;
 
     /// <summary>
     /// Holds all data related to a "Block" rule.
@@ -94,6 +96,34 @@
 
             this.StartLocation = node.ChildNodes[0].Token.Location;
             this.StartLocation = node.ChildNodes[node.ChildNodes.Count - 1].Token.Location;
+        }
+
+        /// <summary>
+        /// Checks for semantic errors within this node.
+        /// </summary>
+        /// <param name="scopeStack">The scope stack associated with this node.</param>
+        /// <returns>True if errors are found, false otherwise.</returns>
+        public override bool CheckSemanticErrors(ScopeStack scopeStack)
+        {
+            bool foundErrors = false;
+            scopeStack.AddLevel(ScopeType.Block);
+
+            foreach (BaseNode child in this.statements)
+            {
+                if (child is DeclarationStatement)
+                {
+                    DeclarationStatement decl = child as DeclarationStatement;
+                    foreach (FieldAtom atom in decl.Atoms)
+                    {
+                        foundErrors |= scopeStack.DeclareVariable(new Variable(decl.Type, atom.Name.Text, atom.Value != null), decl);
+                    }
+                }
+
+                foundErrors |= child.CheckSemanticErrors(scopeStack);
+            }
+
+            scopeStack.DeleteLevel();
+            return foundErrors;
         }
     }
 }

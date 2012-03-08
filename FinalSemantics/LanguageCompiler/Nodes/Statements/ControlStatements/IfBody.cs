@@ -2,7 +2,10 @@
 {
     using System.Windows.Forms;
     using Irony.Parsing;
+    using LanguageCompiler.Errors;
     using LanguageCompiler.Nodes.Expressions;
+    using LanguageCompiler.Nodes.Types;
+    using LanguageCompiler.Semantics;
 
     /// <summary>
     /// Holds all data related to a "IfBody" rule.
@@ -43,6 +46,27 @@
 
             this.StartLocation = node.ChildNodes[0].Token.Location;
             this.StartLocation = node.ChildNodes[node.ChildNodes.Count - 1].Token.Location;
+        }
+
+        /// <summary>
+        /// Checks for semantic errors within this node.
+        /// </summary>
+        /// <param name="scopeStack">The scope stack associated with this node.</param>
+        /// <returns>True if errors are found, false otherwise.</returns>
+        public override bool CheckSemanticErrors(ScopeStack scopeStack)
+        {
+            bool foundErrors = false;
+
+            if (this.expression.GetDataType() != Literal.Bool)
+            {
+                this.AddError(ErrorType.ExpressionNotBoolean);
+                foundErrors = true;
+            }
+
+            foundErrors |= this.expression.CheckSemanticErrors(scopeStack);
+            foundErrors |= this.body.CheckSemanticErrors(scopeStack);
+
+            return foundErrors;
         }
     }
 }

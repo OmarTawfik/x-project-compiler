@@ -56,7 +56,7 @@
         /// </summary>
         /// <param name="scopeStack">The scope stack associated with this node.</param>
         /// <returns>True if errors are found, false otherwise.</returns>
-        public virtual bool HaveSemanticErrors(ScopeStack scopeStack)
+        public virtual bool CheckSemanticErrors(ScopeStack scopeStack)
         {
             return false;
         }

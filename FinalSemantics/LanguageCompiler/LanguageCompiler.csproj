@@ -84,6 +84,7 @@
     <Compile Include="Nodes\Types\Identifier.cs" />
     <Compile Include="Nodes\Types\Literal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Semantics\Scope.cs" />
     <Compile Include="Semantics\ScopeStack.cs" />
     <Compile Include="Semantics\Variable.cs" />
   </ItemGroup>

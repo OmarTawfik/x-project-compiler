@@ -2,7 +2,10 @@
 {
     using System.Windows.Forms;
     using Irony.Parsing;
+    using LanguageCompiler.Errors;
     using LanguageCompiler.Nodes.Expressions;
+    using LanguageCompiler.Nodes.Expressions.Basic;
+    using LanguageCompiler.Nodes.Expressions.Complex;
     using LanguageCompiler.Semantics;
 
     /// <summary>
@@ -36,6 +39,28 @@
 
             this.StartLocation = this.expression.StartLocation;
             this.StartLocation = node.ChildNodes[node.ChildNodes.Count - 1].Token.Location;
+        }
+
+        /// <summary>
+        /// Checks for semantic errors within this node.
+        /// </summary>
+        /// <param name="scopeStack">The scope stack associated with this node.</param>
+        /// <returns>True if errors are found, false otherwise.</returns>
+        public override bool CheckSemanticErrors(ScopeStack scopeStack)
+        {
+            bool foundErrors = false;
+            foundErrors |= this.expression.CheckSemanticErrors(scopeStack);
+
+            if (this.expression is AssignmentExpression == false
+                && this.expression is InvocationExpression == false
+                && this.expression is PostfixExpression == false
+                && this.expression is ObjectCreationExpression == false)
+            {
+                this.AddError(ErrorType.InvalidExpressionStatement);
+                foundErrors = true;
+            }
+
+            return foundErrors;
         }
     }
 }
