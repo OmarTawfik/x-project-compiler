@@ -27,12 +27,12 @@
                 ErrorsFactory.errorsDic.Add(ErrorType.InternalError, "An internal error happened in the compiler. Cannot recover");
                 ErrorsFactory.errorsDic.Add(ErrorType.MultipleTypesWithSameName, "There exists more than one class with the name {0}");
                 ErrorsFactory.errorsDic.Add(ErrorType.TypeNotFound, "The type {0} cannot be found");
+                ErrorsFactory.errorsDic.Add(ErrorType.ItemAlreadyDefined, "An item with the name {0} was already defined.");
             }
 
             //// Level Two: Class Definitions
             {
                 ErrorsFactory.errorsDic.Add(ErrorType.CyclicInheritence, "The class {0} contains a cyclic inheritence list.");
-                ErrorsFactory.errorsDic.Add(ErrorType.MultipleMembersWithSameName, "Multiple members with the name {0} exist within class {1}.");
                 ErrorsFactory.errorsDic.Add(ErrorType.ConcreteBase, "The base of class {0} is concrete.");
                 ErrorsFactory.errorsDic.Add(ErrorType.ScreenModifierNotNormal, "Screen {0} cannot be labeled abstract or concrete.");
                 ErrorsFactory.errorsDic.Add(ErrorType.ScreenCannotInherit, "Screen {0} cannot inherit another type.");
@@ -51,6 +51,8 @@
 
             ErrorsFactory.errorsDic.Add(ErrorType.IdentifierIsReservedWord, "The identifier {0} cannot have a value of a reserved word.");
             ErrorsFactory.errorsDic.Add(ErrorType.IdentifierNameTooLong, "This identifier {0}'s name is too long.");
+            ErrorsFactory.errorsDic.Add(ErrorType.IncorrectEscapeSequence, "Incorrect escape sequence {0} found in char or string literal.");
+            ErrorsFactory.errorsDic.Add(ErrorType.IncorrectNumberLiteral, "Incorrect number {0} found in numerical literal.");
         }
 
         /// <summary>

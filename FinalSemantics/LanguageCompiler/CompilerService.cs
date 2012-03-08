@@ -1,11 +1,11 @@
 ﻿namespace LanguageCompiler
 {
-    using System;
     using System.Collections.Generic;
     using Irony;
     using Irony.Parsing;
     using LanguageCompiler.Errors;
     using LanguageCompiler.Nodes.TopLevel;
+    using LanguageCompiler.Semantics;
 
     /// <summary>
     /// The Service class for building a valid project.
@@ -110,7 +110,7 @@
             {
                 foreach (KeyValuePair<string, ClassDefinition> pair in this.classesList)
                 {
-                    pair.Value.CheckSemantics();
+                    pair.Value.HaveSemanticErrors(new ScopeStack());
                 }
             }
         }

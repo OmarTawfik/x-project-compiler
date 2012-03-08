@@ -1,8 +1,10 @@
 ﻿namespace LanguageCompiler.Nodes
 {
+    using System;
     using System.Windows.Forms;
     using Irony.Parsing;
     using LanguageCompiler.Errors;
+    using LanguageCompiler.Semantics;
 
     /// <summary>
     /// A base for all listed compiler nodes.
@@ -52,8 +54,20 @@
         /// <summary>
         /// Checks for semantic errors within this node.
         /// </summary>
-        public virtual void CheckSemantics()
+        /// <param name="scopeStack">The scope stack associated with this node.</param>
+        /// <returns>True if errors are found, false otherwise.</returns>
+        public virtual bool HaveSemanticErrors(ScopeStack scopeStack)
         {
+            return false;
+        }
+
+        /// <summary>
+        /// Gets the type of this expression.
+        /// </summary>
+        /// <returns>A string representing the name of the type.</returns>
+        public virtual string GetDataType()
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

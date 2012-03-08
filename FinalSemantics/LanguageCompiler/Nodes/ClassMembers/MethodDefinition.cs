@@ -6,6 +6,7 @@
     using LanguageCompiler.Errors;
     using LanguageCompiler.Nodes.Statements;
     using LanguageCompiler.Nodes.Types;
+    using LanguageCompiler.Semantics;
 
     /// <summary>
     /// Holds all data related to a "Method Definition" rule.
@@ -93,26 +94,34 @@
                 this.EndLocation = node.ChildNodes[6].Token.Location;
             }
         }
-        
+
         /// <summary>
         /// Checks for semantic errors within this node.
         /// </summary>
-        public override void CheckSemantics()
+        /// <param name="scopeStack">The scope stack associated with this node.</param>
+        /// <returns>True if errors are found, false otherwise.</returns>
+        public override bool HaveSemanticErrors(ScopeStack scopeStack)
         {
+            bool foundErrors = false;
             if (this.name.CheckTypeExists(false))
             {
                 this.AddError(ErrorType.MemberNameIsAType, this.name.Text);
+                foundErrors = true;
             }
 
             if (this.ModifierType == MemberModifierType.Abstract && this.block != null)
             {
                 this.AddError(ErrorType.AbstractMemberHasBody, this.name.Text);
+                foundErrors = true;
             }
 
             if (this.ModifierType != MemberModifierType.Abstract && this.block == null)
             {
                 this.AddError(ErrorType.MissingBodyOfNonAbstractMember, this.name.Text);
+                foundErrors = true;
             }
+
+            return foundErrors;
         }
     }
 }

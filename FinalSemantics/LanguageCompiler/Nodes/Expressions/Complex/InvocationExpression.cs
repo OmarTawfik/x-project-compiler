@@ -4,6 +4,7 @@
     using System.Windows.Forms;
     using Irony.Parsing;
     using LanguageCompiler.Nodes.Types;
+    using LanguageCompiler.Semantics;
 
     /// <summary>
     /// Holds all data related to a "InvocationExpression" rule.

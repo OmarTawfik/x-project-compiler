@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Windows.Forms;
     using Irony.Parsing;
+    using LanguageCompiler.Semantics;
 
     /// <summary>
     /// Holds all data related to a "ArrayExpression" rule.

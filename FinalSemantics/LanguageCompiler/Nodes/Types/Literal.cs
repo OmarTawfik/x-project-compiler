@@ -3,6 +3,8 @@
     using System.Collections.Generic;
     using System.Windows.Forms;
     using Irony.Parsing;
+    using LanguageCompiler.Errors;
+    using LanguageCompiler.Semantics;
 
     /// <summary>
     /// Holds all data related to a "Literal" rule.
@@ -12,47 +14,52 @@
         /// <summary>
         /// The name of the char data type.
         /// </summary>
-        public static readonly string Char = "char";
+        public const string Char = "char";
 
         /// <summary>
         /// The name of the string data type.
         /// </summary>
-        public static readonly string String = "string";
+        public const string String = "string";
 
         /// <summary>
         /// The name of the double data type.
         /// </summary>
-        public static readonly string Double = "double";
+        public const string Double = "double";
 
         /// <summary>
         /// The name of the float data type.
         /// </summary>
-        public static readonly string Float = "float";
+        public const string Float = "float";
 
         /// <summary>
         /// The name of the byte data type.
         /// </summary>
-        public static readonly string Byte = "byte";
+        public const string Byte = "byte";
 
         /// <summary>
         /// The name of the short data type.
         /// </summary>
-        public static readonly string Short = "short";
+        public const string Short = "short";
 
         /// <summary>
         /// The name of the int data type.
         /// </summary>
-        public static readonly string Int = "int";
+        public const string Int = "int";
 
         /// <summary>
         /// The name of the long data type.
         /// </summary>
-        public static readonly string Long = "long";
+        public const string Long = "long";
 
         /// <summary>
         /// The name of the bool data type.
         /// </summary>
-        public static readonly string Bool = "bool";
+        public const string Bool = "bool";
+
+        /// <summary>
+        /// Legal escape sequences permitted in a char or a string.
+        /// </summary>
+        private static List<char> escapeSequences = new List<char>();
 
         /// <summary>
         /// Content of this literal.
@@ -63,6 +70,14 @@
         /// Type of this literal.
         /// </summary>
         private string type;
+
+        /// <summary>
+        /// Initializes static members of the Literal class.
+        /// </summary>
+        static Literal()
+        {
+            Literal.escapeSequences.AddRange(new char[] { 'n', 't', '\'', '\"', '\\' });
+        }
 
         /// <summary>
         /// Forms a valid tree node representing this object.
@@ -107,6 +122,88 @@
             {
                 this.type = Bool;
             }
+        }
+
+        /// <summary>
+        /// Checks for semantic errors within this node.
+        /// </summary>
+        /// <param name="scopeStack">The scope stack associated with this node.</param>
+        /// <returns>True if errors are found, false otherwise.</returns>
+        public override bool HaveSemanticErrors(ScopeStack scopeStack)
+        {
+            if (this.type == Literal.Char)
+            {
+                if (this.data[1] == '\\' && Literal.escapeSequences.Contains(this.data[2]) == false)
+                {
+                    this.AddError(ErrorType.IncorrectEscapeSequence, this.data[2].ToString());
+                    return true;
+                }
+            }
+            else if (this.type == Literal.String)
+            {
+                for (int i = 1; i < this.data.Length - 1; i++)
+                {
+                    if (this.data[i] == '\\')
+                    {
+                        if (Literal.escapeSequences.Contains(this.data[i + 1]) == false)
+                        {
+                            this.AddError(ErrorType.IncorrectEscapeSequence, this.data[i + 1].ToString());
+                            return true;
+                        }
+                        else
+                        {
+                            i++;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                string value = char.IsLetter(this.data[this.data.Length - 1])
+                    ? this.data.Substring(0, this.data.Length - 1)
+                    : this.data;
+
+                try
+                {
+                    switch (this.type)
+                    {
+                        case Literal.Byte:
+                            byte.Parse(value);
+                            break;
+                        case Literal.Short:
+                            short.Parse(value);
+                            break;
+                        case Literal.Int:
+                            int.Parse(value);
+                            break;
+                        case Literal.Long:
+                            long.Parse(value);
+                            break;
+                        case Literal.Float:
+                            float.Parse(value);
+                            break;
+                        case Literal.Double:
+                            double.Parse(value);
+                            break;
+                    }
+                }
+                catch
+                {
+                    this.AddError(ErrorType.IncorrectNumberLiteral, value);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Gets the type of this expression.
+        /// </summary>
+        /// <returns>A string representing the name of the type.</returns>
+        public override string GetDataType()
+        {
+            return this.type;
         }
     }
 }

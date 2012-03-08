@@ -7,7 +7,7 @@
     /// <summary>
     /// Holds all data related to a "Parameter" rule.
     /// </summary>
-    public class Parameter : MemberDefinition
+    public class Parameter : BaseNode
     {
         /// <summary>
         /// Type of this parameter.

@@ -3,6 +3,7 @@
     using System.Windows.Forms;
     using Irony.Parsing;
     using LanguageCompiler.Nodes.Expressions;
+    using LanguageCompiler.Semantics;
 
     /// <summary>
     /// Holds all data related to a "ExpressionStatement" rule.

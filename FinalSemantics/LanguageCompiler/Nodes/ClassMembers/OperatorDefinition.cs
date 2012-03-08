@@ -6,6 +6,7 @@
     using LanguageCompiler.Errors;
     using LanguageCompiler.Nodes.Statements;
     using LanguageCompiler.Nodes.Types;
+    using LanguageCompiler.Semantics;
 
     /// <summary>
     /// Holds all data related to a "Operator Definition" rule.
@@ -126,21 +127,27 @@
         /// <summary>
         /// Checks for semantic errors within this node.
         /// </summary>
-        public override void CheckSemantics()
+        /// <param name="scopeStack">The scope stack associated with this node.</param>
+        /// <returns>True if errors are found, false otherwise.</returns>
+        public override bool HaveSemanticErrors(ScopeStack scopeStack)
         {
+            bool foundErrors = false;
             if (OperatorDefinition.nonOverloadableOperators.Contains(this.operatorDefined))
             {
                 this.AddError(ErrorType.OperatorNotOverloadable, this.operatorDefined);
+                foundErrors = true;
             }
             
             if (OperatorDefinition.noParameterOperators.Contains(this.operatorDefined) && this.parameters.Count != 0)
             {
                 this.AddError(ErrorType.OperatorInvalidParameters, this.operatorDefined);
+                foundErrors = true;
             }
 
             if (OperatorDefinition.oneParameterOperators.Contains(this.operatorDefined) && this.parameters.Count != 1)
             {
                 this.AddError(ErrorType.OperatorInvalidParameters, this.operatorDefined);
+                foundErrors = true;
             }
 
             if (this.operatorDefined == "<" || this.operatorDefined == ">" || this.operatorDefined == "<=" || this.operatorDefined == ">=")
@@ -148,18 +155,23 @@
                 if ((this.Type is Identifier) == false || (this.Type as Identifier).Text != Literal.Bool)
                 {
                     this.AddError(ErrorType.OperatorInvalidReturnType, this.operatorDefined);
+                    foundErrors = true;
                 }
             }
 
             if (this.ModifierType == MemberModifierType.Abstract && this.block != null)
             {
                 this.AddError(ErrorType.AbstractMemberHasBody, this.operatorDefined);
+                foundErrors = true;
             }
 
             if (this.ModifierType != MemberModifierType.Abstract && this.block == null)
             {
                 this.AddError(ErrorType.MissingBodyOfNonAbstractMember, this.operatorDefined);
+                foundErrors = true;
             }
+
+            return foundErrors;
         }
     }
 }

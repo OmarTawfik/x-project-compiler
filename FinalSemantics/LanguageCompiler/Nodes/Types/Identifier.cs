@@ -3,6 +3,7 @@
     using System.Windows.Forms;
     using Irony.Parsing;
     using LanguageCompiler.Errors;
+    using LanguageCompiler.Semantics;
 
     /// <summary>
     /// Holds all data related to a "Identifier" rule.
@@ -43,22 +44,6 @@
         }
 
         /// <summary>
-        /// Checks for semantic errors within this node.
-        /// </summary>
-        public override void CheckSemantics()
-        {
-            if (LanguageGrammar.ReservedWords.Contains(this.text))
-            {
-                this.AddError(ErrorType.IdentifierIsReservedWord, this.text);
-            }
-
-            if (this.text.Length > 50)
-            {
-                this.AddError(ErrorType.IdentifierNameTooLong, this.text);
-            }
-        }
-
-        /// <summary>
         /// Checks if this type exists in the parsed list.
         /// </summary>
         /// <param name="reportError">If true, the function reports an error if type isn't found.</param>
@@ -75,6 +60,37 @@
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Checks for semantic errors within this node.
+        /// </summary>
+        /// <param name="scopeStack">The scope stack associated with this node.</param>
+        /// <returns>True if errors are found, false otherwise.</returns>
+        public override bool HaveSemanticErrors(ScopeStack scopeStack)
+        {
+            if (LanguageGrammar.ReservedWords.Contains(this.text))
+            {
+                this.AddError(ErrorType.IdentifierIsReservedWord, this.text);
+                return true;
+            }
+
+            if (this.text.Length > 50)
+            {
+                this.AddError(ErrorType.IdentifierNameTooLong, this.text);
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Gets the type of this expression.
+        /// </summary>
+        /// <returns>A string representing the name of the type.</returns>
+        public override string GetDataType()
+        {
+            return this.text;
         }
     }
 }

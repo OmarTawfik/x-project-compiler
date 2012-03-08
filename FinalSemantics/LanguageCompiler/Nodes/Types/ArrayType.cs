@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Windows.Forms;
     using Irony.Parsing;
+using LanguageCompiler.Semantics;
 
     /// <summary>
     /// Holds all data related to a "Array Type" rule.
@@ -53,10 +54,11 @@
         /// <summary>
         /// Checks for semantic errors within this node.
         /// </summary>
-        public override void CheckSemantics()
+        /// <param name="scopeStack">The scope stack associated with this node.</param>
+        /// <returns>True if errors are found, false otherwise.</returns>
+        public override bool HaveSemanticErrors(ScopeStack scopeStack)
         {
-            this.type.CheckSemantics();
-            this.type.CheckTypeExists();
+            return this.type.CheckTypeExists() || this.type.HaveSemanticErrors(scopeStack);
         }
     }
 }

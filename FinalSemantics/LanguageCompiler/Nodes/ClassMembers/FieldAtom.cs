@@ -5,11 +5,12 @@
     using LanguageCompiler.Errors;
     using LanguageCompiler.Nodes.Expressions;
     using LanguageCompiler.Nodes.Types;
+    using LanguageCompiler.Semantics;
 
     /// <summary>
     /// Holds all data related to a "Field Atom" rule.
     /// </summary>
-    public class FieldAtom : MemberDefinition
+    public class FieldAtom : BaseNode
     {
         /// <summary>
         /// Name of this atom.
@@ -66,16 +67,21 @@
                 this.EndLocation = this.name.EndLocation;
             }
         }
-        
+
         /// <summary>
         /// Checks for semantic errors within this node.
         /// </summary>
-        public override void CheckSemantics()
+        /// <param name="scopeStack">The scope stack associated with this node.</param>
+        /// <returns>True if errors are found, false otherwise.</returns>
+        public override bool HaveSemanticErrors(ScopeStack scopeStack)
         {
             if (this.name.CheckTypeExists(false))
             {
                 this.AddError(ErrorType.MemberNameIsAType, this.name.Text);
+                return true;
             }
+
+            return false;
         }
     }
 }

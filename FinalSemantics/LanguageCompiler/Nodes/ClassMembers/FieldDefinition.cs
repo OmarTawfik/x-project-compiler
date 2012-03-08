@@ -4,6 +4,7 @@
     using System.Windows.Forms;
     using Irony.Parsing;
     using LanguageCompiler.Errors;
+    using LanguageCompiler.Semantics;
 
     /// <summary>
     /// Holds all data related to a "Field Definition" rule.
@@ -62,17 +63,26 @@
         /// <summary>
         /// Checks for semantic errors within this node.
         /// </summary>
-        public override void CheckSemantics()
+        /// <param name="scopeStack">The scope stack associated with this node.</param>
+        /// <returns>True if errors are found, false otherwise.</returns>
+        public override bool HaveSemanticErrors(ScopeStack scopeStack)
         {
+            bool foundErrors = false;
             if (this.ModifierType != MemberModifierType.Normal)
             {
                 this.AddError(ErrorType.FieldInvalidModifier);
+                foundErrors = true;
             }
 
             foreach (FieldAtom atom in this.atoms)
             {
-                atom.CheckSemantics();
+                if (atom.HaveSemanticErrors(scopeStack))
+                {
+                    foundErrors = true;
+                }
             }
+
+            return foundErrors;
         }
     }
 }

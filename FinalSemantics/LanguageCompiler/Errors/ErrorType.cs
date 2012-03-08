@@ -56,9 +56,9 @@
         ScreenCannotInherit,
 
         /// <summary>
-        /// Multiple members with the same name exist within a class.
+        /// This item was already defined elsewhere in code.
         /// </summary>
-        MultipleMembersWithSameName,
+        ItemAlreadyDefined,
 
         /// <summary>
         /// Class member has the same name as a type.
@@ -94,5 +94,15 @@
         /// This operator has an invalid return type.
         /// </summary>
         OperatorInvalidReturnType,
+
+        /// <summary>
+        /// An incorrect escape sequence found in char or string literals.
+        /// </summary>
+        IncorrectEscapeSequence,
+
+        /// <summary>
+        /// An incorrect number found in numerical literal.
+        /// </summary>
+        IncorrectNumberLiteral,
     }
 }

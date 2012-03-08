@@ -1,8 +1,8 @@
 ﻿namespace LanguageCompiler.Nodes.Expressions.Complex
 {
-    using System.Collections.Generic;
     using System.Windows.Forms;
     using Irony.Parsing;
+    using LanguageCompiler.Semantics;
 
     /// <summary>
     /// Holds all data related to a "CompoundExpression" rule.

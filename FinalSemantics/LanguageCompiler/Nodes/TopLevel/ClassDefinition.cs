@@ -6,6 +6,7 @@
     using LanguageCompiler.Errors;
     using LanguageCompiler.Nodes.ClassMembers;
     using LanguageCompiler.Nodes.Types;
+    using LanguageCompiler.Semantics;
 
     /// <summary>
     /// The class modifier type.
@@ -190,40 +191,60 @@
         /// <summary>
         /// Checks for semantic errors within this node.
         /// </summary>
-        public override void CheckSemantics()
+        /// <param name="scopeStack">The scope stack associated with this node.</param>
+        /// <returns>True if errors are found, false otherwise.</returns>
+        public override bool HaveSemanticErrors(ScopeStack scopeStack)
         {
-            this.name.CheckSemantics();
+            if (this.name.HaveSemanticErrors(scopeStack))
+            {
+                return true;
+            }
+
+            bool foundErrors = false;
+
             if (this.classBase != null && this.classBase.CheckTypeExists())
             {
-                this.classBase.CheckSemantics();
                 if (this.CheckCyclicInheritence())
                 {
-                    return;
+                    return true;
+                }
+
+                if (this.classBase.HaveSemanticErrors(scopeStack))
+                {
+                    foundErrors = true;
                 }
 
                 ClassDefinition parent = CompilerService.Instance.ClassesList[this.classBase.Text];
                 if (this.label == ClassLabel.Screen)
                 {
                     this.AddError(ErrorType.ScreenCannotInherit, this.name.Text);
+                    foundErrors = true;
                 }
                 else if (parent.modifierType == ClassModifierType.Concrete)
                 {
                     this.AddError(ErrorType.ConcreteBase, this.name.Text);
+                    foundErrors = true;
                 }
             }
 
             if (this.label == ClassLabel.Screen && this.modifierType != ClassModifierType.Normal)
             {
                 this.AddError(ErrorType.ScreenModifierNotNormal, this.name.Text);
+                foundErrors = true;
             }
 
             if (this.CheckMultipleMembers() == false)
             {
                 foreach (MemberDefinition member in this.members)
                 {
-                    member.CheckSemantics();
+                    if (member.HaveSemanticErrors(scopeStack))
+                    {
+                        foundErrors = true;
+                    }
                 }
             }
+
+            return foundErrors;
         }
 
         /// <summary>
@@ -242,7 +263,7 @@
                     {
                         if (memberNames.Contains(atom.Name.Text))
                         {
-                            this.AddError(ErrorType.MultipleMembersWithSameName, atom.Name.Text, this.name.Text);
+                            this.AddError(ErrorType.ItemAlreadyDefined, atom.Name.Text);
                             return true;
                         }
                         else
@@ -256,7 +277,7 @@
                     MethodDefinition method = member as MethodDefinition;
                     if (memberNames.Contains(method.Name.Text))
                     {
-                        this.AddError(ErrorType.MultipleMembersWithSameName, method.Name.Text, this.name.Text);
+                        this.AddError(ErrorType.ItemAlreadyDefined, method.Name.Text);
                         return true;
                     }
                     else
@@ -269,7 +290,7 @@
                     OperatorDefinition op = member as OperatorDefinition;
                     if (memberNames.Contains(op.OperatorDefined))
                     {
-                        this.AddError(ErrorType.MultipleMembersWithSameName, op.OperatorDefined, this.name.Text);
+                        this.AddError(ErrorType.ItemAlreadyDefined, op.OperatorDefined);
                         return true;
                     }
                     else
