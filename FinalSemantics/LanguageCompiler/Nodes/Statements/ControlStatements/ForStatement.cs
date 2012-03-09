@@ -135,11 +135,7 @@
                 foundErrors |= atom.CheckSemanticErrors(scopeStack);
             }
 
-            if (this.secondPart.GetDataType() != Literal.Bool)
-            {
-                this.AddError(ErrorType.ExpressionNotBoolean);
-                foundErrors = true;
-            }
+            foundErrors |= this.secondPart.CheckSemanticErrors(scopeStack);
 
             foreach (BaseNode node in this.thidPartList)
             {
@@ -149,6 +145,17 @@
             scopeStack.AddLevel(ScopeType.Loop);
             this.body.CheckSemanticErrors(scopeStack);
             scopeStack.DeleteLevel();
+
+            if (foundErrors)
+            {
+                return foundErrors;
+            }
+
+            if (this.secondPart.GetDataType() != Literal.Bool)
+            {
+                this.AddError(ErrorType.ExpressionNotBoolean);
+                foundErrors = true;
+            }
 
             return foundErrors;
         }

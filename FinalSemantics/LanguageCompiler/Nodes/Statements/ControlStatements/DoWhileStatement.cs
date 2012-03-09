@@ -56,7 +56,16 @@
         public override bool CheckSemanticErrors(ScopeStack scopeStack)
         {
             bool foundErrors = false;
+
             scopeStack.AddLevel(ScopeType.Loop);
+            foundErrors |= this.expression.CheckSemanticErrors(scopeStack);
+            foundErrors |= this.body.CheckSemanticErrors(scopeStack);
+            scopeStack.DeleteLevel();
+
+            if (foundErrors)
+            {
+                return foundErrors;
+            }
 
             if (this.expression.GetDataType() != Literal.Bool)
             {
@@ -64,10 +73,6 @@
                 foundErrors = true;
             }
 
-            foundErrors |= this.expression.CheckSemanticErrors(scopeStack);
-            foundErrors |= this.body.CheckSemanticErrors(scopeStack);
-
-            scopeStack.DeleteLevel();
             return foundErrors;
         }
     }

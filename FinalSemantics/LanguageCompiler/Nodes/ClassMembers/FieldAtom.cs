@@ -86,7 +86,10 @@
             bool foundErrors = false;
 
             foundErrors |= this.name.CheckSemanticErrors(scopeStack);
-            foundErrors |= this.value.CheckSemanticErrors(scopeStack);
+            if (this.value != null)
+            {
+                foundErrors |= this.value.CheckSemanticErrors(scopeStack);
+            }
 
             if (this.name.CheckTypeExists(false))
             {

@@ -96,7 +96,7 @@
             {
                 foundErrors |= atom.CheckSemanticErrors(scopeStack);
 
-                if (this.Type.GetDataType() != atom.Value.GetDataType())
+                if (!foundErrors && this.Type.GetDataType() != atom.Value.GetDataType())
                 {
                     this.AddError(ErrorType.ExpressionDoesnotMatchType);
                     foundErrors = true;

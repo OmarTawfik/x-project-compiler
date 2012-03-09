@@ -68,21 +68,27 @@
         public override bool CheckSemanticErrors(ScopeStack scopeStack)
         {
             bool foundErrors = false;
-
             if (this.ModifierType != MemberModifierType.Normal)
             {
                 this.AddError(ErrorType.FieldInvalidModifier);
-                foundErrors = true;
+                return true;
             }
 
             foreach (FieldAtom atom in this.atoms)
             {
                 foundErrors |= atom.CheckSemanticErrors(scopeStack);
-
-                if (this.Type.GetDataType() != atom.Value.GetDataType())
+                if (foundErrors)
                 {
-                    this.AddError(ErrorType.ExpressionDoesnotMatchType);
-                    foundErrors = true;
+                    break;
+                }
+
+                if (atom.Value != null)
+                {
+                    if (this.Type.GetDataType() != atom.Value.GetDataType())
+                    {
+                        this.AddError(ErrorType.ExpressionDoesnotMatchType);
+                        foundErrors = true;
+                    }
                 }
             }
 

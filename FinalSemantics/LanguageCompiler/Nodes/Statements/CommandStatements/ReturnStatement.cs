@@ -3,6 +3,7 @@
     using System.Windows.Forms;
     using Irony.Parsing;
     using LanguageCompiler.Nodes.Expressions;
+    using LanguageCompiler.Semantics;
 
     /// <summary>
     /// Holds all data related to a "ReturnStatement" rule.
@@ -42,6 +43,16 @@
 
             this.StartLocation = node.ChildNodes[0].Token.Location;
             this.EndLocation = node.ChildNodes[2].Token.Location;
+        }
+
+        /// <summary>
+        /// Checks for semantic errors within this node.
+        /// </summary>
+        /// <param name="scopeStack">The scope stack associated with this node.</param>
+        /// <returns>True if errors are found, false otherwise.</returns>
+        public override bool CheckSemanticErrors(ScopeStack scopeStack)
+        {
+            return (this.expression == null) ? false : this.expression.CheckSemanticErrors(scopeStack);
         }
     }
 }

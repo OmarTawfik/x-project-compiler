@@ -1,9 +1,9 @@
 ﻿namespace LanguageCompiler.Nodes.Types
 {
-    using System.Collections.Generic;
+    using System.Text;
     using System.Windows.Forms;
     using Irony.Parsing;
-using LanguageCompiler.Semantics;
+    using LanguageCompiler.Semantics;
 
     /// <summary>
     /// Holds all data related to a "Array Type" rule.
@@ -58,7 +58,18 @@ using LanguageCompiler.Semantics;
         /// <returns>True if errors are found, false otherwise.</returns>
         public override bool CheckSemanticErrors(ScopeStack scopeStack)
         {
-            return this.type.CheckTypeExists() || this.type.CheckSemanticErrors(scopeStack);
+            return this.type.CheckSemanticErrors(scopeStack) || this.type.CheckTypeExists();
+        }
+
+        /// <summary>
+        /// Gets the type of this expression.
+        /// </summary>
+        /// <returns>A string representing the name of the type.</returns>
+        public override string GetDataType()
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(',', this.indexes - 1);
+            return string.Format("{0}[{1}]", this.type.GetDataType(), builder.ToString());
         }
     }
 }

@@ -2,6 +2,8 @@
 {
     using System.Windows.Forms;
     using Irony.Parsing;
+    using LanguageCompiler.Errors;
+    using LanguageCompiler.Nodes.Types;
     using LanguageCompiler.Semantics;
 
     /// <summary>
@@ -49,6 +51,46 @@
 
             this.StartLocation = this.condition.StartLocation;
             this.EndLocation = node.ChildNodes[1].ChildNodes[4].Token.Location;
+        }
+
+        /// <summary>
+        /// Checks for semantic errors within this node.
+        /// </summary>
+        /// <param name="scopeStack">The scope stack associated with this node.</param>
+        /// <returns>True if errors are found, false otherwise.</returns>
+        public override bool CheckSemanticErrors(ScopeStack scopeStack)
+        {
+            bool foundErrors = false;
+
+            foundErrors |= this.condition.CheckSemanticErrors(scopeStack);
+            foundErrors |= this.trueChoice.CheckSemanticErrors(scopeStack);
+            foundErrors |= this.falseChoice.CheckSemanticErrors(scopeStack);
+
+            if (!foundErrors)
+            {
+                if (this.condition.GetDataType() != Literal.Bool)
+                {
+                    this.AddError(ErrorType.ExpressionNotBoolean);
+                    foundErrors = true;
+                }
+
+                if (this.trueChoice.GetDataType() != this.falseChoice.GetDataType())
+                {
+                    this.AddError(ErrorType.EmbeddedIfTypeMismatch);
+                    foundErrors = true;
+                }
+            }
+
+            return foundErrors;
+        }
+
+        /// <summary>
+        /// Gets the type of this expression.
+        /// </summary>
+        /// <returns>A string representing the name of the type.</returns>
+        public override string GetDataType()
+        {
+            return this.trueChoice.GetDataType();
         }
     }
 }

@@ -57,14 +57,19 @@
         {
             bool foundErrors = false;
 
+            foundErrors |= this.expression.CheckSemanticErrors(scopeStack);
+            foundErrors |= this.body.CheckSemanticErrors(scopeStack);
+
+            if (foundErrors)
+            {
+                return foundErrors;
+            }
+
             if (this.expression.GetDataType() != Literal.Bool)
             {
                 this.AddError(ErrorType.ExpressionNotBoolean);
                 foundErrors = true;
             }
-
-            foundErrors |= this.expression.CheckSemanticErrors(scopeStack);
-            foundErrors |= this.body.CheckSemanticErrors(scopeStack);
 
             return foundErrors;
         }

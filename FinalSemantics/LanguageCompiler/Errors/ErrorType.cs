@@ -124,5 +124,10 @@
         /// This expression must be a boolean type.
         /// </summary>
         ExpressionNotBoolean,
+
+        /// <summary>
+        /// Types of both expressions of the embedded if statement don't match.
+        /// </summary>
+        EmbeddedIfTypeMismatch,
     }
 }

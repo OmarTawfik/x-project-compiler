@@ -53,11 +53,12 @@
         }
 
         /// <summary>
-        /// Gets a value indicating whether this variable is initialized.
+        /// Gets or sets a value indicating whether this variable is initialized.
         /// </summary>
         public bool IsInitialized
         {
             get { return this.isInitialized; }
+            set { this.IsInitialized = value; }
         }
     }
 }

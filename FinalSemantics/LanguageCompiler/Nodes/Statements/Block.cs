@@ -95,7 +95,7 @@
             }
 
             this.StartLocation = node.ChildNodes[0].Token.Location;
-            this.StartLocation = node.ChildNodes[node.ChildNodes.Count - 1].Token.Location;
+            this.EndLocation = node.ChildNodes[node.ChildNodes.Count - 1].Token.Location;
         }
 
         /// <summary>
@@ -110,7 +110,9 @@
 
             foreach (BaseNode child in this.statements)
             {
-                if (child is DeclarationStatement)
+                foundErrors |= child.CheckSemanticErrors(scopeStack);
+
+                if (!foundErrors && child is DeclarationStatement)
                 {
                     DeclarationStatement decl = child as DeclarationStatement;
                     foreach (FieldAtom atom in decl.Atoms)
@@ -118,8 +120,6 @@
                         foundErrors |= scopeStack.DeclareVariable(new Variable(decl.Type, atom.Name.Text, atom.Value != null), decl);
                     }
                 }
-
-                foundErrors |= child.CheckSemanticErrors(scopeStack);
             }
 
             scopeStack.DeleteLevel();

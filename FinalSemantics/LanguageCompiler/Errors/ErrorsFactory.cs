@@ -67,6 +67,7 @@
                 ErrorsFactory.errorsDic.Add(ErrorType.IdentifierNameTooLong, "This identifier {0}'s name is too long.");
                 ErrorsFactory.errorsDic.Add(ErrorType.IncorrectEscapeSequence, "Incorrect escape sequence {0} found in char or string literal.");
                 ErrorsFactory.errorsDic.Add(ErrorType.IncorrectNumberLiteral, "Incorrect number {0} found in numerical literal.");
+                ErrorsFactory.errorsDic.Add(ErrorType.EmbeddedIfTypeMismatch, "Types of both expressions of the embedded if statement don't match.");
             }
         }
 
