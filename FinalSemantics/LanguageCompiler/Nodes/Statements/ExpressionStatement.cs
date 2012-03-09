@@ -51,8 +51,7 @@
             bool foundErrors = false;
             foundErrors |= this.expression.CheckSemanticErrors(scopeStack);
 
-            if (this.expression is AssignmentExpression == false
-                && this.expression is InvocationExpression == false
+            if (this.expression is InvocationExpression == false
                 && this.expression is PostfixExpression == false
                 && this.expression is ObjectCreationExpression == false)
             {

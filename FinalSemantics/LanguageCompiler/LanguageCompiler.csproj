@@ -51,6 +51,7 @@
     <Compile Include="Errors\ErrorsFactory.cs" />
     <Compile Include="LanguageGrammar.cs" />
     <Compile Include="CompilerService.cs" />
+    <Compile Include="Nodes\Statements\DeclarationStatement.cs" />
     <Compile Include="Nodes\TopLevel\ClassDefinition.cs" />
     <Compile Include="Nodes\ClassMembers\FieldAtom.cs" />
     <Compile Include="Nodes\ClassMembers\FieldDefinition.cs" />
@@ -58,7 +59,6 @@
     <Compile Include="Nodes\ClassMembers\MemberDefinition.cs" />
     <Compile Include="Nodes\ClassMembers\OperatorDefinition.cs" />
     <Compile Include="Nodes\ClassMembers\Parameter.cs" />
-    <Compile Include="Nodes\Expressions\Basic\AssignmentExpression.cs" />
     <Compile Include="Nodes\Expressions\Basic\BinaryExpression.cs" />
     <Compile Include="Nodes\Expressions\Complex\EmptyArrayExpression.cs" />
     <Compile Include="Nodes\Expressions\Complex\ObjectCreationExpression.cs" />
@@ -78,7 +78,6 @@
     <Compile Include="Nodes\Statements\ControlStatements\IfBody.cs" />
     <Compile Include="Nodes\Statements\ControlStatements\IfStatement.cs" />
     <Compile Include="Nodes\Statements\ControlStatements\WhileStatement.cs" />
-    <Compile Include="Nodes\Statements\DeclarationStatement.cs" />
     <Compile Include="Nodes\Statements\ExpressionStatement.cs" />
     <Compile Include="Nodes\Types\ArrayType.cs" />
     <Compile Include="Nodes\Types\Identifier.cs" />

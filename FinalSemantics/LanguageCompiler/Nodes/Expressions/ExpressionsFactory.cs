@@ -17,13 +17,7 @@
         /// <returns>BaseNode Generated.</returns>
         public static BaseNode GetBaseExpr(ParseTreeNode node)
         {
-            if (node.Term.Name == LanguageGrammar.AssignmentExpression.Name)
-            {
-                AssignmentExpression expr = new AssignmentExpression();
-                expr.RecieveData(node);
-                return expr;
-            }
-            else if (node.Term.Name == LanguageGrammar.EmbeddedIf.Name)
+            if (node.Term.Name == LanguageGrammar.EmbeddedIf.Name)
             {
                 if (node.ChildNodes[1].ChildNodes.Count > 0)
                 {

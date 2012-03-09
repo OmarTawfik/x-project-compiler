@@ -258,11 +258,6 @@
         public static readonly NonTerminal IfStatement = new NonTerminal("If Statement");
 
         /// <summary>
-        /// The non terminal object for the "Assignment Expression" rule.
-        /// </summary>
-        public static readonly NonTerminal AssignmentExpression = new NonTerminal("Assignment Expression");
-
-        /// <summary>
         /// The non terminal object for the "For Statement" rule.
         /// </summary>
         public static readonly NonTerminal ForStatement = new NonTerminal("For Statement");
@@ -469,9 +464,8 @@
             DeclarationStatement.Rule = Type + FieldAtomsList + ";";
             Statement.Rule = CommandStatement | DeclarationStatement | ControlStatement | Block | ExpressionStatement;
 
-            AssignmentExpression.Rule = CompoundID + AssignmentOperator + Expression;
             EmbeddedIf.Rule = ConditionalOrExpression + (("?" + Expression + ":" + Expression) | this.Empty);
-            Expression.Rule = EmbeddedIf | AssignmentExpression;
+            Expression.Rule = EmbeddedIf;
             ExpressionsList.Rule = MakeStarRule(ExpressionsList, ToTerm(","), Expression);
 
             ConditionalOrExpression.Rule = ConditionalAndExpression | ConditionalAndExpression + "or" + ConditionalOrExpression;
