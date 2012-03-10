@@ -25,6 +25,14 @@
         private BaseNode rhs;
 
         /// <summary>
+        /// Gets the operator of expression.
+        /// </summary>
+        public string OperatorDefined
+        {
+            get { return this.operatorDefined; }
+        }
+
+        /// <summary>
         /// Forms a valid tree node representing this object.
         /// </summary>
         /// <returns>The formed tree node.</returns>
@@ -42,9 +50,9 @@
         /// <param name="node">The irony ParseTreeNode.</param>
         public override void RecieveData(ParseTreeNode node)
         {
-            this.lhs = ExpressionsFactory.GetBinaryExpr(node.ChildNodes[0]);
+            this.lhs = ExpressionsFactory.GetBaseExpr(node.ChildNodes[0]);
             this.operatorDefined = node.ChildNodes[1].Token.Text;
-            this.rhs = ExpressionsFactory.GetBinaryExpr(node.ChildNodes[2]);
+            this.rhs = ExpressionsFactory.GetBaseExpr(node.ChildNodes[2]);
 
             this.StartLocation = this.lhs.StartLocation;
             this.EndLocation = this.rhs.EndLocation;

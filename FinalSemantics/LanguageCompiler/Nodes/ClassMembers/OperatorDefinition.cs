@@ -16,22 +16,22 @@
         /// <summary>
         /// Operators that are non overloadable.
         /// </summary>
-        private static List<string> nonOverloadableOperators = new List<string>();
+        public static readonly List<string> NonOverloadableOperators = new List<string>();
 
         /// <summary>
         /// Operators that don't take parameters.
         /// </summary>
-        private static List<string> noParameterOperators = new List<string>();
+        public static readonly List<string> NoParameterOperators = new List<string>();
 
         /// <summary>
         /// Operators that take only one parameter.
         /// </summary>
-        private static List<string> oneParameterOperators = new List<string>();
+        public static readonly List<string> OneParameterOperators = new List<string>();
 
         /// <summary>
         /// Assignment operators that return the containing type.
         /// </summary>
-        private static List<string> assignmentOperators = new List<string>();
+        public static readonly List<string> AssignmentOperators = new List<string>();
 
         /// <summary>
         /// Operator of this method.
@@ -53,10 +53,10 @@
         /// </summary>
         static OperatorDefinition()
         {
-            OperatorDefinition.nonOverloadableOperators.AddRange(new string[] { "==", "!=", "not", "and", "or" });
-            OperatorDefinition.noParameterOperators.AddRange(new string[] { "++", "--" });
-            OperatorDefinition.oneParameterOperators.AddRange(new string[] { "<", ">", "<=", ">=", "+", "-", "*", "/", "%" });
-            OperatorDefinition.assignmentOperators.AddRange(new string[] { "=", "+=", "-=", "*=", "/=", "%=" });
+            OperatorDefinition.NonOverloadableOperators.AddRange(new string[] { "==", "!=", "not", "and", "or" });
+            OperatorDefinition.NoParameterOperators.AddRange(new string[] { "++", "--" });
+            OperatorDefinition.OneParameterOperators.AddRange(new string[] { "<", ">", "<=", ">=", "+", "-", "*", "/", "%" });
+            OperatorDefinition.AssignmentOperators.AddRange(new string[] { "=", "+=", "-=", "*=", "/=", "%=" });
         }
 
         /// <summary>
@@ -132,19 +132,19 @@
         public override bool CheckSemanticErrors(ScopeStack scopeStack)
         {
             bool foundErrors = false;
-            if (OperatorDefinition.nonOverloadableOperators.Contains(this.operatorDefined))
+            if (OperatorDefinition.NonOverloadableOperators.Contains(this.operatorDefined))
             {
                 this.AddError(ErrorType.OperatorNotOverloadable, this.operatorDefined);
                 foundErrors = true;
             }
 
-            if (OperatorDefinition.noParameterOperators.Contains(this.operatorDefined) && this.parameters.Count != 0)
+            if (OperatorDefinition.NoParameterOperators.Contains(this.operatorDefined) && this.parameters.Count != 0)
             {
                 this.AddError(ErrorType.OperatorInvalidParameters, this.operatorDefined);
                 foundErrors = true;
             }
 
-            if (OperatorDefinition.oneParameterOperators.Contains(this.operatorDefined) && this.parameters.Count != 1)
+            if (OperatorDefinition.OneParameterOperators.Contains(this.operatorDefined) && this.parameters.Count != 1)
             {
                 this.AddError(ErrorType.OperatorInvalidParameters, this.operatorDefined);
                 foundErrors = true;

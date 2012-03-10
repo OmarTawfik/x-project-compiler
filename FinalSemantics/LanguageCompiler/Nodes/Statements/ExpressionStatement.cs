@@ -3,6 +3,7 @@
     using System.Windows.Forms;
     using Irony.Parsing;
     using LanguageCompiler.Errors;
+    using LanguageCompiler.Nodes.ClassMembers;
     using LanguageCompiler.Nodes.Expressions;
     using LanguageCompiler.Nodes.Expressions.Basic;
     using LanguageCompiler.Nodes.Expressions.Complex;
@@ -53,13 +54,32 @@
 
             if (this.expression is InvocationExpression == false
                 && this.expression is PostfixExpression == false
-                && this.expression is ObjectCreationExpression == false)
+                && this.expression is ObjectCreationExpression == false
+                && this.IsAssignmentExpression(this.expression) == false)
             {
                 this.AddError(ErrorType.InvalidExpressionStatement);
                 foundErrors = true;
             }
 
             return foundErrors;
+        }
+
+        /// <summary>
+        /// Checks if a BaseNode is an assignment expression.
+        /// </summary>
+        /// <param name="node">Node to check.</param>
+        /// <returns>True if node is an assignment expression, false otherwise.</returns>
+        private bool IsAssignmentExpression(BaseNode node)
+        {
+            if (node is BinaryExpression)
+            {
+                BinaryExpression bin = node as BinaryExpression;
+                return OperatorDefinition.AssignmentOperators.Contains(bin.OperatorDefined);
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

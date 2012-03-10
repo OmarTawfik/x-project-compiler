@@ -388,9 +388,9 @@
         public static readonly NonTerminal ConditionalOperator = new NonTerminal("Conditional Operator");
 
         /// <summary>
-        /// The non terminal object for the "Compound ID" rule.
+        /// The non terminal object for the "Assignment Expression" rule.
         /// </summary>
-        public static readonly NonTerminal CompoundID = new NonTerminal("Compound ID");
+        public static readonly NonTerminal AssignmentExpression = new NonTerminal("Assignment Expression");
         #endregion
 
         /// <summary>
@@ -416,7 +416,6 @@
         /// </summary>
         public LanguageGrammar()
         {
-            CompoundID.Rule = MakePlusRule(CompoundID, ToTerm("."), ID);
             CommasList.Rule = MakeStarRule(CommasList, ToTerm(","));
             ArrayType.Rule = ID + "[" + CommasList + "]";
             Type.Rule = ID | ArrayType;
@@ -464,9 +463,10 @@
             DeclarationStatement.Rule = Type + FieldAtomsList + ";";
             Statement.Rule = CommandStatement | DeclarationStatement | ControlStatement | Block | ExpressionStatement;
 
-            EmbeddedIf.Rule = ConditionalOrExpression + (("?" + Expression + ":" + Expression) | this.Empty);
-            Expression.Rule = EmbeddedIf;
+            Expression.Rule = AssignmentExpression;
             ExpressionsList.Rule = MakeStarRule(ExpressionsList, ToTerm(","), Expression);
+            AssignmentExpression.Rule = EmbeddedIf | EmbeddedIf + AssignmentOperator + AssignmentExpression;
+            EmbeddedIf.Rule = ConditionalOrExpression + (("?" + Expression + ":" + Expression) | this.Empty);
 
             ConditionalOrExpression.Rule = ConditionalAndExpression | ConditionalAndExpression + "or" + ConditionalOrExpression;
             ConditionalAndExpression.Rule = EqualityExpression | EqualityExpression + "and" + ConditionalAndExpression;
