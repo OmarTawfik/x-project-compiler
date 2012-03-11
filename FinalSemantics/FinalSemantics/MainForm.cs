@@ -28,7 +28,7 @@
         private void CodeRichTextBox_TextChanged(object sender, System.EventArgs e)
         {
             CompilerService.Instance.Clear();
-            CompilerService.Instance.ParseFile(this.codeRichTextBox.Text);
+            CompilerService.Instance.ParseFile(this.codeRichTextBox.Text, "main.x");
             CompilerService.Instance.CheckSemantics();
 
             this.syntaxTreeView.Nodes.Clear();

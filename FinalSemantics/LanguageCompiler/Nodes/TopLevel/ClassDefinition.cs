@@ -71,9 +71,23 @@
         private Identifier classBase;
 
         /// <summary>
+        /// The name of the file this class was declared in.
+        /// </summary>
+        private string fileName;
+
+        /// <summary>
         /// Members of this class.
         /// </summary>
         private List<MemberDefinition> members = new List<MemberDefinition>();
+
+        /// <summary>
+        /// Initializes a new instance of the ClassDefinition class.
+        /// </summary>
+        /// <param name="fileName">The name of the file this class was declared in.</param>
+        public ClassDefinition(string fileName)
+        {
+            this.fileName = fileName;
+        }
 
         /// <summary>
         /// Gets the name of this class.

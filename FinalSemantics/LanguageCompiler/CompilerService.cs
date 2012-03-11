@@ -75,7 +75,8 @@
         /// Parses a stream of text for building a valid parse tree.
         /// </summary>
         /// <param name="text">Text stream to parse.</param>
-        public void ParseFile(string text)
+        /// <param name="fileName">The name of the file this class was declared in.</param>
+        public void ParseFile(string text, string fileName)
         {
             ParseTree tree = this.parser.Parse(text);
             foreach (LogMessage message in tree.ParserMessages)
@@ -87,7 +88,7 @@
             {
                 foreach (ParseTreeNode child in tree.Root.ChildNodes)
                 {
-                    ClassDefinition classDefinition = new ClassDefinition();
+                    ClassDefinition classDefinition = new ClassDefinition(fileName);
                     classDefinition.RecieveData(child);
                     if (this.classesList.ContainsKey(classDefinition.Name.Text))
                     {
