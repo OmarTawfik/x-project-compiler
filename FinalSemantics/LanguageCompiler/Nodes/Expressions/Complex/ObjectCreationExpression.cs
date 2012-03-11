@@ -47,6 +47,7 @@
         {
             this.type = new Identifier();
             this.type.RecieveData(node.ChildNodes[1]);
+
             foreach (ParseTreeNode child in node.ChildNodes[3].ChildNodes)
             {
                 this.arguments.Add(ExpressionsFactory.GetBaseExpr(child));

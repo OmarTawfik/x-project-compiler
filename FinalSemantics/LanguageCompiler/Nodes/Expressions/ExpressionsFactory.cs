@@ -79,9 +79,9 @@
         /// <returns>BaseNode Generated.</returns>
         public static BaseNode GetUnaryExpr(ParseTreeNode node)
         {
-            if (node.Term.Name == LanguageGrammar.PostfixIncrementExpression.Name)
+            if (node.Term.Name == LanguageGrammar.PrimaryExpression.Name)
             {
-                return GetPostfixExpr(node);
+                return GetPrimaryExpr(node.ChildNodes[0]);
             }
             else if (node.ChildNodes.Count == 1)
             {
@@ -89,74 +89,12 @@
             }
             else
             {
-                UnaryExpression expr = new UnaryExpression();
+                BaseNode expr = new UnaryExpression();
                 expr.RecieveData(node);
                 return expr;
             }
         }
 
-        /// <summary>
-        /// Resolves an expression from complex expressions.
-        /// </summary>
-        /// <param name="node">ParseTreeNode to resolve.</param>
-        /// <returns>BaseNode Generated.</returns>
-        public static BaseNode GetPostfixExpr(ParseTreeNode node)
-        {
-            BaseNode expr = null;
-            if (node.Term.Name == LanguageGrammar.PostfixIncrementExpression.Name
-             || node.Term.Name == LanguageGrammar.PostfixDecrementExpression.Name)
-            {
-                if (node.ChildNodes.Count == 1)
-                {
-                    return GetPostfixExpr(node.ChildNodes[0]);
-                }
-                else
-                {
-                    expr = new PostfixExpression();
-                }
-            }
-            else if (node.Term.Name == LanguageGrammar.ArrayExpression.Name)
-            {
-                if (node.ChildNodes[1].ChildNodes.Count > 0)
-                {
-                    expr = new ArrayExpression();
-                }
-                else
-                {
-                    return GetPostfixExpr(node.ChildNodes[0]);
-                }
-            }
-            else if (node.Term.Name == LanguageGrammar.InvocationExpression.Name)
-            {
-                if (node.ChildNodes[1].ChildNodes.Count > 0)
-                {
-                    expr = new InvocationExpression();
-                }
-                else
-                {
-                    return GetPostfixExpr(node.ChildNodes[0]);
-                }
-            }
-            else if (node.Term.Name == LanguageGrammar.CompoundExpression.Name)
-            {
-                if (node.ChildNodes[1].ChildNodes.Count > 0)
-                {
-                    expr = new CompoundExpression();
-                }
-                else
-                {
-                    return GetPrimaryExpr(node.ChildNodes[0]);
-                }
-            }
-            else
-            {
-                return GetPrimaryExpr(node);
-            }
-
-            expr.RecieveData(node);
-            return expr;
-        }
-        
         /// <summary>
         /// Resolves an expression from primary expressions.
         /// </summary>
@@ -165,29 +103,47 @@
         public static BaseNode GetPrimaryExpr(ParseTreeNode node)
         {
             BaseNode expr = null;
-            if (node.Term.Name == LanguageGrammar.ID.Name)
+
+            if (node.Term.Name == LanguageGrammar.PrimaryExpression.Name)
+            {
+                return GetPrimaryExpr(node.ChildNodes[0]);
+            }
+            else if (node.Term.Name == LanguageGrammar.ID.Name)
             {
                 expr = new Identifier();
             }
-            else if (node.Term.Name == LanguageGrammar.CharLiteral.Name
-                || node.Term.Name == LanguageGrammar.StringLiteral.Name
-                || node.Term.Name == LanguageGrammar.NaturalLiteral.Name
-                || node.Term.Name == LanguageGrammar.DecimalLiteral.Name)
+            else if (node.Term.Name == LanguageGrammar.ParenExpression.Name)
             {
-                expr = new Literal();
+                return GetBaseExpr(node.ChildNodes[1]);
+            }
+            else if (node.Term.Name == LanguageGrammar.CompoundExpression.Name)
+            {
+                expr = new CompoundExpression();
+            }
+            else if (node.Term.Name == LanguageGrammar.PostfixIncrementExpression.Name
+                || node.Term.Name == LanguageGrammar.PostfixDecrementExpression.Name)
+            {
+                expr = new PostfixExpression();
+            }
+            else if (node.Term.Name == LanguageGrammar.ArrayCreationExpression.Name)
+            {
+                expr = new ArrayCreationExpression();
             }
             else if (node.Term.Name == LanguageGrammar.ObjectCreationExpression.Name)
             {
                 expr = new ObjectCreationExpression();
             }
-            else if (node.Term.Name == LanguageGrammar.EmptyArrayExpression.Name)
+            else if (node.Term.Name == LanguageGrammar.ArrayExpression.Name)
             {
-                expr = new EmptyArrayExpression();
+                expr = new ArrayExpression();
+            }
+            else if (node.Term.Name == LanguageGrammar.InvocationExpression.Name)
+            {
+                expr = new InvocationExpression();
             }
             else
             {
-                expr = GetBaseExpr(node.ChildNodes[1]);
-                return expr;
+                expr = new Literal();
             }
 
             expr.RecieveData(node);

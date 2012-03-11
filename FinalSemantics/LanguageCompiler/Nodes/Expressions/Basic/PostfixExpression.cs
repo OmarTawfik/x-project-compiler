@@ -36,7 +36,7 @@
         /// <param name="node">The irony ParseTreeNode.</param>
         public override void RecieveData(ParseTreeNode node)
         {
-            this.lhs = ExpressionsFactory.GetPostfixExpr(node.ChildNodes[0]);
+            this.lhs = ExpressionsFactory.GetPrimaryExpr(node.ChildNodes[0]);
             this.operatorDefined = node.ChildNodes[1].Token.Text;
 
             this.StartLocation = this.lhs.StartLocation;

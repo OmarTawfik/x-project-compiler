@@ -43,6 +43,11 @@
         public static readonly NonTerminal ClassBase = new NonTerminal("Class Base");
 
         /// <summary>
+        /// The non terminal object for the "Plus Expressions List" rule.
+        /// </summary>
+        public static readonly NonTerminal PlusExpressionsList = new NonTerminal("Plus Expressions List");
+
+        /// <summary>
         /// The non terminal object for the "Class Definition" rule.
         /// </summary>
         public static readonly NonTerminal ClassDefinition = new NonTerminal("Class Definition");
@@ -375,7 +380,7 @@
         /// <summary>
         /// The non terminal object for the "Empty Array Expression" rule.
         /// </summary>
-        public static readonly NonTerminal EmptyArrayExpression = new NonTerminal("Empty Array Expression");
+        public static readonly NonTerminal ArrayCreationExpression = new NonTerminal("Empty Array Expression");
 
         /// <summary>
         /// The non terminal object for the "Expression Statement" rule.
@@ -465,6 +470,7 @@
 
             Expression.Rule = AssignmentExpression;
             ExpressionsList.Rule = MakeStarRule(ExpressionsList, ToTerm(","), Expression);
+            PlusExpressionsList.Rule = MakePlusRule(PlusExpressionsList, ToTerm(","), Expression);
             AssignmentExpression.Rule = EmbeddedIf | EmbeddedIf + AssignmentOperator + AssignmentExpression;
             EmbeddedIf.Rule = ConditionalOrExpression + (("?" + Expression + ":" + Expression) | this.Empty);
 
@@ -480,21 +486,26 @@
 
             PositiveExpression.Rule = NegativeExpression | "+" + NegativeExpression;
             NegativeExpression.Rule = InvertExpression | "-" + InvertExpression;
-            InvertExpression.Rule = PostfixIncrementExpression | "not" + PostfixIncrementExpression;
-            PostfixIncrementExpression.Rule = PostfixDecrementExpression | PostfixDecrementExpression + "++";
-            PostfixDecrementExpression.Rule = ArrayExpression | ArrayExpression + "--";
+            InvertExpression.Rule = PrimaryExpression | "not" + PrimaryExpression;
 
-            ArrayExpression.Rule = InvocationExpression + ("[" + ExpressionsList + "]" | this.Empty);
-            InvocationExpression.Rule = CompoundExpression + (ID + "(" + ExpressionsList + ")" | this.Empty);
-            CompoundExpression.Rule = PrimaryExpression + ("." + ID | this.Empty);
-
-            PrimaryExpression.Rule = ID | CharLiteral | StringLiteral | DecimalLiteral | NaturalLiteral
-                | "true" | "false" | ParenExpression | ObjectCreationExpression | EmptyArrayExpression;
+            PrimaryExpression.Rule = ParenExpression | CompoundExpression
+                | ID | CharLiteral | StringLiteral | DecimalLiteral | NaturalLiteral | "true" | "false"
+                | PostfixIncrementExpression | PostfixDecrementExpression
+                | ArrayCreationExpression | ObjectCreationExpression
+                | ArrayExpression | InvocationExpression;
 
             ParenExpression.Rule = "(" + Expression + ")";
-            ObjectCreationExpression.Rule = "new" + ID + "(" + ExpressionsList + ")";
-            EmptyArrayExpression.Rule = "new" + ID + "[" + ExpressionsList + "]";
+            CompoundExpression.Rule = PrimaryExpression + "." + ID;
 
+            PostfixIncrementExpression.Rule = PrimaryExpression + "++";
+            PostfixDecrementExpression.Rule = PrimaryExpression + "--";
+
+            ArrayCreationExpression.Rule = "new" + ID + "[" + PlusExpressionsList + "]";
+            ObjectCreationExpression.Rule = "new" + ID + "(" + ExpressionsList + ")";
+
+            ArrayExpression.Rule = PrimaryExpression + "[" + PlusExpressionsList + "]";
+            InvocationExpression.Rule = PrimaryExpression + "(" + ExpressionsList + ")";
+            
             EqualityOperator.Rule = ToTerm("==") | "!=";
             RelationalOperator.Rule = ToTerm("<") | ">" | "<=" | ">=";
             UnaryOperator.Rule = ToTerm("+") | "-" | "not" | "++" | "--";
@@ -511,26 +522,23 @@
             this.NonGrammarTerminals.Add(new CommentTerminal("Single Line Comment", "/", "\r\n", "\n", "\r"));
             this.NonGrammarTerminals.Add(new CommentTerminal("Multi Line Comment", "/*", "*/"));
 
-            this.RegisterOperators(16, Associativity.Neutral, "=", "+=", "-=", "*=", "/=", "%=");
-            this.RegisterOperators(15, Associativity.Neutral, "?");
-            this.RegisterOperators(14, Associativity.Neutral, ":");
-            this.RegisterOperators(13, Associativity.Neutral, "or");
-            this.RegisterOperators(12, Associativity.Neutral, "==", "!=");
-            this.RegisterOperators(11, Associativity.Neutral, "<", ">", "<=", ">=");
-            this.RegisterOperators(10, Associativity.Neutral, "+");
-            this.RegisterOperators(9, Associativity.Neutral, "-");
-            this.RegisterOperators(8, Associativity.Neutral, "*");
-            this.RegisterOperators(7, Associativity.Neutral, "/");
-            this.RegisterOperators(6, Associativity.Neutral, "%");
-            this.RegisterOperators(5, Associativity.Left, "++");
-            this.RegisterOperators(4, Associativity.Left, "--");
-            this.RegisterOperators(3, Associativity.Neutral, "not");
-            this.RegisterOperators(2, Associativity.Right, "++");
-            this.RegisterOperators(1, Associativity.Right, "--");
+            this.RegisterOperators(13, Associativity.Neutral, "=", "+=", "-=", "*=", "/=", "%=");
+            this.RegisterOperators(12, Associativity.Neutral, "?");
+            this.RegisterOperators(11, Associativity.Neutral, ":");
+            this.RegisterOperators(10, Associativity.Neutral, "or");
+            this.RegisterOperators(9, Associativity.Neutral, "==", "!=");
+            this.RegisterOperators(8, Associativity.Neutral, "<", ">", "<=", ">=");
+            this.RegisterOperators(7, Associativity.Neutral, "+");
+            this.RegisterOperators(6, Associativity.Neutral, "-");
+            this.RegisterOperators(5, Associativity.Neutral, "*");
+            this.RegisterOperators(4, Associativity.Neutral, "/");
+            this.RegisterOperators(3, Associativity.Neutral, "%");
+            this.RegisterOperators(2, Associativity.Neutral, "not");
+            this.RegisterOperators(1, Associativity.Left, "--", "++");
 
-            this.MarkTransient(EqualityOperator, RelationalOperator, UnaryOperator, AssignmentOperator, OverloadableOperator);
+            this.MarkTransient(EqualityOperator, RelationalOperator, UnaryOperator, AssignmentOperator);
             this.MarkTransient(ClassLabel, ClassMember, Type, MethodType, BlockOrSemicolon);
-            this.MarkTransient(Statement, CommandStatement, ControlStatement, Expression, PrimaryExpression);
+            this.MarkTransient(Statement, CommandStatement, ControlStatement, Expression, OverloadableOperator);
 
             FileDefinition.Rule = MakePlusRule(FileDefinition, ClassDefinition);
             this.Root = FileDefinition;

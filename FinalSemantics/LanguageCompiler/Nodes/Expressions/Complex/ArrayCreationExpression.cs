@@ -9,7 +9,7 @@
     /// <summary>
     /// Holds all data related to a "EmptyArrayExpression" rule.
     /// </summary>
-    public class EmptyArrayExpression : BaseNode
+    public class ArrayCreationExpression : BaseNode
     {
         /// <summary>
         /// Type of array.

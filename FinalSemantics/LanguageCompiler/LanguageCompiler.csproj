@@ -60,7 +60,7 @@
     <Compile Include="Nodes\ClassMembers\OperatorDefinition.cs" />
     <Compile Include="Nodes\ClassMembers\Parameter.cs" />
     <Compile Include="Nodes\Expressions\Basic\BinaryExpression.cs" />
-    <Compile Include="Nodes\Expressions\Complex\EmptyArrayExpression.cs" />
+    <Compile Include="Nodes\Expressions\Complex\ArrayCreationExpression.cs" />
     <Compile Include="Nodes\Expressions\Complex\ObjectCreationExpression.cs" />
     <Compile Include="Nodes\Expressions\Basic\EmbeddedIf.cs" />
     <Compile Include="Nodes\Expressions\ExpressionsFactory.cs" />

@@ -2,7 +2,7 @@
 {
     using System.Windows.Forms;
     using Irony.Parsing;
-    using LanguageCompiler.Semantics;
+    using LanguageCompiler.Nodes.Types;
 
     /// <summary>
     /// Holds all data related to a "CompoundExpression" rule.
@@ -17,7 +17,7 @@
         /// <summary>
         /// RHS of expression.
         /// </summary>
-        private BaseNode rhs;
+        private Identifier rhs;
 
         /// <summary>
         /// Forms a valid tree node representing this object.
@@ -37,8 +37,9 @@
         /// <param name="node">The irony ParseTreeNode.</param>
         public override void RecieveData(ParseTreeNode node)
         {
-            this.lhs = ExpressionsFactory.GetPostfixExpr(node.ChildNodes[0]);
-            this.rhs = ExpressionsFactory.GetPostfixExpr(node.ChildNodes[1].ChildNodes[1]);
+            this.lhs = ExpressionsFactory.GetPrimaryExpr(node.ChildNodes[0]);
+            this.rhs = new Identifier();
+            this.rhs.RecieveData(node.ChildNodes[2]);
 
             this.StartLocation = this.lhs.StartLocation;
             this.EndLocation = this.rhs.EndLocation;

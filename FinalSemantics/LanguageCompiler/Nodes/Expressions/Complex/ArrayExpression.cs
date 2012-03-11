@@ -45,14 +45,14 @@
         /// <param name="node">The irony ParseTreeNode.</param>
         public override void RecieveData(ParseTreeNode node)
         {
-            this.lhs = ExpressionsFactory.GetPostfixExpr(node.ChildNodes[0]);
-            foreach (ParseTreeNode child in node.ChildNodes[1].ChildNodes[1].ChildNodes)
+            this.lhs = ExpressionsFactory.GetPrimaryExpr(node.ChildNodes[0]);
+            foreach (ParseTreeNode child in node.ChildNodes[2].ChildNodes)
             {
                 this.indexes.Add(ExpressionsFactory.GetBaseExpr(child));
             }
 
             this.StartLocation = this.lhs.StartLocation;
-            this.EndLocation = node.ChildNodes[1].ChildNodes[2].Token.Location;
+            this.EndLocation = node.ChildNodes[3].Token.Location;
         }
     }
 }
