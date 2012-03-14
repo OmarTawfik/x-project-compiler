@@ -5,6 +5,7 @@
     using Irony.Parsing;
     using LanguageCompiler.Errors;
     using LanguageCompiler.Nodes.Statements;
+    using LanguageCompiler.Nodes.TopLevel;
     using LanguageCompiler.Nodes.Types;
     using LanguageCompiler.Semantics;
 
@@ -57,6 +58,15 @@
             OperatorDefinition.NoParameterOperators.AddRange(new string[] { "++", "--" });
             OperatorDefinition.OneParameterOperators.AddRange(new string[] { "<", ">", "<=", ">=", "+", "-", "*", "/", "%" });
             OperatorDefinition.AssignmentOperators.AddRange(new string[] { "=", "+=", "-=", "*=", "/=", "%=" });
+        }
+        
+        /// <summary>
+        /// Initializes a new instance of the OperatorDefinition class.
+        /// </summary>
+        /// <param name="parent">The class where this member was defined in.</param>
+        public OperatorDefinition(ClassDefinition parent)
+            : base(parent)
+        {
         }
 
         /// <summary>
@@ -177,7 +187,12 @@
                 foreach (Parameter param in this.parameters)
                 {
                     foundErrors |= param.CheckSemanticErrors(scopeStack);
-                    foundErrors |= scopeStack.DeclareVariable(new Variable(param.Type, param.Name.Text, true), this);
+                    foundErrors |= scopeStack.DeclareVariable(
+                        new Variable(
+                            param.Type.GetExpressionType(scopeStack),
+                            param.Name.Text,
+                            true),
+                        this);
                 }
 
                 this.block.CheckSemanticErrors(scopeStack);

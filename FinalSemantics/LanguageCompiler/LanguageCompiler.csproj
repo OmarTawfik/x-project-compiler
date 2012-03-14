@@ -51,6 +51,7 @@
     <Compile Include="Errors\ErrorsFactory.cs" />
     <Compile Include="LanguageGrammar.cs" />
     <Compile Include="CompilerService.cs" />
+    <Compile Include="Nodes\Expressions\ExpressionNode.cs" />
     <Compile Include="Nodes\Statements\DeclarationStatement.cs" />
     <Compile Include="Nodes\TopLevel\ClassDefinition.cs" />
     <Compile Include="Nodes\ClassMembers\FieldAtom.cs" />
@@ -83,6 +84,10 @@
     <Compile Include="Nodes\Types\Identifier.cs" />
     <Compile Include="Nodes\Types\Literal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Semantics\ExpressionTypes\ArrayExpressionType.cs" />
+    <Compile Include="Semantics\ExpressionTypes\ExpressionType.cs" />
+    <Compile Include="Semantics\ExpressionTypes\MethodExpressionType.cs" />
+    <Compile Include="Semantics\ExpressionTypes\ObjectExpressionType.cs" />
     <Compile Include="Semantics\Scope.cs" />
     <Compile Include="Semantics\ScopeStack.cs" />
     <Compile Include="Semantics\Variable.cs" />

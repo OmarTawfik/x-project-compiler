@@ -4,6 +4,7 @@
     using System.Windows.Forms;
     using Irony.Parsing;
     using LanguageCompiler.Errors;
+    using LanguageCompiler.Nodes.TopLevel;
     using LanguageCompiler.Semantics;
 
     /// <summary>
@@ -15,6 +16,15 @@
         /// Atoms of this field.
         /// </summary>
         private List<FieldAtom> atoms = new List<FieldAtom>();
+
+        /// <summary>
+        /// Initializes a new instance of the FieldDefinition class.
+        /// </summary>
+        /// <param name="parent">The class where this member was defined in.</param>
+        public FieldDefinition(ClassDefinition parent)
+            : base(parent)
+        {
+        }
 
         /// <summary>
         /// Gets the list of field atoms.
@@ -84,7 +94,7 @@
 
                 if (atom.Value != null)
                 {
-                    if (this.Type.GetDataType() != atom.Value.GetDataType())
+                    if (this.Type.GetExpressionType(scopeStack).IsEqualTo(atom.Value.GetExpressionType(scopeStack)) == false)
                     {
                         this.AddError(ErrorType.ExpressionDoesnotMatchType);
                         foundErrors = true;

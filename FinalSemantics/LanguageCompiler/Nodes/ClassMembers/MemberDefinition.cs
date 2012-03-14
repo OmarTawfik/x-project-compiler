@@ -2,6 +2,8 @@
 {
     using System.Windows.Forms;
     using Irony.Parsing;
+    using LanguageCompiler.Nodes.Expressions;
+    using LanguageCompiler.Nodes.TopLevel;
     using LanguageCompiler.Nodes.Types;
 
     /// <summary>
@@ -90,14 +92,36 @@
         /// <summary>
         /// Data type for this member.
         /// </summary>
-        private BaseNode type;
+        private ExpressionNode type;
+
+        /// <summary>
+        /// The class where this member was defined in.
+        /// </summary>
+        private ClassDefinition parent;
+
+        /// <summary>
+        /// Initializes a new instance of the MemberDefinition class.
+        /// </summary>
+        /// <param name="parent">The class where this member was defined in.</param>
+        public MemberDefinition(ClassDefinition parent)
+        {
+            this.parent = parent;
+        }
 
         /// <summary>
         /// Gets the base node of the member type
         /// </summary>
-        public BaseNode Type
+        public ExpressionNode Type
         {
             get { return this.type; }
+        }
+
+        /// <summary>
+        /// Gets the class where this member was defined in.
+        /// </summary>
+        public ClassDefinition Parent
+        {
+            get { return this.parent; }
         }
 
         /// <summary>

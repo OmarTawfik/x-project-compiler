@@ -15,7 +15,7 @@
         /// </summary>
         /// <param name="node">ParseTreeNode to resolve.</param>
         /// <returns>BaseNode Generated.</returns>
-        public static BaseNode GetBaseExpr(ParseTreeNode node)
+        public static ExpressionNode GetBaseExpr(ParseTreeNode node)
         {
             if (node.Term.Name == LanguageGrammar.AssignmentExpression.Name)
             {
@@ -54,7 +54,7 @@
         /// </summary>
         /// <param name="node">ParseTreeNode to resolve.</param>
         /// <returns>BaseNode Generated.</returns>
-        public static BaseNode GetBinaryExpr(ParseTreeNode node)
+        public static ExpressionNode GetBinaryExpr(ParseTreeNode node)
         {
             if (node.Term.Name == LanguageGrammar.PositiveExpression.Name)
             {
@@ -77,7 +77,7 @@
         /// </summary>
         /// <param name="node">ParseTreeNode to resolve.</param>
         /// <returns>BaseNode Generated.</returns>
-        public static BaseNode GetUnaryExpr(ParseTreeNode node)
+        public static ExpressionNode GetUnaryExpr(ParseTreeNode node)
         {
             if (node.Term.Name == LanguageGrammar.PrimaryExpression.Name)
             {
@@ -89,7 +89,7 @@
             }
             else
             {
-                BaseNode expr = new UnaryExpression();
+                UnaryExpression expr = new UnaryExpression();
                 expr.RecieveData(node);
                 return expr;
             }
@@ -100,9 +100,9 @@
         /// </summary>
         /// <param name="node">ParseTreeNode to resolve.</param>
         /// <returns>BaseNode Generated.</returns>
-        public static BaseNode GetPrimaryExpr(ParseTreeNode node)
+        public static ExpressionNode GetPrimaryExpr(ParseTreeNode node)
         {
-            BaseNode expr = null;
+            ExpressionNode expr = null;
 
             if (node.Term.Name == LanguageGrammar.PrimaryExpression.Name)
             {

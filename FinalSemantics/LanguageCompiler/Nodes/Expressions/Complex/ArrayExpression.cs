@@ -4,21 +4,22 @@
     using System.Windows.Forms;
     using Irony.Parsing;
     using LanguageCompiler.Semantics;
+    using LanguageCompiler.Semantics.ExpressionTypes;
 
     /// <summary>
     /// Holds all data related to a "ArrayExpression" rule.
     /// </summary>
-    public class ArrayExpression : BaseNode
+    public class ArrayExpression : ExpressionNode
     {
         /// <summary>
         /// expression in LHS.
         /// </summary>
-        private BaseNode lhs;
+        private ExpressionNode lhs;
 
         /// <summary>
         /// Indexes of expression.
         /// </summary>
-        private List<BaseNode> indexes = new List<BaseNode>();
+        private List<ExpressionNode> indexes = new List<ExpressionNode>();
 
         /// <summary>
         /// Forms a valid tree node representing this object.
@@ -53,6 +54,16 @@
 
             this.StartLocation = this.lhs.StartLocation;
             this.EndLocation = node.ChildNodes[3].Token.Location;
+        }
+
+        /// <summary>
+        /// Gets the expression type of this node.
+        /// </summary>
+        /// <param name="stack">Current Scope Stack.</param>
+        /// <returns>The expression type of this node.</returns>
+        public override ExpressionType GetExpressionType(ScopeStack stack)
+        {
+            return (this.lhs.GetExpressionType(stack) as ArrayExpressionType).ElementType;
         }
     }
 }

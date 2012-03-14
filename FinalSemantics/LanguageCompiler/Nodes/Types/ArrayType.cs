@@ -1,14 +1,15 @@
 ﻿namespace LanguageCompiler.Nodes.Types
 {
-    using System.Text;
     using System.Windows.Forms;
     using Irony.Parsing;
+    using LanguageCompiler.Nodes.Expressions;
     using LanguageCompiler.Semantics;
+    using LanguageCompiler.Semantics.ExpressionTypes;
 
     /// <summary>
     /// Holds all data related to a "Array Type" rule.
     /// </summary>
-    public class ArrayType : BaseNode
+    public class ArrayType : ExpressionNode
     {
         /// <summary>
         /// The type of this array.
@@ -60,16 +61,15 @@
         {
             return this.type.CheckSemanticErrors(scopeStack) || this.type.CheckTypeExists();
         }
-
+        
         /// <summary>
-        /// Gets the type of this expression.
+        /// Gets the expression type of this node.
         /// </summary>
-        /// <returns>A string representing the name of the type.</returns>
-        public override string GetDataType()
+        /// <param name="stack">Current Scope Stack.</param>
+        /// <returns>The expression type of this node.</returns>
+        public override ExpressionType GetExpressionType(ScopeStack stack)
         {
-            StringBuilder builder = new StringBuilder();
-            builder.Append(',', this.indexes - 1);
-            return string.Format("{0}[{1}]", this.type.GetDataType(), builder.ToString());
+            return new ArrayExpressionType(this.type.GetExpressionType(stack), this.indexes);
         }
     }
 }

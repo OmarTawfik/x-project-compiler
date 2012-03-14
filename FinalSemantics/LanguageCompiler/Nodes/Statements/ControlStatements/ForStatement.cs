@@ -22,12 +22,12 @@
         /// <summary>
         /// Stopping condition of the for statement.
         /// </summary>
-        private BaseNode secondPart;
+        private ExpressionNode secondPart;
 
         /// <summary>
         /// third part list of expressions.
         /// </summary>
-        private List<BaseNode> thidPartList = new List<BaseNode>();
+        private List<ExpressionNode> thidPartList = new List<ExpressionNode>();
 
         /// <summary>
         /// Body of the for statement.
@@ -151,7 +151,7 @@
                 return foundErrors;
             }
 
-            if (this.secondPart.GetDataType() != Literal.Bool)
+            if (this.secondPart.GetExpressionType(scopeStack).IsEqualTo(Literal.ConstructExpression(Literal.Bool)) == false)
             {
                 this.AddError(ErrorType.ExpressionNotBoolean);
                 foundErrors = true;

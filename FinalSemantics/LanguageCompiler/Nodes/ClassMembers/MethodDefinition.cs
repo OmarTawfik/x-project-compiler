@@ -5,6 +5,7 @@
     using Irony.Parsing;
     using LanguageCompiler.Errors;
     using LanguageCompiler.Nodes.Statements;
+    using LanguageCompiler.Nodes.TopLevel;
     using LanguageCompiler.Nodes.Types;
     using LanguageCompiler.Semantics;
 
@@ -27,6 +28,15 @@
         /// Code block of this method.
         /// </summary>
         private Block block;
+
+        /// <summary>
+        /// Initializes a new instance of the MethodDefinition class.
+        /// </summary>
+        /// <param name="parent">The class where this member was defined in.</param>
+        public MethodDefinition(ClassDefinition parent)
+            : base(parent)
+        {
+        }
 
         /// <summary>
         /// Gets the name of this method.
@@ -127,7 +137,12 @@
                 foreach (Parameter param in this.parameters)
                 {
                     foundErrors |= param.CheckSemanticErrors(scopeStack);
-                    foundErrors |= scopeStack.DeclareVariable(new Variable(param.Type, param.Name.Text, true), this);
+                    foundErrors |= scopeStack.DeclareVariable(
+                        new Variable(
+                            param.Type.GetExpressionType(scopeStack),
+                            param.Name.Text,
+                            true),
+                        this);
                 }
 
                 this.block.CheckSemanticErrors(scopeStack);

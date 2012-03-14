@@ -1,18 +1,22 @@
 ﻿namespace LanguageCompiler.Nodes.Expressions.Basic
 {
+    using System;
     using System.Windows.Forms;
     using Irony.Parsing;
+    using LanguageCompiler.Nodes.ClassMembers;
+    using LanguageCompiler.Nodes.TopLevel;
     using LanguageCompiler.Semantics;
+    using LanguageCompiler.Semantics.ExpressionTypes;
 
     /// <summary>
     /// Holds all data related to a "BinaryExpression" rule.
     /// </summary>
-    public class BinaryExpression : BaseNode
+    public class BinaryExpression : ExpressionNode
     {
         /// <summary>
         /// LHS of expression.
         /// </summary>
-        private BaseNode lhs;
+        private ExpressionNode lhs;
 
         /// <summary>
         /// Operator of expression.
@@ -22,7 +26,7 @@
         /// <summary>
         /// RHS of expression.
         /// </summary>
-        private BaseNode rhs;
+        private ExpressionNode rhs;
 
         /// <summary>
         /// Gets the operator of expression.
@@ -56,6 +60,30 @@
 
             this.StartLocation = this.lhs.StartLocation;
             this.EndLocation = this.rhs.EndLocation;
+        }
+
+        /// <summary>
+        /// Gets the expression type of this node.
+        /// </summary>
+        /// <param name="stack">Current Scope Stack.</param>
+        /// <returns>The expression type of this node.</returns>
+        public override ExpressionType GetExpressionType(ScopeStack stack)
+        {
+            ClassDefinition lhsType = (this.lhs.GetExpressionType(stack) as ObjectExpressionType).DataType;
+
+            foreach (MemberDefinition member in lhsType.Members)
+            {
+                if (member is OperatorDefinition)
+                {
+                    OperatorDefinition op = member as OperatorDefinition;
+                    if (op.OperatorDefined == this.operatorDefined)
+                    {
+                        return op.Type.GetExpressionType(stack);
+                    }
+                }
+            }
+
+            throw new Exception("Faulty Type. Should be handled in semantics.");
         }
     }
 }

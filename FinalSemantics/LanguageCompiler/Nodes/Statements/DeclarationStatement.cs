@@ -5,6 +5,7 @@
      using Irony.Parsing;
      using LanguageCompiler.Errors;
      using LanguageCompiler.Nodes.ClassMembers;
+     using LanguageCompiler.Nodes.Expressions;
      using LanguageCompiler.Nodes.Types;
      using LanguageCompiler.Semantics;
 
@@ -16,7 +17,7 @@
          /// <summary>
          /// Type of this statement.
          /// </summary>
-         private BaseNode type;
+         private ExpressionNode type;
 
          /// <summary>
          /// Atoms of this field.
@@ -26,7 +27,7 @@
          /// <summary>
          /// Gets the type of this statement.
          /// </summary>
-         public BaseNode Type
+         public ExpressionNode Type
          {
              get { return this.type; }
          }
@@ -96,7 +97,8 @@
              {
                  foundErrors |= atom.CheckSemanticErrors(scopeStack);
 
-                 if (!foundErrors && atom.Value != null && this.Type.GetDataType() != atom.Value.GetDataType())
+                 if (!foundErrors && atom.Value != null
+                     && this.Type.GetExpressionType(scopeStack).IsEqualTo(atom.Value.GetExpressionType(scopeStack)) == false)
                  {
                      this.AddError(ErrorType.ExpressionDoesnotMatchType);
                      foundErrors = true;

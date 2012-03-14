@@ -2,6 +2,7 @@
 {
     using System.Windows.Forms;
     using Irony.Parsing;
+    using LanguageCompiler.Nodes.Expressions;
     using LanguageCompiler.Nodes.Types;
     using LanguageCompiler.Semantics;
 
@@ -13,7 +14,7 @@
         /// <summary>
         /// Type of this parameter.
         /// </summary>
-        private BaseNode type;
+        private ExpressionNode type;
 
         /// <summary>
         /// Name of this parameter.
@@ -23,7 +24,7 @@
         /// <summary>
         /// Gets the type of this parameter.
         /// </summary>
-        public BaseNode Type
+        public ExpressionNode Type
         {
             get { return this.type; }
         }

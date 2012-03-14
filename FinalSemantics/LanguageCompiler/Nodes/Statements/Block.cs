@@ -117,7 +117,12 @@
                     DeclarationStatement decl = child as DeclarationStatement;
                     foreach (FieldAtom atom in decl.Atoms)
                     {
-                        foundErrors |= scopeStack.DeclareVariable(new Variable(decl.Type, atom.Name.Text, atom.Value != null), decl);
+                        foundErrors |= scopeStack.DeclareVariable(
+                            new Variable(
+                                decl.Type.GetExpressionType(scopeStack),
+                                atom.Name.Text,
+                                atom.Value != null),
+                                decl);
                     }
                 }
             }

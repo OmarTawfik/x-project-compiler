@@ -1,18 +1,23 @@
 ﻿namespace LanguageCompiler.Nodes.Expressions.Complex
 {
+    using System;
     using System.Windows.Forms;
     using Irony.Parsing;
+    using LanguageCompiler.Nodes.ClassMembers;
+    using LanguageCompiler.Nodes.TopLevel;
     using LanguageCompiler.Nodes.Types;
+    using LanguageCompiler.Semantics;
+    using LanguageCompiler.Semantics.ExpressionTypes;
 
     /// <summary>
     /// Holds all data related to a "CompoundExpression" rule.
     /// </summary>
-    public class CompoundExpression : BaseNode
+    public class CompoundExpression : ExpressionNode
     {
         /// <summary>
         /// expression in LHS.
         /// </summary>
-        private BaseNode lhs;
+        private ExpressionNode lhs;
 
         /// <summary>
         /// RHS of expression.
@@ -43,6 +48,41 @@
 
             this.StartLocation = this.lhs.StartLocation;
             this.EndLocation = this.rhs.EndLocation;
+        }
+
+        /// <summary>
+        /// Gets the expression type of this node.
+        /// </summary>
+        /// <param name="stack">Current Scope Stack.</param>
+        /// <returns>The expression type of this node.</returns>
+        public override ExpressionType GetExpressionType(ScopeStack stack)
+        {
+            ClassDefinition lhsType = (this.lhs.GetExpressionType(stack) as ObjectExpressionType).DataType;
+
+            foreach (MemberDefinition member in lhsType.Members)
+            {
+                if (member is FieldDefinition)
+                {
+                    FieldDefinition field = member as FieldDefinition;
+                    foreach (FieldAtom atom in field.Atoms)
+                    {
+                        if (atom.Name.Text == this.rhs.Text)
+                        {
+                            return field.Type.GetExpressionType(stack);
+                        }
+                    }
+                }
+                else if (member is MethodDefinition)
+                {
+                    MethodDefinition method = member as MethodDefinition;
+                    if (method.Name.Text == this.rhs.Text)
+                    {
+                        return new MethodExpressionType(method);
+                    }
+                }
+            }
+
+            throw new Exception("Faulty Type. Should be handled in semantics.");
         }
     }
 }

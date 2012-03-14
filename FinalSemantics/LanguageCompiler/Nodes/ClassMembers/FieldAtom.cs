@@ -20,7 +20,7 @@
         /// <summary>
         /// Value of this atom.
         /// </summary>
-        private BaseNode value;
+        private ExpressionNode value;
 
         /// <summary>
         /// Gets the name of the field atom.
@@ -33,7 +33,7 @@
         /// <summary>
         /// Gets the value of this atom.
         /// </summary>
-        public BaseNode Value
+        public ExpressionNode Value
         {
             get { return this.value; }
         }

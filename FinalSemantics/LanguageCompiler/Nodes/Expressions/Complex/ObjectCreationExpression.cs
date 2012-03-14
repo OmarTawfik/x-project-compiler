@@ -5,11 +5,12 @@
     using Irony.Parsing;
     using LanguageCompiler.Nodes.Types;
     using LanguageCompiler.Semantics;
+    using LanguageCompiler.Semantics.ExpressionTypes;
 
     /// <summary>
     /// Holds all data related to a "ObjectCreationExpression" rule.
     /// </summary>
-    public class ObjectCreationExpression : BaseNode
+    public class ObjectCreationExpression : ExpressionNode
     {
         /// <summary>
         /// Type of object.
@@ -19,7 +20,7 @@
         /// <summary>
         /// Arguments of constructor.
         /// </summary>
-        private List<BaseNode> arguments = new List<BaseNode>();
+        private List<ExpressionNode> arguments = new List<ExpressionNode>();
 
         /// <summary>
         /// Forms a valid tree node representing this object.
@@ -55,6 +56,16 @@
 
             this.StartLocation = node.ChildNodes[0].Token.Location;
             this.EndLocation = node.ChildNodes[4].Token.Location;
+        }
+
+        /// <summary>
+        /// Gets the expression type of this node.
+        /// </summary>
+        /// <param name="stack">Current Scope Stack.</param>
+        /// <returns>The expression type of this node.</returns>
+        public override ExpressionType GetExpressionType(ScopeStack stack)
+        {
+            return this.type.GetExpressionType(stack);
         }
     }
 }

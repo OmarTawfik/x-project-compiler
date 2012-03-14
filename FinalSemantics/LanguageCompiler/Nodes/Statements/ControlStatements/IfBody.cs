@@ -15,7 +15,7 @@
         /// <summary>
         /// The expression for this if body.
         /// </summary>
-        private BaseNode expression;
+        private ExpressionNode expression;
 
         /// <summary>
         /// The body for this if body.
@@ -65,7 +65,7 @@
                 return foundErrors;
             }
 
-            if (this.expression.GetDataType() != Literal.Bool)
+            if (this.expression.GetExpressionType(scopeStack).IsEqualTo(Literal.ConstructExpression(Literal.Bool)) == false)
             {
                 this.AddError(ErrorType.ExpressionNotBoolean);
                 foundErrors = true;

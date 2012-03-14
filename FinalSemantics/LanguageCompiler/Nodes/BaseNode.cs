@@ -62,15 +62,6 @@
         }
 
         /// <summary>
-        /// Gets the type of this expression.
-        /// </summary>
-        /// <returns>A string representing the name of the type.</returns>
-        public virtual string GetDataType()
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
         /// A short hand to be used for adding errors.
         /// </summary>
         /// <param name="type">Type of error found.</param>

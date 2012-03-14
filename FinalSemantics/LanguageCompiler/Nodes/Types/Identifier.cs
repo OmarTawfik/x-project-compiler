@@ -3,12 +3,15 @@
     using System.Windows.Forms;
     using Irony.Parsing;
     using LanguageCompiler.Errors;
+    using LanguageCompiler.Nodes.ClassMembers;
+    using LanguageCompiler.Nodes.Expressions;
     using LanguageCompiler.Semantics;
+    using LanguageCompiler.Semantics.ExpressionTypes;
 
     /// <summary>
     /// Holds all data related to a "Identifier" rule.
     /// </summary>
-    public class Identifier : BaseNode
+    public class Identifier : ExpressionNode
     {
         /// <summary>
         /// The text of this identifier.
@@ -85,12 +88,20 @@
         }
 
         /// <summary>
-        /// Gets the type of this expression.
+        /// Gets the expression type of this node.
         /// </summary>
-        /// <returns>A string representing the name of the type.</returns>
-        public override string GetDataType()
+        /// <param name="stack">Current Scope Stack.</param>
+        /// <returns>The expression type of this node.</returns>
+        public override ExpressionType GetExpressionType(ScopeStack stack)
         {
-            return this.text;
+            if (this.CheckTypeExists(false))
+            {
+                return new ObjectExpressionType(CompilerService.Instance.ClassesList[this.text], MemberStaticType.Static);
+            }
+            else
+            {
+                return stack.GetVariable(this.text).Type;
+            }
         }
     }
 }

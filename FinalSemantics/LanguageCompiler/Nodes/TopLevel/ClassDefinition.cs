@@ -90,6 +90,14 @@
         }
 
         /// <summary>
+        /// Gets the members of this class.
+        /// </summary>
+        public List<MemberDefinition> Members
+        {
+            get { return this.members; }
+        }
+
+        /// <summary>
         /// Gets the name of this class.
         /// </summary>
         public Identifier Name
@@ -184,15 +192,15 @@
                 MemberDefinition member = null;
                 if (memberNode.Term.Name == LanguageGrammar.MethodDefinition.Name)
                 {
-                    member = new MethodDefinition();
+                    member = new MethodDefinition(this);
                 }
                 else if (memberNode.Term.Name == LanguageGrammar.OperatorDefinition.Name)
                 {
-                    member = new OperatorDefinition();
+                    member = new OperatorDefinition(this);
                 }
                 else if (memberNode.Term.Name == LanguageGrammar.FieldDefinition.Name)
                 {
-                    member = new FieldDefinition();
+                    member = new FieldDefinition(this);
                 }
 
                 member.RecieveData(memberNode);
@@ -252,7 +260,12 @@
                     FieldDefinition field = member as FieldDefinition;
                     foreach (FieldAtom atom in field.Atoms)
                     {
-                        scopeStack.DeclareVariable(new Variable(member.Type, atom.Name.Text, atom.Value != null), this);
+                        scopeStack.DeclareVariable(
+                            new Variable(
+                                member.Type.GetExpressionType(scopeStack),
+                                atom.Name.Text,
+                                atom.Value != null),
+                            this);
                     }
                 }
             }

@@ -5,11 +5,12 @@
     using Irony.Parsing;
     using LanguageCompiler.Nodes.Types;
     using LanguageCompiler.Semantics;
+    using LanguageCompiler.Semantics.ExpressionTypes;
 
     /// <summary>
     /// Holds all data related to a "EmptyArrayExpression" rule.
     /// </summary>
-    public class ArrayCreationExpression : BaseNode
+    public class ArrayCreationExpression : ExpressionNode
     {
         /// <summary>
         /// Type of array.
@@ -19,7 +20,7 @@
         /// <summary>
         /// Sizes of its indices.
         /// </summary>
-        private List<BaseNode> sizes = new List<BaseNode>();
+        private List<ExpressionNode> sizes = new List<ExpressionNode>();
 
         /// <summary>
         /// Forms a valid tree node representing this object.
@@ -54,6 +55,16 @@
 
             this.StartLocation = node.ChildNodes[0].Token.Location;
             this.EndLocation = node.ChildNodes[4].Token.Location;
+        }
+
+        /// <summary>
+        /// Gets the expression type of this node.
+        /// </summary>
+        /// <param name="stack">Current Scope Stack.</param>
+        /// <returns>The expression type of this node.</returns>
+        public override ExpressionType GetExpressionType(ScopeStack stack)
+        {
+            return new ArrayExpressionType(this.type.GetExpressionType(stack), this.sizes.Count);
         }
     }
 }

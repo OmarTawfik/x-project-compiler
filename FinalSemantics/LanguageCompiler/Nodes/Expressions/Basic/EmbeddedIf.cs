@@ -5,26 +5,27 @@
     using LanguageCompiler.Errors;
     using LanguageCompiler.Nodes.Types;
     using LanguageCompiler.Semantics;
+using LanguageCompiler.Semantics.ExpressionTypes;
 
     /// <summary>
     /// Holds all data related to a "EmbeddedIf" rule.
     /// </summary>
-    public class EmbeddedIf : BaseNode
+    public class EmbeddedIf : ExpressionNode
     {
         /// <summary>
         /// Condition of this embedded if.
         /// </summary>
-        private BaseNode condition;
+        private ExpressionNode condition;
 
         /// <summary>
         /// Expression to return if condition is true.
         /// </summary>
-        private BaseNode trueChoice;
+        private ExpressionNode trueChoice;
 
         /// <summary>
         /// Expression to return if condition is false.
         /// </summary>
-        private BaseNode falseChoice;
+        private ExpressionNode falseChoice;
 
         /// <summary>
         /// Forms a valid tree node representing this object.
@@ -68,13 +69,13 @@
 
             if (!foundErrors)
             {
-                if (this.condition.GetDataType() != Literal.Bool)
+                if (this.condition.GetExpressionType(scopeStack).IsEqualTo(Literal.ConstructExpression(Literal.Bool)) == false)
                 {
                     this.AddError(ErrorType.ExpressionNotBoolean);
                     foundErrors = true;
                 }
 
-                if (this.trueChoice.GetDataType() != this.falseChoice.GetDataType())
+                if (this.trueChoice.GetExpressionType(scopeStack).IsEqualTo(this.falseChoice.GetExpressionType(scopeStack)) == false)
                 {
                     this.AddError(ErrorType.EmbeddedIfTypeMismatch);
                     foundErrors = true;
@@ -85,12 +86,13 @@
         }
 
         /// <summary>
-        /// Gets the type of this expression.
+        /// Gets the expression type of this node.
         /// </summary>
-        /// <returns>A string representing the name of the type.</returns>
-        public override string GetDataType()
+        /// <param name="stack">Current Scope Stack.</param>
+        /// <returns>The expression type of this node.</returns>
+        public override ExpressionType GetExpressionType(ScopeStack stack)
         {
-            return this.trueChoice.GetDataType();
+            return this.trueChoice.GetExpressionType(stack);
         }
     }
 }

@@ -3,11 +3,12 @@
     using System.Windows.Forms;
     using Irony.Parsing;
     using LanguageCompiler.Semantics;
+    using LanguageCompiler.Semantics.ExpressionTypes;
 
     /// <summary>
     /// Holds all data related to a "UnaryExpression" rule.
     /// </summary>
-    public class UnaryExpression : BaseNode
+    public class UnaryExpression : ExpressionNode
     {
         /// <summary>
         /// Operator of expression.
@@ -17,7 +18,7 @@
         /// <summary>
         /// RHS of expression.
         /// </summary>
-        private BaseNode rhs;
+        private ExpressionNode rhs;
 
         /// <summary>
         /// Forms a valid tree node representing this object.
@@ -41,6 +42,16 @@
 
             this.StartLocation = node.ChildNodes[0].Token.Location;
             this.EndLocation = this.rhs.EndLocation;
+        }
+
+        /// <summary>
+        /// Gets the expression type of this node.
+        /// </summary>
+        /// <param name="stack">Current Scope Stack.</param>
+        /// <returns>The expression type of this node.</returns>
+        public override ExpressionType GetExpressionType(ScopeStack stack)
+        {
+            return this.rhs.GetExpressionType(stack);
         }
     }
 }

@@ -4,12 +4,15 @@
     using System.Windows.Forms;
     using Irony.Parsing;
     using LanguageCompiler.Errors;
+    using LanguageCompiler.Nodes.ClassMembers;
+    using LanguageCompiler.Nodes.Expressions;
     using LanguageCompiler.Semantics;
+    using LanguageCompiler.Semantics.ExpressionTypes;
 
     /// <summary>
     /// Holds all data related to a "Literal" rule.
     /// </summary>
-    public class Literal : BaseNode
+    public class Literal : ExpressionNode
     {
         /// <summary>
         /// The name of the char data type.
@@ -77,6 +80,18 @@
         static Literal()
         {
             Literal.escapeSequences.AddRange(new char[] { 'n', 't', '\'', '\"', '\\' });
+        }
+
+        /// <summary>
+        /// Constructs a new expression type based on a name of a type.
+        /// </summary>
+        /// <param name="type">Name of type to use.</param>
+        /// <returns>The constructed expression type.</returns>
+        public static ExpressionType ConstructExpression(string type)
+        {
+            return new ObjectExpressionType(
+                CompilerService.Instance.ClassesList[type],
+                MemberStaticType.Normal);
         }
 
         /// <summary>
@@ -196,14 +211,17 @@
 
             return false;
         }
-
+        
         /// <summary>
-        /// Gets the type of this expression.
+        /// Gets the expression type of this node.
         /// </summary>
-        /// <returns>A string representing the name of the type.</returns>
-        public override string GetDataType()
+        /// <param name="stack">Current Scope Stack.</param>
+        /// <returns>The expression type of this node.</returns>
+        public override ExpressionType GetExpressionType(ScopeStack stack)
         {
-            return this.type;
+            return new ObjectExpressionType(
+                CompilerService.Instance.ClassesList[this.type],
+                MemberStaticType.Normal);
         }
     }
 }

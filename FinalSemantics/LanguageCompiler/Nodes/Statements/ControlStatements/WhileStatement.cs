@@ -15,7 +15,7 @@
         /// <summary>
         /// The expression for this while loop.
         /// </summary>
-        private BaseNode expression;
+        private ExpressionNode expression;
 
         /// <summary>
         /// The body for this while loop.
@@ -82,7 +82,7 @@
                 return foundErrors;
             }
 
-            if (this.expression.GetDataType() != Literal.Bool)
+            if (this.expression.GetExpressionType(scopeStack).IsEqualTo(Literal.ConstructExpression(Literal.Bool)) == false)
             {
                 this.AddError(ErrorType.ExpressionNotBoolean);
                 foundErrors = true;

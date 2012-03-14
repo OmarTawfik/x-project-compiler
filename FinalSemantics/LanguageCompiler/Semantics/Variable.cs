@@ -1,7 +1,6 @@
 ﻿namespace LanguageCompiler.Semantics
 {
-    using LanguageCompiler.Nodes;
-    using LanguageCompiler.Nodes.Types;
+    using LanguageCompiler.Semantics.ExpressionTypes;
 
     /// <summary>
     /// Holds all data related to a variable, so it can be used in a scope stack.
@@ -11,7 +10,7 @@
         /// <summary>
         /// Type of this variable.
         /// </summary>
-        private BaseNode type;
+        private ExpressionType type;
 
         /// <summary>
         /// Name of this variable.
@@ -29,7 +28,7 @@
         /// <param name="type">Type of this variable.</param>
         /// <param name="name">Name of this variable.</param>
         /// <param name="isInitialized">Indicates if this variable is initialized.</param>
-        public Variable(BaseNode type, string name, bool isInitialized)
+        public Variable(ExpressionType type, string name, bool isInitialized)
         {
             this.type = type;
             this.name = name;
@@ -39,7 +38,7 @@
         /// <summary>
         /// Gets the type of this variable.
         /// </summary>
-        public BaseNode Type
+        public ExpressionType Type
         {
             get { return this.type; }
         }

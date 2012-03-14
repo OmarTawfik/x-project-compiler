@@ -1,13 +1,17 @@
 ﻿namespace LanguageCompiler.Nodes.Expressions.Basic
 {
+    using System;
     using System.Windows.Forms;
     using Irony.Parsing;
+    using LanguageCompiler.Nodes.ClassMembers;
+    using LanguageCompiler.Nodes.TopLevel;
     using LanguageCompiler.Semantics;
+    using LanguageCompiler.Semantics.ExpressionTypes;
 
     /// <summary>
     /// Holds all data related to a "PostfixExpression" rule.
     /// </summary>
-    public class PostfixExpression : BaseNode
+    public class PostfixExpression : ExpressionNode
     {
         /// <summary>
         /// Operator of expression.
@@ -17,7 +21,7 @@
         /// <summary>
         /// LHS of expression.
         /// </summary>
-        private BaseNode lhs;
+        private ExpressionNode lhs;
 
         /// <summary>
         /// Forms a valid tree node representing this object.
@@ -41,6 +45,30 @@
 
             this.StartLocation = this.lhs.StartLocation;
             this.EndLocation = node.ChildNodes[1].Token.Location;
+        }
+
+        /// <summary>
+        /// Gets the expression type of this node.
+        /// </summary>
+        /// <param name="stack">Current Scope Stack.</param>
+        /// <returns>The expression type of this node.</returns>
+        public override ExpressionType GetExpressionType(ScopeStack stack)
+        {
+            ClassDefinition lhsType = (this.lhs.GetExpressionType(stack) as ObjectExpressionType).DataType;
+
+            foreach (MemberDefinition member in lhsType.Members)
+            {
+                if (member is OperatorDefinition)
+                {
+                    OperatorDefinition op = member as OperatorDefinition;
+                    if (op.OperatorDefined == this.operatorDefined)
+                    {
+                        return op.Type.GetExpressionType(stack);
+                    }
+                }
+            }
+
+            throw new Exception("Faulty Type. Should be handled in semantics.");
         }
     }
 }
