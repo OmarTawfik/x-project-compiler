@@ -120,8 +120,7 @@
                         foundErrors |= scopeStack.DeclareVariable(
                             new Variable(
                                 decl.Type.GetExpressionType(scopeStack),
-                                atom.Name.Text,
-                                atom.Value != null),
+                                atom.Name.Text),
                                 decl);
                     }
                 }

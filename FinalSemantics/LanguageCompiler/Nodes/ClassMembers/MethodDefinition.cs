@@ -140,8 +140,7 @@
                     foundErrors |= scopeStack.DeclareVariable(
                         new Variable(
                             param.Type.GetExpressionType(scopeStack),
-                            param.Name.Text,
-                            true),
+                            param.Name.Text),
                         this);
                 }
 

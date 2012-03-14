@@ -129,5 +129,25 @@
         /// Types of both expressions of the embedded if statement don't match.
         /// </summary>
         EmbeddedIfTypeMismatch,
+
+        /// <summary>
+        /// The expression on the LHS cannot be assigned to.
+        /// </summary>
+        CannotAssignTo,
+
+        /// <summary>
+        /// Cannot use operator with this LHS.
+        /// </summary>
+        NotAValidLHS,
+
+        /// <summary>
+        /// No suitable operator found that takes RHS of this type.
+        /// </summary>
+        NotAValidRHS,
+
+        /// <summary>
+        /// Cannot assign the RHS value to the RHS value.
+        /// </summary>
+        CannotAssignRHSToLHS,
     }
 }

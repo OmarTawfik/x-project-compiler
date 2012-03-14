@@ -68,6 +68,10 @@
                 ErrorsFactory.errorsDic.Add(ErrorType.IncorrectEscapeSequence, "Incorrect escape sequence {0} found in char or string literal.");
                 ErrorsFactory.errorsDic.Add(ErrorType.IncorrectNumberLiteral, "Incorrect number {0} found in numerical literal.");
                 ErrorsFactory.errorsDic.Add(ErrorType.EmbeddedIfTypeMismatch, "Types of both expressions of the embedded if statement don't match.");
+                ErrorsFactory.errorsDic.Add(ErrorType.CannotAssignTo, "The expression on the LHS cannot be assigned to.");
+                ErrorsFactory.errorsDic.Add(ErrorType.NotAValidLHS, "Cannot use operator {0} with this LHS.");
+                ErrorsFactory.errorsDic.Add(ErrorType.NotAValidRHS, "No suitable operator found that takes RHS of type {0}.");
+                ErrorsFactory.errorsDic.Add(ErrorType.CannotAssignRHSToLHS, "Cannot assign the RHS value to the RHS value.");
             }
         }
 

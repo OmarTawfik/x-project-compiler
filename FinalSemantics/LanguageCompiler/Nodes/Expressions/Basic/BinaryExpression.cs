@@ -3,6 +3,7 @@
     using System;
     using System.Windows.Forms;
     using Irony.Parsing;
+    using LanguageCompiler.Errors;
     using LanguageCompiler.Nodes.ClassMembers;
     using LanguageCompiler.Nodes.TopLevel;
     using LanguageCompiler.Semantics;
@@ -63,6 +64,76 @@
         }
 
         /// <summary>
+        /// Checks for semantic errors within this node.
+        /// </summary>
+        /// <param name="scopeStack">The scope stack associated with this node.</param>
+        /// <returns>True if errors are found, false otherwise.</returns>
+        public override bool CheckSemanticErrors(ScopeStack scopeStack)
+        {
+            bool foundErrors = false;
+
+            foundErrors |= this.rhs.CheckSemanticErrors(scopeStack);
+            foundErrors |= this.lhs.CheckSemanticErrors(scopeStack);
+
+            if (foundErrors)
+            {
+                return foundErrors;
+            }
+
+            ExpressionType lhsType = this.lhs.GetExpressionType(scopeStack);
+            ExpressionType rhsType = this.rhs.GetExpressionType(scopeStack);
+
+            if (OperatorDefinition.AssignmentOperators.Contains(this.operatorDefined) && this.lhs.IsAssignable() == false)
+            {
+                this.AddError(ErrorType.CannotAssignTo);
+                foundErrors = true;
+            }
+
+            if (lhsType is ObjectExpressionType == false)
+            {
+                this.AddError(ErrorType.NotAValidLHS, this.operatorDefined);
+                return true;
+            }
+
+            if (lhsType is ObjectExpressionType && rhsType is ObjectExpressionType)
+            {
+                if ((rhsType as ObjectExpressionType).DataType.IsMyParent(
+                    (lhsType as ObjectExpressionType).DataType.Name.Text) == false)
+                {
+                    this.AddError(ErrorType.CannotAssignRHSToLHS);
+                    return true;
+                }
+            }
+
+            if (!foundErrors)
+            {
+                ClassDefinition lhsClass = (lhsType as ObjectExpressionType).DataType;
+                bool foundOperator = false;
+
+                foreach (MemberDefinition member in lhsClass.Members)
+                {
+                    if (member is OperatorDefinition)
+                    {
+                        OperatorDefinition op = member as OperatorDefinition;
+                        if (op.OperatorDefined == this.operatorDefined
+                            && rhsType.IsEqualTo(op.Parameters[0].Type.GetExpressionType(scopeStack)))
+                        {
+                            foundOperator = true;
+                        }
+                    }
+                }
+
+                if (foundOperator == false)
+                {
+                    this.AddError(ErrorType.NotAValidRHS, rhsType.GetName());
+                    foundErrors = true;
+                }
+            }
+
+            return foundErrors;
+        }
+
+        /// <summary>
         /// Gets the expression type of this node.
         /// </summary>
         /// <param name="stack">Current Scope Stack.</param>
@@ -84,6 +155,15 @@
             }
 
             throw new Exception("Faulty Type. Should be handled in semantics.");
+        }
+
+        /// <summary>
+        /// Checks if this expression can be assigned to.
+        /// </summary>
+        /// <returns>True if this expression can be assigned to, false otherwise.</returns>
+        public override bool IsAssignable()
+        {
+            return false;
         }
     }
 }

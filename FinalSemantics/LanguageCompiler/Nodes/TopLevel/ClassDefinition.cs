@@ -263,8 +263,7 @@
                         scopeStack.DeclareVariable(
                             new Variable(
                                 member.Type.GetExpressionType(scopeStack),
-                                atom.Name.Text,
-                                atom.Value != null),
+                                atom.Name.Text),
                             this);
                     }
                 }
@@ -280,6 +279,29 @@
 
             scopeStack.DeleteLevel();
             return foundErrors;
+        }
+
+        /// <summary>
+        /// Checks if a certain class is a parent of this class.
+        /// </summary>
+        /// <param name="parent">Name of the parent class.</param>
+        /// <returns>True if a certain class is a parent of this class, false otherwise.</returns>
+        public bool IsMyParent(string parent)
+        {
+            if (this.classBase != null)
+            {
+                if (this.classBase.Text == parent)
+                {
+                    return true;
+                }
+
+                ClassDefinition parentClass = CompilerService.Instance.ClassesList[this.classBase.Text];
+                return parentClass.IsMyParent(parent);
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>

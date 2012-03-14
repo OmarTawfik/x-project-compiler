@@ -70,5 +70,14 @@
 
             throw new Exception("Faulty Type. Should be handled in semantics.");
         }
+
+        /// <summary>
+        /// Checks if this expression can be assigned to.
+        /// </summary>
+        /// <returns>True if this expression can be assigned to, false otherwise.</returns>
+        public override bool IsAssignable()
+        {
+            return true;
+        }
     }
 }

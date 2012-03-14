@@ -78,6 +78,14 @@
         }
 
         /// <summary>
+        /// Gets the parameters of this method.
+        /// </summary>
+        public List<Parameter> Parameters
+        {
+            get { return this.parameters; }
+        }
+
+        /// <summary>
         /// Forms a valid tree node representing this object.
         /// </summary>
         /// <returns>The formed tree node.</returns>
@@ -190,8 +198,7 @@
                     foundErrors |= scopeStack.DeclareVariable(
                         new Variable(
                             param.Type.GetExpressionType(scopeStack),
-                            param.Name.Text,
-                            true),
+                            param.Name.Text),
                         this);
                 }
 

@@ -54,5 +54,14 @@
                 return false;
             }
         }
+
+        /// <summary>
+        /// Gets the name of this expression type.
+        /// </summary>
+        /// <returns>The name of this expression type.</returns>
+        public override string GetName()
+        {
+            return this.elementType.GetName() + " Array";
+        }
     }
 }

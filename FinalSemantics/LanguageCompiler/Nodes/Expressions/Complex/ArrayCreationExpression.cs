@@ -66,5 +66,14 @@
         {
             return new ArrayExpressionType(this.type.GetExpressionType(stack), this.sizes.Count);
         }
+
+        /// <summary>
+        /// Checks if this expression can be assigned to.
+        /// </summary>
+        /// <returns>True if this expression can be assigned to, false otherwise.</returns>
+        public override bool IsAssignable()
+        {
+            return false;
+        }
     }
 }
