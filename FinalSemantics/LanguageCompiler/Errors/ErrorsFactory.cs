@@ -70,6 +70,7 @@
                 ErrorsFactory.errorsDic.Add(ErrorType.NotAValidLHS, "Cannot use operator {0} with this LHS.");
                 ErrorsFactory.errorsDic.Add(ErrorType.NotAValidRHS, "No suitable operator found that takes RHS of type {0}.");
                 ErrorsFactory.errorsDic.Add(ErrorType.CannotAssignRHSToLHS, "Cannot assign the RHS value to the RHS value.");
+                ErrorsFactory.errorsDic.Add(ErrorType.PostfixOnTemp, "Cannot apply postfix operator on a temp value.");
             }
         }
 

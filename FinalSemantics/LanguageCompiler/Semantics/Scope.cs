@@ -53,6 +53,7 @@
         /// Initializes a new instance of the Scope class.
         /// </summary>
         /// <param name="type">Type of this scope.</param>
+        /// <param name="node">The node this scope was defined in.</param>
         public Scope(ScopeType type, BaseNode node)
         {
             this.type = type;

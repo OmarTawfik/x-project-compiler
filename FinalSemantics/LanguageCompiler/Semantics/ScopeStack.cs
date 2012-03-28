@@ -42,6 +42,7 @@
         /// Adds a new level to the stack.
         /// </summary>
         /// <param name="type">ScopeType to be added.</param>
+        /// <param name="node">The node this scope was defined in.</param>
         public void AddLevel(ScopeType type, BaseNode node)
         {
             this.stack.Push(new Scope(type, node));
@@ -112,13 +113,20 @@
             return false;
         }
 
+        /// <summary>
+        /// Gets the function or operator in this scope.
+        /// </summary>
+        /// <returns>A MemberDefinition object.</returns>
         public MemberDefinition GetFunction()
         {
             foreach (Scope scope in this.stack)
             {
                 if (scope.Type == ScopeType.Function)
+                {
                     return scope.Node as MemberDefinition;
+                }
             }
+
             return null;
         }
     }

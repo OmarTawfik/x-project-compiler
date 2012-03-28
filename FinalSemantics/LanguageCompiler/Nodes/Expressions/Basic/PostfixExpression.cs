@@ -3,6 +3,7 @@
     using System;
     using System.Windows.Forms;
     using Irony.Parsing;
+    using LanguageCompiler.Errors;
     using LanguageCompiler.Nodes.ClassMembers;
     using LanguageCompiler.Nodes.TopLevel;
     using LanguageCompiler.Semantics;
@@ -78,6 +79,22 @@
         public override bool IsAssignable()
         {
             return true;
+        }
+
+        /// <summary>
+        /// Checks for semantic errors within this node.
+        /// </summary>
+        /// <param name="scopeStack">The scope stack associated with this node.</param>
+        /// <returns>True if errors are found, false otherwise.</returns>
+        public override bool CheckSemanticErrors(ScopeStack scopeStack)
+        {
+            if (this.lhs.IsAssignable() == false)
+            {
+                this.AddError(ErrorType.PostfixOnTemp);
+                return true;
+            }
+
+            return this.lhs.CheckSemanticErrors(scopeStack);
         }
     }
 }

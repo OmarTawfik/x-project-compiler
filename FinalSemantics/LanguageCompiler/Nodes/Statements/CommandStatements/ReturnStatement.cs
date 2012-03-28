@@ -57,18 +57,22 @@
 
             if (node.Type.GetExpressionType(scopeStack).GetName()
                 == this.expression.GetExpressionType(scopeStack).GetName())
+            {
                 return true;
-
+            }
             else if (node.Type.GetExpressionType(scopeStack).GetName() != null
                 && this.expression.GetExpressionType(scopeStack).GetName() == null)
+            {
                 this.AddError(Errors.ErrorType.FunctionReturn, "This Function must return {0}");
-
+            }
             else if (node.Type.GetExpressionType(scopeStack).GetName() == null
                 && this.expression.GetExpressionType(scopeStack).GetName() != null)
+            {
                 this.AddError(Errors.ErrorType.FunctionReturn, "This Function doesn't return anything{0}");
+            }
 
             return false;
-            //return (this.expression == null) ? false : this.expression.CheckSemanticErrors(scopeStack);
+            //// return (this.expression == null) ? false : this.expression.CheckSemanticErrors(scopeStack);
         }
     }
 }

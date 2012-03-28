@@ -151,6 +151,11 @@
         CannotAssignRHSToLHS,
 
         /// <summary>
+        /// Cannot apply postfix operator on a temp value.
+        /// </summary>
+        PostfixOnTemp,
+
+        /// <summary>
         /// Function return type mismatch with return statement.
         /// </summary>
         FunctionReturn,

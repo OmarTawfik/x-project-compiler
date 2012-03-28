@@ -63,15 +63,15 @@
          /// <param name="node">The irony ParseTreeNode.</param>
          public override void RecieveData(ParseTreeNode node)
          {
-             if (node.ChildNodes[0].ChildNodes[0].Term.Name == LanguageGrammar.ID.Name)
+             if (node.ChildNodes[0].Term.Name == LanguageGrammar.ID.Name)
              {
                  this.type = new Identifier();
-                 this.type.RecieveData(node.ChildNodes[0].ChildNodes[0]);
+                 this.type.RecieveData(node.ChildNodes[0]);
              }
-             else if (node.ChildNodes[0].ChildNodes[0].Term.Name == LanguageGrammar.ArrayType.Name)
+             else if (node.ChildNodes[0].Term.Name == LanguageGrammar.ArrayType.Name)
              {
                  this.type = new ArrayType();
-                 this.type.RecieveData(node.ChildNodes[0].ChildNodes[0]);
+                 this.type.RecieveData(node.ChildNodes[0]);
              }
 
              foreach (ParseTreeNode child in node.ChildNodes[1].ChildNodes)
