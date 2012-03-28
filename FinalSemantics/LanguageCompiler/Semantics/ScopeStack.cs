@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using LanguageCompiler.Errors;
     using LanguageCompiler.Nodes;
+    using LanguageCompiler.Nodes.ClassMembers;
 
     /// <summary>
     /// A stack of scopes (used in semantic checking).
@@ -41,9 +42,9 @@
         /// Adds a new level to the stack.
         /// </summary>
         /// <param name="type">ScopeType to be added.</param>
-        public void AddLevel(ScopeType type)
+        public void AddLevel(ScopeType type, BaseNode node)
         {
-            this.stack.Push(new Scope(type));
+            this.stack.Push(new Scope(type, node));
         }
 
         /// <summary>
@@ -109,6 +110,16 @@
             }
 
             return false;
+        }
+
+        public MemberDefinition GetFunction()
+        {
+            foreach (Scope scope in this.stack)
+            {
+                if (scope.Type == ScopeType.Function)
+                    return scope.Node as MemberDefinition;
+            }
+            return null;
         }
     }
 }

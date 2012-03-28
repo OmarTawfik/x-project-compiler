@@ -9,6 +9,7 @@
     public class LanguageGrammar : Grammar
     {
         #region Terminals
+
         /// <summary>
         /// The terminal object for the "Identifier" rule.
         /// </summary>
@@ -34,9 +35,10 @@
         /// </summary>
         public static readonly RegexBasedTerminal DecimalLiteral = new RegexBasedTerminal("Decimal", "([0-9]*)\\.([0-9]+)(d|f|D|F)?");
 
-        #endregion
+        #endregion Terminals
 
         #region NonTerminals
+
         /// <summary>
         /// The non terminal object for the "Class Base" rule.
         /// </summary>
@@ -396,7 +398,8 @@
         /// The non terminal object for the "Assignment Expression" rule.
         /// </summary>
         public static readonly NonTerminal AssignmentExpression = new NonTerminal("Assignment Expression");
-        #endregion
+
+        #endregion NonTerminals
 
         /// <summary>
         /// List of reserved words in our language.
@@ -408,7 +411,7 @@
         /// </summary>
         static LanguageGrammar()
         {
-            LanguageGrammar.reservedWords.AddRange(new string[] 
+            LanguageGrammar.reservedWords.AddRange(new string[]
             {
                 "new", "if", "using", "abstract", "concrete", "class", "screen", "extends",
                 "public", "private", "protected", "virtual", "override", "abstract", "static",
@@ -505,7 +508,7 @@
 
             ArrayExpression.Rule = PrimaryExpression + "[" + PlusExpressionsList + "]";
             InvocationExpression.Rule = PrimaryExpression + "(" + ExpressionsList + ")";
-            
+
             EqualityOperator.Rule = ToTerm("==") | "!=";
             RelationalOperator.Rule = ToTerm("<") | ">" | "<=" | ">=";
             UnaryOperator.Rule = ToTerm("+") | "-" | "not" | "++" | "--";

@@ -59,7 +59,7 @@
             OperatorDefinition.OneParameterOperators.AddRange(new string[] { "<", ">", "<=", ">=", "+", "-", "*", "/", "%" });
             OperatorDefinition.AssignmentOperators.AddRange(new string[] { "=", "+=", "-=", "*=", "/=", "%=" });
         }
-        
+
         /// <summary>
         /// Initializes a new instance of the OperatorDefinition class.
         /// </summary>
@@ -191,7 +191,7 @@
                     foundErrors = true;
                 }
 
-                scopeStack.AddLevel(ScopeType.Function);
+                scopeStack.AddLevel(ScopeType.Function, this);
                 foreach (Parameter param in this.parameters)
                 {
                     foundErrors |= param.CheckSemanticErrors(scopeStack);

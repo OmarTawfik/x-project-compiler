@@ -1,6 +1,5 @@
 ﻿namespace LanguageCompiler.Nodes
 {
-    using System;
     using System.Windows.Forms;
     using Irony.Parsing;
     using LanguageCompiler.Errors;

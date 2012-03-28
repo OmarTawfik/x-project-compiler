@@ -72,7 +72,7 @@
             this.StartLocation = this.type.StartLocation;
             this.EndLocation = this.name.EndLocation;
         }
-        
+
         /// <summary>
         /// Checks for semantic errors within this node.
         /// </summary>

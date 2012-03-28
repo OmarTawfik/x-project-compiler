@@ -2,6 +2,7 @@
 {
     using System.Windows.Forms;
     using Irony.Parsing;
+    using LanguageCompiler.Nodes.ClassMembers;
     using LanguageCompiler.Nodes.Expressions;
     using LanguageCompiler.Semantics;
 
@@ -13,7 +14,7 @@
         /// <summary>
         /// The expression returned by this statement.
         /// </summary>
-        private BaseNode expression;
+        private ExpressionNode expression;
 
         /// <summary>
         /// Forms a valid tree node representing this object.
@@ -52,7 +53,22 @@
         /// <returns>True if errors are found, false otherwise.</returns>
         public override bool CheckSemanticErrors(ScopeStack scopeStack)
         {
-            return (this.expression == null) ? false : this.expression.CheckSemanticErrors(scopeStack);
+            MemberDefinition node = scopeStack.GetFunction();
+
+            if (node.Type.GetExpressionType(scopeStack).GetName()
+                == this.expression.GetExpressionType(scopeStack).GetName())
+                return true;
+
+            else if (node.Type.GetExpressionType(scopeStack).GetName() != null
+                && this.expression.GetExpressionType(scopeStack).GetName() == null)
+                this.AddError(Errors.ErrorType.FunctionReturn, "This Function must return {0}");
+
+            else if (node.Type.GetExpressionType(scopeStack).GetName() == null
+                && this.expression.GetExpressionType(scopeStack).GetName() != null)
+                this.AddError(Errors.ErrorType.FunctionReturn, "This Function doesn't return anything{0}");
+
+            return false;
+            //return (this.expression == null) ? false : this.expression.CheckSemanticErrors(scopeStack);
         }
     }
 }

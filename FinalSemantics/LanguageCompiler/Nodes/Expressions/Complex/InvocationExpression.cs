@@ -55,7 +55,7 @@
             this.StartLocation = this.lhs.StartLocation;
             this.EndLocation = node.ChildNodes[3].Token.Location;
         }
-        
+
         /// <summary>
         /// Gets the expression type of this node.
         /// </summary>

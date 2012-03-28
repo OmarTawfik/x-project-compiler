@@ -1,9 +1,7 @@
 ﻿namespace LanguageCompiler.Errors
 {
-    using System;
     using System.Collections.Generic;
     using Irony;
-    using Irony.Parsing;
     using LanguageCompiler.Nodes;
 
     /// <summary>

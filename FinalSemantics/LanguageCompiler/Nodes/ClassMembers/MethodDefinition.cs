@@ -133,7 +133,7 @@
 
             if (this.block != null)
             {
-                scopeStack.AddLevel(ScopeType.Function);
+                scopeStack.AddLevel(ScopeType.Function, this);
                 foreach (Parameter param in this.parameters)
                 {
                     foundErrors |= param.CheckSemanticErrors(scopeStack);

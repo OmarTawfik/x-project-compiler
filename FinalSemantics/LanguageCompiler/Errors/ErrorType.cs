@@ -149,5 +149,10 @@
         /// Cannot assign the RHS value to the RHS value.
         /// </summary>
         CannotAssignRHSToLHS,
+
+        /// <summary>
+        /// Function return type mismatch with return statement.
+        /// </summary>
+        FunctionReturn,
     }
 }

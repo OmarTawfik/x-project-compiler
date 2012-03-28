@@ -252,7 +252,7 @@
                 foundErrors = true;
             }
 
-            scopeStack.AddLevel(ScopeType.Class);
+            scopeStack.AddLevel(ScopeType.Class, this);
             foreach (MemberDefinition member in this.members)
             {
                 if (member is FieldDefinition)

@@ -5,7 +5,7 @@
     using LanguageCompiler.Errors;
     using LanguageCompiler.Nodes.Types;
     using LanguageCompiler.Semantics;
-using LanguageCompiler.Semantics.ExpressionTypes;
+    using LanguageCompiler.Semantics.ExpressionTypes;
 
     /// <summary>
     /// Holds all data related to a "EmbeddedIf" rule.

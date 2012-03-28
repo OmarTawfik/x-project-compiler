@@ -106,7 +106,7 @@
         public override bool CheckSemanticErrors(ScopeStack scopeStack)
         {
             bool foundErrors = false;
-            scopeStack.AddLevel(ScopeType.Block);
+            scopeStack.AddLevel(ScopeType.Block, this);
 
             foreach (BaseNode child in this.statements)
             {

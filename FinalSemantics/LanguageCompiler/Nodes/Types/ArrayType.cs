@@ -61,7 +61,7 @@
         {
             return this.type.CheckSemanticErrors(scopeStack) || this.type.CheckTypeExists();
         }
-        
+
         /// <summary>
         /// Gets the expression type of this node.
         /// </summary>

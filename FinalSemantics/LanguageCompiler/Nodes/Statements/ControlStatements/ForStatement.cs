@@ -101,7 +101,7 @@
             {
                 this.secondPart = null;
             }
-            
+
             foreach (ParseTreeNode child in node.ChildNodes[6].ChildNodes)
             {
                 this.thidPartList.Add(ExpressionsFactory.GetBaseExpr(child));
@@ -142,7 +142,7 @@
                 foundErrors |= node.CheckSemanticErrors(scopeStack);
             }
 
-            scopeStack.AddLevel(ScopeType.Loop);
+            scopeStack.AddLevel(ScopeType.Loop, this);
             this.body.CheckSemanticErrors(scopeStack);
             scopeStack.DeleteLevel();
 

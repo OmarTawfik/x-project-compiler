@@ -72,7 +72,7 @@
         {
             bool foundErrors = false;
 
-            scopeStack.AddLevel(ScopeType.Loop);
+            scopeStack.AddLevel(ScopeType.Loop, this);
             foundErrors |= this.expression.CheckSemanticErrors(scopeStack);
             foundErrors |= this.body.CheckSemanticErrors(scopeStack);
             scopeStack.DeleteLevel();

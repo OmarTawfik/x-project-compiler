@@ -1,6 +1,7 @@
 ﻿namespace LanguageCompiler.Semantics
 {
     using System.Collections.Generic;
+    using LanguageCompiler.Nodes;
 
     /// <summary>
     /// Holds all types a scope can have.
@@ -11,7 +12,7 @@
         /// A class scope.
         /// </summary>
         Class,
-        
+
         /// <summary>
         /// A function scope.
         /// </summary>
@@ -39,6 +40,11 @@
         private ScopeType type;
 
         /// <summary>
+        /// The node this scope was defined in.
+        /// </summary>
+        private BaseNode node;
+
+        /// <summary>
         /// Variables declared in this scope.
         /// </summary>
         private List<Variable> variables = new List<Variable>();
@@ -47,9 +53,10 @@
         /// Initializes a new instance of the Scope class.
         /// </summary>
         /// <param name="type">Type of this scope.</param>
-        public Scope(ScopeType type)
+        public Scope(ScopeType type, BaseNode node)
         {
             this.type = type;
+            this.node = node;
         }
 
         /// <summary>
@@ -66,6 +73,14 @@
         public List<Variable> Variables
         {
             get { return this.variables; }
+        }
+
+        /// <summary>
+        /// Gets the node this scope was defined in.
+        /// </summary>
+        public BaseNode Node
+        {
+            get { return this.node; }
         }
     }
 }

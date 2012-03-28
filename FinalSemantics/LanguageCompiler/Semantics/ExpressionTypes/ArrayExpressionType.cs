@@ -1,7 +1,5 @@
 ﻿namespace LanguageCompiler.Semantics.ExpressionTypes
 {
-    using LanguageCompiler.Nodes.TopLevel;
-
     /// <summary>
     /// Represents the type of an expression that returns an array.
     /// </summary>
