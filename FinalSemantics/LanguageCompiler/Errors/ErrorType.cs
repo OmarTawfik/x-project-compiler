@@ -159,5 +159,10 @@
         /// Function return type mismatch with return statement.
         /// </summary>
         FunctionReturn,
+
+        /// <summary>
+        /// An identifier cannot contain underscores.
+        /// </summary>
+        UnderscoreInIdentifier,
     }
 }

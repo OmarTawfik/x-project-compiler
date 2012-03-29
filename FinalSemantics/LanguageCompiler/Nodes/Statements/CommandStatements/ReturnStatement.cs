@@ -54,7 +54,7 @@
         public override bool CheckSemanticErrors(ScopeStack scopeStack)
         {
             MemberDefinition node = scopeStack.GetFunction();
-
+            
             if (node.Type.GetExpressionType(scopeStack).GetName()
                 == this.expression.GetExpressionType(scopeStack).GetName())
             {

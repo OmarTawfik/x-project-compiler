@@ -64,6 +64,7 @@
                 ErrorsFactory.errorsDic.Add(ErrorType.IdentifierIsReservedWord, "The identifier {0} cannot have a value of a reserved word.");
                 ErrorsFactory.errorsDic.Add(ErrorType.IdentifierNameTooLong, "This identifier {0}'s name is too long.");
                 ErrorsFactory.errorsDic.Add(ErrorType.IncorrectEscapeSequence, "Incorrect escape sequence {0} found in char or string literal.");
+                ErrorsFactory.errorsDic.Add(ErrorType.UnderscoreInIdentifier, "The identifier {0} cannot contain underscores.");
                 ErrorsFactory.errorsDic.Add(ErrorType.IncorrectNumberLiteral, "Incorrect number {0} found in numerical literal.");
                 ErrorsFactory.errorsDic.Add(ErrorType.EmbeddedIfTypeMismatch, "Types of both expressions of the embedded if statement don't match.");
                 ErrorsFactory.errorsDic.Add(ErrorType.CannotAssignTo, "The expression on the LHS cannot be assigned to.");

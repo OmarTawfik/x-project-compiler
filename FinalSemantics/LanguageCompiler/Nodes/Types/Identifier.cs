@@ -84,6 +84,12 @@
                 return true;
             }
 
+            if (this.text.Contains("_"))
+            {
+                this.AddError(ErrorType.UnderscoreInIdentifier, this.text);
+                return true;
+            }
+
             return false;
         }
 

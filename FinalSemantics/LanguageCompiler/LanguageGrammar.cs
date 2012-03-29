@@ -9,11 +9,10 @@
     public class LanguageGrammar : Grammar
     {
         #region Terminals
-
         /// <summary>
         /// The terminal object for the "Identifier" rule.
         /// </summary>
-        public static readonly RegexBasedTerminal ID = new RegexBasedTerminal("Identifier", "[a-zA-Z]([a-zA-Z0-9]*)");
+        public static readonly Terminal ID = TerminalFactory.CreateCSharpIdentifier("ID");
 
         /// <summary>
         /// The terminal object for the "CharLiteral" rule.
@@ -470,7 +469,7 @@
             ExpressionStatement.Rule = Expression + ";";
             DeclarationStatement.Rule = Type + FieldAtomsList + ";";
             Statement.Rule = CommandStatement | DeclarationStatement | ControlStatement | Block | ExpressionStatement;
-
+            
             Expression.Rule = AssignmentExpression;
             ExpressionsList.Rule = MakeStarRule(ExpressionsList, ToTerm(","), Expression);
             PlusExpressionsList.Rule = MakePlusRule(PlusExpressionsList, ToTerm(","), Expression);

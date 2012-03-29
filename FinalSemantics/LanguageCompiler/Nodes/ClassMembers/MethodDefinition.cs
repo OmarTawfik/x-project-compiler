@@ -112,7 +112,7 @@
         /// <returns>True if errors are found, false otherwise.</returns>
         public override bool CheckSemanticErrors(ScopeStack scopeStack)
         {
-            bool foundErrors = false;
+            bool foundErrors = this.name.CheckSemanticErrors(scopeStack);
             if (this.name.CheckTypeExists(false))
             {
                 this.AddError(ErrorType.MemberNameIsAType, this.name.Text);

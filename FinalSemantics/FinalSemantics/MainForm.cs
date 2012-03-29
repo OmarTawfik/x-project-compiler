@@ -34,16 +34,14 @@
             this.syntaxTreeView.Nodes.Clear();
             this.errorsGridView.Rows.Clear();
 
-            if (CompilerService.Instance.Errors.Count == 0)
+            foreach (KeyValuePair<string, ClassDefinition> pair in CompilerService.Instance.ClassesList)
             {
-                foreach (KeyValuePair<string, ClassDefinition> pair in CompilerService.Instance.ClassesList)
-                {
-                    this.syntaxTreeView.Nodes.Add(pair.Value.GetGUINode());
-                }
-
-                this.syntaxTreeView.ExpandAll();
+                this.syntaxTreeView.Nodes.Add(pair.Value.GetGUINode());
             }
-            else
+
+            this.syntaxTreeView.ExpandAll();
+
+            if (CompilerService.Instance.Errors.Count > 0)
             {
                 this.errorsGridView.Rows.Add(CompilerService.Instance.Errors.Count);
                 for (int i = 0; i < CompilerService.Instance.Errors.Count; i++)
