@@ -54,25 +54,42 @@
         public override bool CheckSemanticErrors(ScopeStack scopeStack)
         {
             MemberDefinition node = scopeStack.GetFunction();
-            
+
+            string retStatment, functionRetStatment;
+
+            try
+            {
+                functionRetStatment = node.Type.GetExpressionType(scopeStack).GetName();
+            }
+            catch (System.Exception)
+            {
+                if (this.expression == null)
+                {
+                    return true;
+                }
+                if (this.expression != null)
+                {
+                    this.AddError(Errors.ErrorType.FunctionReturn, "void", "");
+                    return false;
+                }
+            }
+            retStatment = this.expression.GetExpressionType(scopeStack).GetName();
+
+            if (node != null && this.expression == null)
+            {
+                functionRetStatment = node.Type.GetExpressionType(scopeStack).GetName();
+                this.AddError(Errors.ErrorType.FunctionReturn, functionRetStatment, "");
+                return false;
+            }
             if (node.Type.GetExpressionType(scopeStack).GetName()
                 == this.expression.GetExpressionType(scopeStack).GetName())
             {
                 return true;
             }
-            else if (node.Type.GetExpressionType(scopeStack).GetName() != null
-                && this.expression.GetExpressionType(scopeStack).GetName() == null)
-            {
-                this.AddError(Errors.ErrorType.FunctionReturn, "This Function must return {0}");
-            }
-            else if (node.Type.GetExpressionType(scopeStack).GetName() == null
-                && this.expression.GetExpressionType(scopeStack).GetName() != null)
-            {
-                this.AddError(Errors.ErrorType.FunctionReturn, "This Function doesn't return anything{0}");
-            }
 
+            functionRetStatment = node.Type.GetExpressionType(scopeStack).GetName();
+            this.AddError(Errors.ErrorType.FunctionReturn, functionRetStatment, retStatment);
             return false;
-            //// return (this.expression == null) ? false : this.expression.CheckSemanticErrors(scopeStack);
         }
     }
 }

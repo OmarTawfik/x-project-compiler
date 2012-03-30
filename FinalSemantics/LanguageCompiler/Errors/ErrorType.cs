@@ -164,5 +164,10 @@
         /// An identifier cannot contain underscores.
         /// </summary>
         UnderscoreInIdentifier,
+
+        /// <summary>
+        /// Variable's Name same as Function's Name
+        /// </summary>
+        VariableSameFunction
     }
 }

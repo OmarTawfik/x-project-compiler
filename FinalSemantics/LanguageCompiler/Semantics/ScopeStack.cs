@@ -129,5 +129,22 @@
 
             return null;
         }
+
+        /// <summary>
+        /// Gets the function or operator in this scope.
+        /// </summary>
+        /// <returns>A MethodDefinition object.</returns>
+        public MethodDefinition GetFunction(bool method)
+        {
+            foreach (Scope scope in this.stack)
+            {
+                if (scope.Type == ScopeType.Function)
+                {
+                    return scope.Node as MethodDefinition;
+                }
+            }
+
+            return null;
+        }
     }
 }

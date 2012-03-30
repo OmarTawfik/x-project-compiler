@@ -57,6 +57,8 @@
                 ErrorsFactory.errorsDic.Add(ErrorType.StatementMustAppearInLoop, "Break and Continue Statements must appear within a loop.");
                 ErrorsFactory.errorsDic.Add(ErrorType.InvalidExpressionStatement, "Only assignment, call, increment, decrement, and new object expressions can be used as a statement.");
                 ErrorsFactory.errorsDic.Add(ErrorType.ExpressionNotBoolean, "This expression must be a boolean type.");
+                ErrorsFactory.errorsDic.Add(ErrorType.FunctionReturn, "Function return type {0} doesn't match return statement type {1}.");
+                ErrorsFactory.errorsDic.Add(ErrorType.VariableSameFunction, "The Variable ({0}) and The Function names are the same");
             }
 
             //// Level Six: Expressions

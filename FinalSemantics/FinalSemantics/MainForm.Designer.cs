@@ -94,7 +94,7 @@
             this.codeRichTextBox.Name = "codeRichTextBox";
             this.codeRichTextBox.Size = new System.Drawing.Size(500, 200);
             this.codeRichTextBox.TabIndex = 0;
-            this.codeRichTextBox.Text = "class int{}\nclass x {\nint main () {\n\n}}";
+            this.codeRichTextBox.Text = "class int{}\nclass x\n{\nint main()\n{\n\n}}";
             this.codeRichTextBox.TextChanged += new System.EventHandler(this.CodeRichTextBox_TextChanged);
             // 
             // errorsGridView
