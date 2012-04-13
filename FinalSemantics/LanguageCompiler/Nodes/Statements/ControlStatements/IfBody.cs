@@ -45,7 +45,7 @@
             this.body.RecieveData(node.ChildNodes[4]);
 
             this.StartLocation = node.ChildNodes[0].Token.Location;
-            this.StartLocation = node.ChildNodes[node.ChildNodes.Count - 1].Token.Location;
+            this.EndLocation = this.body.EndLocation;
         }
 
         /// <summary>

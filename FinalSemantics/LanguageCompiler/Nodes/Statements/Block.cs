@@ -105,7 +105,7 @@
         /// <returns>True if errors are found, false otherwise.</returns>
         public override bool CheckSemanticErrors(ScopeStack scopeStack)
         {
-            MethodDefinition node = scopeStack.GetFunction(true);
+            MethodDefinition node = scopeStack.GetFunction();
 
             bool foundErrors = false;
             scopeStack.AddLevel(ScopeType.Block, this);
@@ -121,10 +121,10 @@
                     {
                         if (atom.Name.Text == node.Name.Text)
                         {
-                            this.AddError(Errors.ErrorType.VariableSameFunction,
-                                atom.Name.Text);
+                            this.AddError(Errors.ErrorType.VariableSameFunction, atom.Name.Text);
                             return false;
                         }
+
                         foundErrors |= scopeStack.DeclareVariable(
                             new Variable(
                                 decl.Type.GetExpressionType(scopeStack),

@@ -47,7 +47,7 @@
         {
             this.lhs = ExpressionsFactory.GetPrimaryExpr(node.ChildNodes[0]);
 
-            foreach (ParseTreeNode child in node.ChildNodes[1].ChildNodes)
+            foreach (ParseTreeNode child in node.ChildNodes[2].ChildNodes)
             {
                 this.arguments.Add(ExpressionsFactory.GetBaseExpr(child));
             }

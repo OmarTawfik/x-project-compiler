@@ -63,8 +63,10 @@
                 this.elseBody.RecieveData(node.ChildNodes[1].ChildNodes[1]);
             }
 
-            this.StartLocation = node.ChildNodes[0].Token.Location;
-            this.StartLocation = node.ChildNodes[node.ChildNodes.Count - 1].Token.Location;
+            this.StartLocation = this.bodies[0].StartLocation;
+            this.EndLocation = (this.elseBody == null)
+                ? this.bodies[this.bodies.Count - 1].EndLocation
+                : this.elseBody.EndLocation;
         }
 
         /// <summary>

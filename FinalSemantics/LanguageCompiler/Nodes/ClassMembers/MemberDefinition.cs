@@ -92,7 +92,7 @@
         /// <summary>
         /// Data type for this member.
         /// </summary>
-        private ExpressionNode type;
+        private Identifier type;
 
         /// <summary>
         /// The class where this member was defined in.
@@ -111,7 +111,7 @@
         /// <summary>
         /// Gets the base node of the member type
         /// </summary>
-        public ExpressionNode Type
+        public Identifier Type
         {
             get { return this.type; }
         }
@@ -207,16 +207,8 @@
                 }
             }
 
-            if (node.ChildNodes[3].Term.Name == LanguageGrammar.ID.Name)
-            {
-                this.type = new Identifier();
-                this.type.RecieveData(node.ChildNodes[3]);
-            }
-            else if (node.ChildNodes[3].Term.Name == LanguageGrammar.ArrayType.Name)
-            {
-                this.type = new ArrayType();
-                this.type.RecieveData(node.ChildNodes[3]);
-            }
+            this.type = new Identifier();
+            this.type.RecieveData(node.ChildNodes[3]);
 
             if (this.StartLocation.Line == -1)
             {

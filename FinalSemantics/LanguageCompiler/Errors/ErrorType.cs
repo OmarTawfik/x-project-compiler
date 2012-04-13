@@ -168,6 +168,11 @@
         /// <summary>
         /// Variable's Name same as Function's Name
         /// </summary>
-        VariableSameFunction
+        VariableSameFunction,
+
+        /// <summary>
+        /// User defined backend class.
+        /// </summary>
+        UserDefinedBackendClass,
     }
 }

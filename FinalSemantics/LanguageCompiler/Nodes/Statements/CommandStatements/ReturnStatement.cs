@@ -67,20 +67,23 @@
                 {
                     return true;
                 }
+
                 if (this.expression != null)
                 {
-                    this.AddError(Errors.ErrorType.FunctionReturn, "void", "");
+                    this.AddError(Errors.ErrorType.FunctionReturn, "void", string.Empty);
                     return false;
                 }
             }
+
             retStatment = this.expression.GetExpressionType(scopeStack).GetName();
 
             if (node != null && this.expression == null)
             {
                 functionRetStatment = node.Type.GetExpressionType(scopeStack).GetName();
-                this.AddError(Errors.ErrorType.FunctionReturn, functionRetStatment, "");
+                this.AddError(Errors.ErrorType.FunctionReturn, functionRetStatment, string.Empty);
                 return false;
             }
+
             if (node.Type.GetExpressionType(scopeStack).GetName()
                 == this.expression.GetExpressionType(scopeStack).GetName())
             {

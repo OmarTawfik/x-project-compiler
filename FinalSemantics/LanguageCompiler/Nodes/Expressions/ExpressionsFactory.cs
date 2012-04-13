@@ -125,17 +125,9 @@
             {
                 expr = new PostfixExpression();
             }
-            else if (node.Term.Name == LanguageGrammar.ArrayCreationExpression.Name)
-            {
-                expr = new ArrayCreationExpression();
-            }
             else if (node.Term.Name == LanguageGrammar.ObjectCreationExpression.Name)
             {
                 expr = new ObjectCreationExpression();
-            }
-            else if (node.Term.Name == LanguageGrammar.ArrayExpression.Name)
-            {
-                expr = new ArrayExpression();
             }
             else if (node.Term.Name == LanguageGrammar.InvocationExpression.Name)
             {

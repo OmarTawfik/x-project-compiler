@@ -14,7 +14,7 @@
         /// <summary>
         /// Type of this parameter.
         /// </summary>
-        private ExpressionNode type;
+        private Identifier type;
 
         /// <summary>
         /// Name of this parameter.
@@ -24,7 +24,7 @@
         /// <summary>
         /// Gets the type of this parameter.
         /// </summary>
-        public ExpressionNode Type
+        public Identifier Type
         {
             get { return this.type; }
         }
@@ -55,16 +55,8 @@
         /// <param name="node">The irony ParseTreeNode.</param>
         public override void RecieveData(ParseTreeNode node)
         {
-            if (node.ChildNodes[0].Term.Name == LanguageGrammar.ID.Name)
-            {
-                this.type = new Identifier();
-                this.type.RecieveData(node.ChildNodes[0]);
-            }
-            else if (node.ChildNodes[0].Term.Name == LanguageGrammar.ArrayType.Name)
-            {
-                this.type = new ArrayType();
-                this.type.RecieveData(node.ChildNodes[0]);
-            }
+            this.type = new Identifier();
+            this.type.RecieveData(node.ChildNodes[0]);
 
             this.name = new Identifier();
             this.name.RecieveData(node.ChildNodes[1]);

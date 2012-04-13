@@ -34,6 +34,7 @@
                 ErrorsFactory.errorsDic.Add(ErrorType.ConcreteBase, "The base of class {0} is concrete.");
                 ErrorsFactory.errorsDic.Add(ErrorType.ScreenModifierNotNormal, "Screen {0} cannot be labeled abstract or concrete.");
                 ErrorsFactory.errorsDic.Add(ErrorType.ScreenCannotInherit, "Screen {0} cannot inherit another type.");
+                ErrorsFactory.errorsDic.Add(ErrorType.UserDefinedBackendClass, "User defined a class or screen {0} with the keyword \"Backend\".");
             }
 
             //// Level Three: Member Definitions

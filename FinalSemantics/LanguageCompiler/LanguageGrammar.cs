@@ -104,16 +104,6 @@
         public static readonly NonTerminal MethodType = new NonTerminal("Method Type");
 
         /// <summary>
-        /// The non terminal object for the "Type" rule.
-        /// </summary>
-        public static readonly NonTerminal Type = new NonTerminal("Type");
-
-        /// <summary>
-        /// The non terminal object for the "Array Type" rule.
-        /// </summary>
-        public static readonly NonTerminal ArrayType = new NonTerminal("Array Type");
-
-        /// <summary>
         /// The non terminal object for the "CommasList" rule.
         /// </summary>
         public static readonly NonTerminal CommasList = new NonTerminal("CommasList");
@@ -359,11 +349,6 @@
         public static readonly NonTerminal InvocationExpression = new NonTerminal("Invocation Expression");
 
         /// <summary>
-        /// The non terminal object for the "Array Expression" rule.
-        /// </summary>
-        public static readonly NonTerminal ArrayExpression = new NonTerminal("Array Expression");
-
-        /// <summary>
         /// The non terminal object for the "Paren Expression" rule.
         /// </summary>
         public static readonly NonTerminal ParenExpression = new NonTerminal("Paren Expression");
@@ -377,11 +362,6 @@
         /// The non terminal object for the "Object Creation Expression" rule.
         /// </summary>
         public static readonly NonTerminal ObjectCreationExpression = new NonTerminal("Object Creation Expression");
-
-        /// <summary>
-        /// The non terminal object for the "Empty Array Expression" rule.
-        /// </summary>
-        public static readonly NonTerminal ArrayCreationExpression = new NonTerminal("Empty Array Expression");
 
         /// <summary>
         /// The non terminal object for the "Expression Statement" rule.
@@ -412,7 +392,7 @@
         {
             LanguageGrammar.reservedWords.AddRange(new string[]
             {
-                "new", "if", "using", "abstract", "concrete", "class", "screen", "extends",
+                "new", "if", "using", "abstract", "concrete", "class", "screen", "extends", "backend",
                 "public", "private", "protected", "virtual", "override", "abstract", "static",
                 "operator", "continue", "break", "for", "else", "while", "do", "true", "false"
             });
@@ -424,10 +404,8 @@
         public LanguageGrammar()
         {
             CommasList.Rule = MakeStarRule(CommasList, ToTerm(","));
-            ArrayType.Rule = ID + "[" + CommasList + "]";
-            Type.Rule = ID | ArrayType;
 
-            Parameter.Rule = Type + ID;
+            Parameter.Rule = ID + ID;
             ParametersList.Rule = MakeStarRule(ParametersList, ToTerm(","), Parameter);
             ParametersDefinition.Rule = "(" + ParametersList + ")";
 
@@ -436,7 +414,8 @@
             ClassMember.Rule = MethodDefinition | OperatorDefinition | FieldDefinition;
             ClassMembersList.Rule = MakeStarRule(ClassMembersList, ClassMember);
             ClassBase.Rule = this.Empty | ("extends" + ID);
-            ClassDefinition.Rule = ClassModifier + ClassLabel + ID + ClassBase + "{" + ClassMembersList + "}";
+            ClassDefinition.Rule = ClassModifier + (this.Empty | "backend") + ClassLabel
+                + ID + ClassBase + "{" + ClassMembersList + "}";
 
             MemberAccessor.Rule = this.Empty | "public" | "private" | "protected";
             MemberModifier.Rule = this.Empty | "virtual" | "override" | "abstract";
@@ -445,9 +424,9 @@
             OptionalAssignment.Rule = ("=" + Expression) | this.Empty;
             FieldAtom.Rule = ID + OptionalAssignment;
             FieldAtomsList.Rule = MakePlusRule(FieldAtomsList, ToTerm(","), FieldAtom);
-            FieldDefinition.Rule = MemberAccessor + MemberModifier + MemberStatic + Type + FieldAtomsList + ";";
-            MethodDefinition.Rule = MemberAccessor + MemberModifier + MemberStatic + Type + ID + ParametersDefinition + BlockOrSemicolon;
-            OperatorDefinition.Rule = MemberAccessor + MemberModifier + MemberStatic + Type + "operator" + OverloadableOperator + ParametersDefinition + BlockOrSemicolon;
+            FieldDefinition.Rule = MemberAccessor + MemberModifier + MemberStatic + ID + FieldAtomsList + ";";
+            MethodDefinition.Rule = MemberAccessor + MemberModifier + MemberStatic + ID + ID + ParametersDefinition + BlockOrSemicolon;
+            OperatorDefinition.Rule = MemberAccessor + MemberModifier + MemberStatic + ID + "operator" + OverloadableOperator + ParametersDefinition + BlockOrSemicolon;
 
             StatementsList.Rule = MakeStarRule(StatementsList, Statement);
             Block.Rule = "{" + StatementsList + "}";
@@ -467,7 +446,7 @@
             ControlStatement.Rule = WhileStatement | DoWhileStatement | IfStatement | ForStatement;
 
             ExpressionStatement.Rule = Expression + ";";
-            DeclarationStatement.Rule = Type + FieldAtomsList + ";";
+            DeclarationStatement.Rule = ID + FieldAtomsList + ";";
             Statement.Rule = CommandStatement | DeclarationStatement | ControlStatement | Block | ExpressionStatement;
             
             Expression.Rule = AssignmentExpression;
@@ -493,8 +472,7 @@
             PrimaryExpression.Rule = ParenExpression | CompoundExpression
                 | ID | CharLiteral | StringLiteral | DecimalLiteral | NaturalLiteral | "true" | "false"
                 | PostfixIncrementExpression | PostfixDecrementExpression
-                | ArrayCreationExpression | ObjectCreationExpression
-                | ArrayExpression | InvocationExpression;
+                | ObjectCreationExpression | InvocationExpression;
 
             ParenExpression.Rule = "(" + Expression + ")";
             CompoundExpression.Rule = PrimaryExpression + "." + ID;
@@ -502,10 +480,8 @@
             PostfixIncrementExpression.Rule = PrimaryExpression + "++";
             PostfixDecrementExpression.Rule = PrimaryExpression + "--";
 
-            ArrayCreationExpression.Rule = "new" + ID + "[" + PlusExpressionsList + "]";
             ObjectCreationExpression.Rule = "new" + ID + "(" + ExpressionsList + ")";
 
-            ArrayExpression.Rule = PrimaryExpression + "[" + PlusExpressionsList + "]";
             InvocationExpression.Rule = PrimaryExpression + "(" + ExpressionsList + ")";
 
             EqualityOperator.Rule = ToTerm("==") | "!=";
@@ -539,7 +515,7 @@
             this.RegisterOperators(1, Associativity.Left, "--", "++");
 
             this.MarkTransient(EqualityOperator, RelationalOperator, UnaryOperator, AssignmentOperator);
-            this.MarkTransient(ClassLabel, ClassMember, Type, MethodType, BlockOrSemicolon);
+            this.MarkTransient(ClassLabel, ClassMember, MethodType, BlockOrSemicolon);
             this.MarkTransient(Statement, CommandStatement, ControlStatement, Expression, OverloadableOperator);
 
             FileDefinition.Rule = MakePlusRule(FileDefinition, ClassDefinition);

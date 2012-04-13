@@ -51,6 +51,11 @@
     public class ClassDefinition : BaseNode
     {
         /// <summary>
+        /// Names of the backend classes.
+        /// </summary>
+        private static List<string> backendClasses = new List<string>();
+
+        /// <summary>
         /// The modifier type for this class.
         /// </summary>
         private ClassModifierType modifierType = ClassModifierType.Normal;
@@ -76,9 +81,27 @@
         private string fileName;
 
         /// <summary>
+        /// Indicates whether this class should be implemented in the backend.
+        /// </summary>
+        private bool isBackend;
+
+        /// <summary>
         /// Members of this class.
         /// </summary>
         private List<MemberDefinition> members = new List<MemberDefinition>();
+
+        /// <summary>
+        /// Initializes static members of the ClassDefinition class.
+        /// </summary>
+        static ClassDefinition()
+        {
+            backendClasses.AddRange(new string[]
+            {
+                "list", Literal.Bool,
+                Literal.Char, Literal.String, Literal.Double, Literal.Float,
+                Literal.Byte, Literal.Short, Literal.Int, Literal.Long,
+            });
+        }
 
         /// <summary>
         /// Initializes a new instance of the ClassDefinition class.
@@ -114,14 +137,23 @@
         }
 
         /// <summary>
+        /// Gets a value indicating whether this class should be implemented in the backend.
+        /// </summary>
+        private bool IsBackend
+        {
+            get { return this.isBackend; }
+        }
+
+        /// <summary>
         /// Forms a valid tree node representing this object.
         /// </summary>
         /// <returns>The formed tree node.</returns>
         public override TreeNode GetGUINode()
         {
             TreeNode classNode = new TreeNode(string.Format(
-                "{0} {1} {2}",
+                "{0} {1} {2} {3}",
                 this.modifierType.ToString(),
+                this.isBackend ? "Backend" : string.Empty,
                 this.label.ToString(),
                 this.name.Text));
 
@@ -164,30 +196,32 @@
                 }
             }
 
-            if (node.ChildNodes[1].Token.Text == "class")
+            this.isBackend = node.ChildNodes[1].ChildNodes.Count > 0;
+
+            if (node.ChildNodes[2].Token.Text == "class")
             {
                 this.label = ClassLabel.Class;
             }
-            else if (node.ChildNodes[1].Token.Text == "screen")
+            else if (node.ChildNodes[2].Token.Text == "screen")
             {
                 this.label = ClassLabel.Screen;
             }
 
             if (this.StartLocation.Position == -1)
             {
-                this.StartLocation = node.ChildNodes[1].Token.Location;
+                this.StartLocation = node.ChildNodes[2].Token.Location;
             }
 
             this.name = new Identifier();
-            this.name.RecieveData(node.ChildNodes[2]);
+            this.name.RecieveData(node.ChildNodes[3]);
 
-            if (node.ChildNodes[3].ChildNodes.Count > 0)
+            if (node.ChildNodes[4].ChildNodes.Count > 0)
             {
                 this.classBase = new Identifier();
-                this.classBase.RecieveData(node.ChildNodes[3].ChildNodes[1]);
+                this.classBase.RecieveData(node.ChildNodes[4].ChildNodes[1]);
             }
 
-            foreach (ParseTreeNode memberNode in node.ChildNodes[5].ChildNodes)
+            foreach (ParseTreeNode memberNode in node.ChildNodes[6].ChildNodes)
             {
                 MemberDefinition member = null;
                 if (memberNode.Term.Name == LanguageGrammar.MethodDefinition.Name)
@@ -223,6 +257,12 @@
             }
 
             bool foundErrors = false;
+
+            if (this.isBackend && backendClasses.Contains(this.name.Text) == false)
+            {
+                foundErrors = true;
+                this.AddError(ErrorType.UserDefinedBackendClass, this.name.Text);
+            }
 
             if (this.classBase != null && this.classBase.CheckTypeExists())
             {
