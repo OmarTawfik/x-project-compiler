@@ -372,27 +372,29 @@
                 else if (member is MethodDefinition)
                 {
                     MethodDefinition method = member as MethodDefinition;
-                    if (memberNames.Contains(method.Name.Text))
+                    string name = string.Format("{0}_{1}", method.Name.Text, method.Parameters.Count);
+                    if (memberNames.Contains(name))
                     {
                         this.AddError(ErrorType.ItemAlreadyDefined, method.Name.Text);
                         return true;
                     }
                     else
                     {
-                        memberNames.Add(method.Name.Text);
+                        memberNames.Add(name);
                     }
                 }
                 else if (member is OperatorDefinition)
                 {
                     OperatorDefinition op = member as OperatorDefinition;
-                    if (memberNames.Contains(op.OperatorDefined))
+                    string name = string.Format("{0}_{1}", op.OperatorDefined, op.Parameters.Count);
+                    if (memberNames.Contains(name))
                     {
                         this.AddError(ErrorType.ItemAlreadyDefined, op.OperatorDefined);
                         return true;
                     }
                     else
                     {
-                        memberNames.Add(op.OperatorDefined);
+                        memberNames.Add(name);
                     }
                 }
             }
