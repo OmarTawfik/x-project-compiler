@@ -15,7 +15,7 @@
     public class CompoundExpression : ExpressionNode
     {
         /// <summary>
-        /// expression in LHS.
+        /// Expression in LHS.
         /// </summary>
         private ExpressionNode lhs;
 
@@ -23,6 +23,22 @@
         /// RHS of expression.
         /// </summary>
         private Identifier rhs;
+
+        /// <summary>
+        /// Gets the left hand side of the expression.
+        /// </summary>
+        public ExpressionNode LHS
+        {
+            get { return this.lhs; }
+        }
+
+        /// <summary>
+        /// Gets the right hand side of the expression.
+        /// </summary>
+        public Identifier RHS
+        {
+            get { return this.rhs; }
+        }
 
         /// <summary>
         /// Forms a valid tree node representing this object.

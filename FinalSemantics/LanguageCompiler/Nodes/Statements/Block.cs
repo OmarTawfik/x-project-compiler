@@ -19,6 +19,14 @@
         private List<BaseNode> statements = new List<BaseNode>();
 
         /// <summary>
+        /// Gets the list of statements held by the block.
+        /// </summary>
+        public List<BaseNode> Statements
+        {
+            get { return this.statements; }
+        }
+
+        /// <summary>
         /// Forms a valid tree node representing this object.
         /// </summary>
         /// <returns>The formed tree node.</returns>

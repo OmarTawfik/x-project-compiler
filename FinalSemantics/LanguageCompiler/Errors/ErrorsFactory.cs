@@ -46,6 +46,7 @@
                 ErrorsFactory.errorsDic.Add(ErrorType.OperatorInvalidParameters, "This Operator {0} has an invalid number of parameters");
                 ErrorsFactory.errorsDic.Add(ErrorType.OperatorNotOverloadable, "Cannot overload the operator {0}.");
                 ErrorsFactory.errorsDic.Add(ErrorType.OperatorInvalidReturnType, "Operator {0} has an invalid return type.");
+                ErrorsFactory.errorsDic.Add(ErrorType.StaticConstructorsMustBePublic, "Static constructor {0} must be public.");
             }
 
             //// Level Four: Members With Scope

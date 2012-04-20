@@ -21,6 +21,22 @@
         private ExpressionNode rhs;
 
         /// <summary>
+        /// Gets the operator of expression.
+        /// </summary>
+        public string OperatorDefined
+        {
+            get { return this.operatorDefined; }
+        }
+
+        /// <summary>
+        /// Gets the right hand side of the expression.
+        /// </summary>
+        public ExpressionNode RHS
+        {
+            get { return this.rhs; }
+        }
+
+        /// <summary>
         /// Forms a valid tree node representing this object.
         /// </summary>
         /// <returns>The formed tree node.</returns>

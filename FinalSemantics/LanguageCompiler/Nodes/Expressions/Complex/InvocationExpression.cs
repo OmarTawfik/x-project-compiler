@@ -12,14 +12,30 @@
     public class InvocationExpression : ExpressionNode
     {
         /// <summary>
-        /// expression in LHS.
+        /// Expression in LHS.
         /// </summary>
         private ExpressionNode lhs;
 
         /// <summary>
-        /// arguments of expression.
+        /// Arguments of expression.
         /// </summary>
         private List<ExpressionNode> arguments = new List<ExpressionNode>();
+
+        /// <summary>
+        /// Gets the left hand side of the expression.
+        /// </summary>
+        public ExpressionNode LHS
+        {
+            get { return this.lhs; }
+        }
+
+        /// <summary>
+        /// Gets the list of arguments of invocation.
+        /// </summary>
+        public List<ExpressionNode> Arguments
+        {
+            get { return this.arguments; }
+        }
 
         /// <summary>
         /// Forms a valid tree node representing this object.

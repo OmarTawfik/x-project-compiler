@@ -23,6 +23,22 @@
         private Block body;
 
         /// <summary>
+        /// Gets the expression of the while statement.
+        /// </summary>
+        public ExpressionNode Expression
+        {
+            get { return this.expression; }
+        }
+
+        /// <summary>
+        /// Gets the body of the while statement.
+        /// </summary>
+        public Block Body
+        {
+            get { return this.body; }
+        }
+
+        /// <summary>
         /// Forms a valid tree node representing this object.
         /// </summary>
         /// <returns>The formed tree node.</returns>

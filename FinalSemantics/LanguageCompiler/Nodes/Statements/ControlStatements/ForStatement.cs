@@ -15,7 +15,7 @@
     public class ForStatement : BaseNode
     {
         /// <summary>
-        /// first part list of assignments or expressions.
+        /// First part list of assignments or expressions.
         /// </summary>
         private List<FieldAtom> firstPartList = new List<FieldAtom>();
 
@@ -25,7 +25,7 @@
         private ExpressionNode secondPart;
 
         /// <summary>
-        /// third part list of expressions.
+        /// Third part list of expressions.
         /// </summary>
         private List<ExpressionNode> thidPartList = new List<ExpressionNode>();
 
@@ -33,6 +33,38 @@
         /// Body of the for statement.
         /// </summary>
         private Block body;
+
+        /// <summary>
+        /// Gets the first part of the for loop.
+        /// </summary>
+        public List<FieldAtom> FirstPartList
+        {
+            get { return this.firstPartList; }
+        }
+
+        /// <summary>
+        /// Gets the second part of the for loop.
+        /// </summary>
+        public ExpressionNode SecondPart
+        {
+            get { return this.secondPart; }
+        }
+
+        /// <summary>
+        /// Gets the third part of the for loop.
+        /// </summary>
+        public List<ExpressionNode> ThirdPartList
+        {
+            get { return this.ThirdPartList; }
+        }
+
+        /// <summary>
+        /// Gets the body of the for loop.
+        /// </summary>
+        public Block Block
+        {
+            get { return this.body; }
+        }
 
         /// <summary>
         /// Forms a valid tree node representing this object.
@@ -118,7 +150,7 @@
             }
 
             this.StartLocation = node.ChildNodes[0].Token.Location;
-            this.StartLocation = node.ChildNodes[node.ChildNodes.Count - 1].Token.Location;
+            this.EndLocation = node.ChildNodes[node.ChildNodes.Count - 1].Token.Location;
         }
 
         /// <summary>

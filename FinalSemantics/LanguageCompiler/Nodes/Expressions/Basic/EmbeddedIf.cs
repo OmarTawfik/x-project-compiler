@@ -28,6 +28,30 @@
         private ExpressionNode falseChoice;
 
         /// <summary>
+        /// Gets the condition of the embedded if.
+        /// </summary>
+        public ExpressionNode Condition
+        {
+            get { return this.condition; }
+        }
+
+        /// <summary>
+        /// Gets the true choice of the embedded if.
+        /// </summary>
+        public ExpressionNode TrueChoice
+        {
+            get { return this.trueChoice; }
+        }
+
+        /// <summary>
+        /// Gets the true choice of the embedded if.
+        /// </summary>
+        public ExpressionNode FalseChoice
+        {
+            get { return this.falseChoice; }
+        }
+
+        /// <summary>
         /// Forms a valid tree node representing this object.
         /// </summary>
         /// <returns>The formed tree node.</returns>

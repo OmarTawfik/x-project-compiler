@@ -1,5 +1,6 @@
 ﻿namespace LanguageCompiler.Nodes.Statements.CommandStatements
 {
+    using System.Collections.Generic;
     using System.Windows.Forms;
     using Irony.Parsing;
     using LanguageCompiler.Nodes.ClassMembers;
@@ -15,6 +16,14 @@
         /// The expression returned by this statement.
         /// </summary>
         private ExpressionNode expression;
+
+        /// <summary>
+        /// Gets the expression for the return statement.
+        /// </summary>
+        public ExpressionNode Expression
+        {
+            get { return this.expression; }
+        }
 
         /// <summary>
         /// Forms a valid tree node representing this object.

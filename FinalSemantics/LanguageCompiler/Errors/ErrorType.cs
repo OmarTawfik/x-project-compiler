@@ -166,7 +166,7 @@
         UnderscoreInIdentifier,
 
         /// <summary>
-        /// Variable's Name same as Function's Name
+        /// Variable's Name same as Function's Name.
         /// </summary>
         VariableSameFunction,
 
@@ -174,5 +174,10 @@
         /// User defined backend class.
         /// </summary>
         UserDefinedBackendClass,
+
+        /// <summary>
+        /// Static constructors must be public.
+        /// </summary>
+        StaticConstructorsMustBePublic
     }
 }

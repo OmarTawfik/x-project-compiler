@@ -139,7 +139,7 @@
         /// <summary>
         /// Gets a value indicating whether this class should be implemented in the backend.
         /// </summary>
-        private bool IsBackend
+        public bool IsBackend
         {
             get { return this.isBackend; }
         }

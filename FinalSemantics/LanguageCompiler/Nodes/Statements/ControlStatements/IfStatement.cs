@@ -21,6 +21,22 @@
         private Block elseBody;
 
         /// <summary>
+        /// Gets the if bodies of the if statement.
+        /// </summary>
+        public List<IfBody> Bodies
+        {
+            get { return this.bodies; }     
+        }
+
+        /// <summary>
+        /// Gets the else block for the if statement.
+        /// </summary>
+        public Block ElseBody
+        {
+            get { return this.elseBody; }
+        }
+
+        /// <summary>
         /// Forms a valid tree node representing this object.
         /// </summary>
         /// <returns>The formed tree node.</returns>

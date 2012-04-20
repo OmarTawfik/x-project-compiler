@@ -23,6 +23,22 @@
         private List<ExpressionNode> sizes = new List<ExpressionNode>();
 
         /// <summary>
+        /// Gets the type identifier.
+        /// </summary>
+        public Identifier Type
+        {
+            get { return this.type; }
+        }
+
+        /// <summary>
+        /// Gets the sizes of the created array.
+        /// </summary>
+        public List<ExpressionNode> Sizes
+        {
+            get { return this.sizes; }
+        }
+
+        /// <summary>
         /// Forms a valid tree node representing this object.
         /// </summary>
         /// <returns>The formed tree node.</returns>

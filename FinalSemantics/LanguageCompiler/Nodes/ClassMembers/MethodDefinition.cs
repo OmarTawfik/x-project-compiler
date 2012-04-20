@@ -47,6 +47,22 @@
         }
 
         /// <summary>
+        /// Gets the parameters of the method.
+        /// </summary>
+        public List<Parameter> Parameters
+        {
+            get { return this.parameters; }
+        }
+
+        /// <summary>
+        /// Gets the block of the method.
+        /// </summary>
+        public Block Block
+        {
+            get { return this.block; }
+        }
+
+        /// <summary>
         /// Forms a valid tree node representing this object.
         /// </summary>
         /// <returns>The formed tree node.</returns>
@@ -113,9 +129,15 @@
         public override bool CheckSemanticErrors(ScopeStack scopeStack)
         {
             bool foundErrors = this.name.CheckSemanticErrors(scopeStack);
-            if (this.name.CheckTypeExists(false))
+            if (this.name.CheckTypeExists(false) && this.Type.Text != "constructor")
             {
                 this.AddError(ErrorType.MemberNameIsAType, this.name.Text);
+                foundErrors = true;
+            }
+
+            if (this.StaticType == MemberStaticType.Static && this.Type.Text == "constructor" && this.AccessorType != MemberAccessorType.Public)
+            {
+                this.AddError(ErrorType.StaticConstructorsMustBePublic, this.name.Text);
                 foundErrors = true;
             }
 

@@ -83,6 +83,14 @@
         }
 
         /// <summary>
+        /// Gets the data of the literal.
+        /// </summary>
+        public string Data
+        {
+            get { return this.data; }
+        }
+
+        /// <summary>
         /// Constructs a new expression type based on a name of a type.
         /// </summary>
         /// <param name="type">Name of type to use.</param>
@@ -216,7 +224,7 @@
         /// Gets the expression type of this node.
         /// </summary>
         /// <param name="stack">Current Scope Stack.</param>
-        /// <returns>The expression type of this node.</returns>
+        /// <returns>The expression type of this node.</returns>    
         public override ExpressionType GetExpressionType(ScopeStack stack)
         {
             return new ObjectExpressionType(

@@ -38,6 +38,22 @@
         }
 
         /// <summary>
+        /// Gets the left hand side of the expression.
+        /// </summary>
+        public ExpressionNode LHS
+        {
+            get { return this.lhs; }
+        }
+
+        /// <summary>
+        /// Gets the right hand side of the expression.
+        /// </summary>
+        public ExpressionNode RHS
+        {
+            get { return this.rhs; }
+        }
+
+        /// <summary>
         /// Forms a valid tree node representing this object.
         /// </summary>
         /// <returns>The formed tree node.</returns>

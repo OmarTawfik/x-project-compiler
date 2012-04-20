@@ -25,6 +25,22 @@
         private ExpressionNode lhs;
 
         /// <summary>
+        /// Gets the left hand side of the postfix expression.
+        /// </summary>
+        public ExpressionNode LHS
+        {
+            get { return this.lhs; }
+        }
+
+        /// <summary>
+        /// Gets the operator of expression.
+        /// </summary>
+        public string OperatorDefined
+        {
+            get { return this.operatorDefined; }
+        }
+
+        /// <summary>
         /// Forms a valid tree node representing this object.
         /// </summary>
         /// <returns>The formed tree node.</returns>

@@ -23,6 +23,22 @@
         private List<ExpressionNode> arguments = new List<ExpressionNode>();
 
         /// <summary>
+        /// Gets the type of the object to create.
+        /// </summary>
+        public Identifier Type
+        {
+            get { return this.type; }
+        }
+
+        /// <summary>
+        /// Gets the list of arguments for the constructor of the object creation statement.
+        /// </summary>
+        public List<ExpressionNode> Arguments
+        {
+            get { return this.arguments; }
+        }
+
+        /// <summary>
         /// Forms a valid tree node representing this object.
         /// </summary>
         /// <returns>The formed tree node.</returns>

@@ -109,7 +109,7 @@
         }
 
         /// <summary>
-        /// Gets the base node of the member type
+        /// Gets the base node of the member type.
         /// </summary>
         public Identifier Type
         {
@@ -125,11 +125,27 @@
         }
 
         /// <summary>
+        /// Gets the access type for this member.
+        /// </summary>
+        public MemberAccessorType AccessorType
+        {
+            get { return this.accessorType; }
+        }
+
+        /// <summary>
         /// Gets the modifier type for this member.
         /// </summary>
         public MemberModifierType ModifierType
         {
             get { return this.modifierType; }
+        }
+
+        /// <summary>
+        /// Gets the static type for this member.
+        /// </summary>
+        public MemberStaticType StaticType
+        {
+            get { return this.staticType; }
         }
 
         /// <summary>

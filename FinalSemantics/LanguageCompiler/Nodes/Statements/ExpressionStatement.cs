@@ -20,6 +20,14 @@
         private BaseNode expression;
 
         /// <summary>
+        /// Gets the expression.
+        /// </summary>
+        public BaseNode Expresssion
+        {
+            get { return this.expression; }
+        }
+
+        /// <summary>
         /// Forms a valid tree node representing this object.
         /// </summary>
         /// <returns>The formed tree node.</returns>
