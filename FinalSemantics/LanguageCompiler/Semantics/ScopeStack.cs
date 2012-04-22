@@ -4,6 +4,7 @@
     using LanguageCompiler.Errors;
     using LanguageCompiler.Nodes;
     using LanguageCompiler.Nodes.ClassMembers;
+    using LanguageCompiler.Nodes.TopLevel;
 
     /// <summary>
     /// A stack of scopes (used in semantic checking).
@@ -124,6 +125,23 @@
                 if (scope.Type == ScopeType.Function)
                 {
                     return scope.Node as MethodDefinition;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the class existing in this scope.
+        /// </summary>
+        /// <returns>A ClassDefinition object.</returns>
+        public ClassDefinition GetClass()
+        {
+            foreach (Scope scope in this.stack)
+            {
+                if (scope.Type == ScopeType.Class)
+                {
+                    return scope.Node as ClassDefinition;
                 }
             }
 

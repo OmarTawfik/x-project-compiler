@@ -76,6 +76,14 @@
                 ErrorsFactory.errorsDic.Add(ErrorType.NotAValidRHS, "No suitable operator found that takes RHS of type {0}.");
                 ErrorsFactory.errorsDic.Add(ErrorType.CannotAssignRHSToLHS, "Cannot assign the RHS value to the RHS value.");
                 ErrorsFactory.errorsDic.Add(ErrorType.PostfixOnTemp, "Cannot apply postfix operator on a temp value.");
+                ErrorsFactory.errorsDic.Add(ErrorType.NoMemberWithThisName, "Class {0} doesn't contain a member with the name {1}.");
+                ErrorsFactory.errorsDic.Add(ErrorType.InaccessibleDueToProtectionLevel, "Member {0} is inaccessible due to its protection level.");
+                ErrorsFactory.errorsDic.Add(ErrorType.CallToAbstractFunction, "Cannot call method {0} because it is abstract.");
+                ErrorsFactory.errorsDic.Add(ErrorType.CallNormalMembersFromClass, "Cannot call member {0} from a class quantifier.");
+                ErrorsFactory.errorsDic.Add(ErrorType.CallStaticMembersFromObject, "Cannot call member {0} from an object quantifier.");
+                ErrorsFactory.errorsDic.Add(ErrorType.InvalidParameterType, "Function {0} doesn't accept the argument of type {1}.");
+                ErrorsFactory.errorsDic.Add(ErrorType.WrongNumberOfParameters, "Function {0} doesn't accept {1} arguments.");
+                ErrorsFactory.errorsDic.Add(ErrorType.LHSNotAFunction, "LHS of this expression isn't a function.");
             }
         }
 

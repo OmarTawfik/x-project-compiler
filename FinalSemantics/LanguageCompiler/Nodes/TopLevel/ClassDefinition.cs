@@ -372,15 +372,14 @@
                 else if (member is MethodDefinition)
                 {
                     MethodDefinition method = member as MethodDefinition;
-                    string name = string.Format("{0}_{1}", method.Name.Text, method.Parameters.Count);
-                    if (memberNames.Contains(name))
+                    if (memberNames.Contains(method.Name.Text))
                     {
                         this.AddError(ErrorType.ItemAlreadyDefined, method.Name.Text);
                         return true;
                     }
                     else
                     {
-                        memberNames.Add(name);
+                        memberNames.Add(method.Name.Text);
                     }
                 }
                 else if (member is OperatorDefinition)

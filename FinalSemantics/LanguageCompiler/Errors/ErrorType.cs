@@ -178,6 +178,46 @@
         /// <summary>
         /// Static constructors must be public.
         /// </summary>
-        StaticConstructorsMustBePublic
+        StaticConstructorsMustBePublic,
+
+        /// <summary>
+        /// Class {0} doesn't contain a member with the name {1}.
+        /// </summary>
+        NoMemberWithThisName,
+
+        /// <summary>
+        /// Member {0} is inaccessible due to its protection level.
+        /// </summary>
+        InaccessibleDueToProtectionLevel,
+
+        /// <summary>
+        /// Cannot call method {0} because it is abstract.
+        /// </summary>
+        CallToAbstractFunction,
+
+        /// <summary>
+        /// Cannot call member {0} from a class quantifier.
+        /// </summary>
+        CallNormalMembersFromClass,
+
+        /// <summary>
+        /// Cannot call member {0} from an object quantifier.
+        /// </summary>
+        CallStaticMembersFromObject,
+
+        /// <summary>
+        /// Function {0} doesn't accept the argument of type {1}.
+        /// </summary>
+        InvalidParameterType,
+
+        /// <summary>
+        /// Function {0} doesn't accept {1} arguments.
+        /// </summary>
+        WrongNumberOfParameters,
+
+        /// <summary>
+        /// LHS of this expression isn't a function.
+        /// </summary>
+        LHSNotAFunction,
     }
 }

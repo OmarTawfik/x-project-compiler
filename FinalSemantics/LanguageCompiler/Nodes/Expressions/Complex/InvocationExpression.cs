@@ -3,6 +3,8 @@
     using System.Collections.Generic;
     using System.Windows.Forms;
     using Irony.Parsing;
+    using LanguageCompiler.Errors;
+    using LanguageCompiler.Nodes.ClassMembers;
     using LanguageCompiler.Semantics;
     using LanguageCompiler.Semantics.ExpressionTypes;
 
@@ -70,6 +72,68 @@
 
             this.StartLocation = this.lhs.StartLocation;
             this.EndLocation = node.ChildNodes[3].Token.Location;
+        }
+
+        /// <summary>
+        /// Checks for semantic errors within this node.
+        /// </summary>
+        /// <param name="scopeStack">The scope stack associated with this node.</param>
+        /// <returns>True if errors are found, false otherwise.</returns>
+        public override bool CheckSemanticErrors(ScopeStack scopeStack)
+        {
+            if (this.lhs.CheckSemanticErrors(scopeStack) == false)
+            {
+                foreach (ExpressionNode arg in this.arguments)
+                {
+                    if (arg.CheckSemanticErrors(scopeStack))
+                    {
+                        return true;
+                    }
+                }
+
+                ExpressionType lhsType = this.lhs.GetExpressionType(scopeStack);
+                if (lhsType is MethodExpressionType)
+                {
+                    MethodDefinition lhsMethod = (lhsType as MethodExpressionType).Method;
+                    if (lhsMethod.Parameters.Count == this.arguments.Count)
+                    {
+                        for (int i = 0; i < this.arguments.Count; i++)
+                        {
+                            ExpressionType argType = this.arguments[i].GetExpressionType(scopeStack);
+                            if (argType is ObjectExpressionType)
+                            {
+                                ObjectExpressionType argObject = argType as ObjectExpressionType;
+                                if (argObject.DataType.Name.Text != lhsMethod.Parameters[i].Type.Text)
+                                {
+                                    this.AddError(ErrorType.InvalidParameterType, lhsMethod.Name.Text, argObject.DataType.Name.Text);
+                                    return true;
+                                }
+                            }
+                            else
+                            {
+                                this.AddError(ErrorType.InvalidParameterType, lhsMethod.Name.Text, (argType as MethodExpressionType).Method.Name.Text);
+                                return true;
+                            }
+                        }
+
+                        return false;
+                    }
+                    else
+                    {
+                        this.AddError(ErrorType.WrongNumberOfParameters, lhsMethod.Name.Text, this.arguments.Count.ToString());
+                        return true;
+                    }
+                }
+                else
+                {
+                    this.AddError(ErrorType.LHSNotAFunction);
+                    return true;
+                }
+            }
+            else
+            {
+                return true;
+            }
         }
 
         /// <summary>
