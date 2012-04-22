@@ -73,6 +73,15 @@
         }
 
         /// <summary>
+        /// Checks if a statement or block of code returns a value.
+        /// </summary>
+        /// <returns>True if it returns a value, false otherwise.</returns>
+        public override bool ReturnsAValue()
+        {
+            return false;
+        }
+
+        /// <summary>
         /// Checks if a BaseNode is an assignment expression.
         /// </summary>
         /// <param name="node">Node to check.</param>

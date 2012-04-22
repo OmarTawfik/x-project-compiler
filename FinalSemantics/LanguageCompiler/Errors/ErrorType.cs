@@ -146,7 +146,7 @@
         NotAValidRHS,
 
         /// <summary>
-        /// Cannot assign the RHS value to the RHS value.
+        /// Cannot assign the RHS value to the LHS value.
         /// </summary>
         CannotAssignRHSToLHS,
 
@@ -224,5 +224,15 @@
         /// Cannot find a suitable constructor for type {0} that takes these arguments.
         /// </summary>
         NoSuitableConstructor,
+
+        /// <summary>
+        /// A constructor must return the containing type.
+        /// </summary>
+        ConstructorMustReturnContainingType,
+
+        /// <summary>
+        /// Not all control paths return a value.
+        /// </summary>
+        NotAllControlPathsReturnAValue,
     }
 }

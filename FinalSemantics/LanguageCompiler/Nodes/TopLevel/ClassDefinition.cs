@@ -345,6 +345,15 @@
         }
 
         /// <summary>
+        /// Checks if a statement or block of code returns a value.
+        /// </summary>
+        /// <returns>True if it returns a value, false otherwise.</returns>
+        public override bool ReturnsAValue()
+        {
+            return false;
+        }
+
+        /// <summary>
         /// Checks if multiple members with the same name exist.
         /// </summary>
         /// <returns>True if multiple members with the same name exist, false otherwise.</returns>

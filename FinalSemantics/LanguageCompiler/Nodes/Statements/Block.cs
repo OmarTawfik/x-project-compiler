@@ -145,5 +145,22 @@
             scopeStack.DeleteLevel();
             return foundErrors;
         }
+
+        /// <summary>
+        /// Checks if a statement or block of code returns a value.
+        /// </summary>
+        /// <returns>True if it returns a value, false otherwise.</returns>
+        public override bool ReturnsAValue()
+        {
+            foreach (BaseNode statement in this.statements)
+            {
+                if (statement.ReturnsAValue())
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

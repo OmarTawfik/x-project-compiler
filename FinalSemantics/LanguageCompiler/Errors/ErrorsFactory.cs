@@ -51,6 +51,8 @@
 
             //// Level Four: Members With Scope
             {
+                ErrorsFactory.errorsDic.Add(ErrorType.ConstructorMustReturnContainingType, "A constructor must return the containing type.");
+                ErrorsFactory.errorsDic.Add(ErrorType.NotAllControlPathsReturnAValue, "Not all control paths return a value.");
             }
 
             //// Level Five: Statements
@@ -74,7 +76,7 @@
                 ErrorsFactory.errorsDic.Add(ErrorType.CannotAssignTo, "The expression on the LHS cannot be assigned to.");
                 ErrorsFactory.errorsDic.Add(ErrorType.NotAValidLHS, "Cannot use operator {0} with this LHS.");
                 ErrorsFactory.errorsDic.Add(ErrorType.NotAValidRHS, "No suitable operator found that takes RHS of type {0}.");
-                ErrorsFactory.errorsDic.Add(ErrorType.CannotAssignRHSToLHS, "Cannot assign the RHS value to the RHS value.");
+                ErrorsFactory.errorsDic.Add(ErrorType.CannotAssignRHSToLHS, "Cannot assign the RHS value to the LHS value.");
                 ErrorsFactory.errorsDic.Add(ErrorType.PostfixOnTemp, "Cannot apply postfix operator on a temp value.");
                 ErrorsFactory.errorsDic.Add(ErrorType.NoMemberWithThisName, "Class {0} doesn't contain a member with the name {1}.");
                 ErrorsFactory.errorsDic.Add(ErrorType.InaccessibleDueToProtectionLevel, "Member {0} is inaccessible due to its protection level.");

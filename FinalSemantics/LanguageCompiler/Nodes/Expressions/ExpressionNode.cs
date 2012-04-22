@@ -20,5 +20,14 @@
         /// </summary>
         /// <returns>True if this expression can be assigned to, false otherwise.</returns>
         public abstract bool IsAssignable();
+
+        /// <summary>
+        /// Checks if a statement or block of code returns a value.
+        /// </summary>
+        /// <returns>True if it returns a value, false otherwise.</returns>
+        public override bool ReturnsAValue()
+        {
+            return false;
+        }
     }
 }

@@ -179,6 +179,12 @@
 
             if (this.block != null)
             {
+                if (this.Type.Text != "void" && this.block.ReturnsAValue() == false)
+                {
+                    this.AddError(ErrorType.NotAllControlPathsReturnAValue);
+                    foundErrors = true;
+                }
+
                 if (this.ModifierType == MemberModifierType.Abstract)
                 {
                     this.AddError(ErrorType.AbstractMemberHasBody, this.operatorDefined);
@@ -207,6 +213,15 @@
             }
 
             return foundErrors;
+        }
+
+        /// <summary>
+        /// Checks if a statement or block of code returns a value.
+        /// </summary>
+        /// <returns>True if it returns a value, false otherwise.</returns>
+        public override bool ReturnsAValue()
+        {
+            return false;
         }
     }
 }

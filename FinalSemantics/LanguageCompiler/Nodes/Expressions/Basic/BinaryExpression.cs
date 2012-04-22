@@ -113,8 +113,11 @@
 
             if (lhsType is ObjectExpressionType && rhsType is ObjectExpressionType)
             {
-                if ((rhsType as ObjectExpressionType).DataType.IsMyParent(
-                    (lhsType as ObjectExpressionType).DataType.Name.Text) == false)
+                ObjectExpressionType rhsObject = rhsType as ObjectExpressionType;
+                ObjectExpressionType lhsObject = lhsType as ObjectExpressionType;
+
+                if (rhsObject.DataType.IsMyParent(lhsObject.DataType.Name.Text) == false
+                    && rhsObject.DataType.Name.Text != lhsObject.DataType.Name.Text)
                 {
                     this.AddError(ErrorType.CannotAssignRHSToLHS);
                     return true;

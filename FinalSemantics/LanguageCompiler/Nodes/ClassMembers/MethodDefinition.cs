@@ -141,6 +141,12 @@
                 foundErrors = true;
             }
 
+            if (this.name.Text == "constructor" && this.Type.Text != scopeStack.GetClass().Name.Text)
+            {
+                this.AddError(ErrorType.ConstructorMustReturnContainingType);
+                foundErrors = true;
+            }
+
             if (this.ModifierType == MemberModifierType.Abstract && this.block != null)
             {
                 this.AddError(ErrorType.AbstractMemberHasBody, this.name.Text);
@@ -155,6 +161,12 @@
 
             if (this.block != null)
             {
+                if (this.Type.Text != "void" && this.block.ReturnsAValue() == false)
+                {
+                    this.AddError(ErrorType.NotAllControlPathsReturnAValue);
+                    foundErrors = true;
+                }
+
                 scopeStack.AddLevel(ScopeType.Function, this);
                 foreach (Parameter param in this.parameters)
                 {
@@ -171,6 +183,15 @@
             }
 
             return foundErrors;
+        }
+
+        /// <summary>
+        /// Checks if a statement or block of code returns a value.
+        /// </summary>
+        /// <returns>True if it returns a value, false otherwise.</returns>
+        public override bool ReturnsAValue()
+        {
+            return false;
         }
     }
 }

@@ -61,6 +61,12 @@
         }
 
         /// <summary>
+        /// Checks if a statement or block of code returns a value.
+        /// </summary>
+        /// <returns>True if it returns a value, false otherwise.</returns>
+        public abstract bool ReturnsAValue();
+
+        /// <summary>
         /// A short hand to be used for adding errors.
         /// </summary>
         /// <param name="type">Type of error found.</param>
