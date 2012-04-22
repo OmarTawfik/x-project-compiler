@@ -3,6 +3,9 @@
     using System.Collections.Generic;
     using System.Windows.Forms;
     using Irony.Parsing;
+    using LanguageCompiler.Errors;
+    using LanguageCompiler.Nodes.ClassMembers;
+    using LanguageCompiler.Nodes.TopLevel;
     using LanguageCompiler.Nodes.Types;
     using LanguageCompiler.Semantics;
     using LanguageCompiler.Semantics.ExpressionTypes;
@@ -72,6 +75,77 @@
 
             this.StartLocation = node.ChildNodes[0].Token.Location;
             this.EndLocation = node.ChildNodes[4].Token.Location;
+        }
+
+        /// <summary>
+        /// Checks for semantic errors within this node.
+        /// </summary>
+        /// <param name="scopeStack">The scope stack associated with this node.</param>
+        /// <returns>True if errors are found, false otherwise.</returns>
+        public override bool CheckSemanticErrors(ScopeStack scopeStack)
+        {
+            if (this.type.CheckSemanticErrors(scopeStack) || this.type.CheckTypeExists() == false)
+            {
+                return true;
+            }
+
+            bool foundErrors = false;
+            foreach (ExpressionNode arg in this.arguments)
+            {
+                foundErrors |= arg.CheckSemanticErrors(scopeStack);
+            }
+
+            if (foundErrors)
+            {
+                return true;
+            }
+
+            ClassDefinition classObj = CompilerService.Instance.ClassesList[this.type.Text];
+            bool foundHiddenDefaultCtor = false;
+
+            foreach (MemberDefinition member in classObj.Members)
+            {
+                if (member is MethodDefinition)
+                {
+                    MethodDefinition method = member as MethodDefinition;
+                    if (method.Name.Text == "constructor")
+                    {
+                        if ((method.AccessorType == MemberAccessorType.Protected || method.AccessorType == MemberAccessorType.Private)
+                            && this.arguments.Count == 0 && method.Parameters.Count == 0)
+                        {
+                            foundHiddenDefaultCtor = true;
+                        }
+                        else if (method.Parameters.Count == this.arguments.Count)
+                        {
+                            bool correctCtor = true;
+                            for (int i = 0; i < method.Parameters.Count; i++)
+                            {
+                                if (method.Parameters[i].Type.GetExpressionType(scopeStack)
+                                    .IsEqualTo(this.arguments[i].GetExpressionType(scopeStack)) == false)
+                                {
+                                    correctCtor = false;
+                                    break;
+                                }
+                            }
+
+                            if (correctCtor)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (foundHiddenDefaultCtor)
+            {
+                this.AddError(ErrorType.NoSuitableConstructor, this.type.Text);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>

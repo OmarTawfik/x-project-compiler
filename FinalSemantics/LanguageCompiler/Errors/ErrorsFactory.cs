@@ -84,6 +84,7 @@
                 ErrorsFactory.errorsDic.Add(ErrorType.InvalidParameterType, "Function {0} doesn't accept the argument of type {1}.");
                 ErrorsFactory.errorsDic.Add(ErrorType.WrongNumberOfParameters, "Function {0} doesn't accept {1} arguments.");
                 ErrorsFactory.errorsDic.Add(ErrorType.LHSNotAFunction, "LHS of this expression isn't a function.");
+                ErrorsFactory.errorsDic.Add(ErrorType.NoSuitableConstructor, "Cannot find a suitable constructor for type {0} that takes these arguments.");
             }
         }
 

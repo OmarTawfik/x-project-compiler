@@ -219,5 +219,10 @@
         /// LHS of this expression isn't a function.
         /// </summary>
         LHSNotAFunction,
+
+        /// <summary>
+        /// Cannot find a suitable constructor for type {0} that takes these arguments.
+        /// </summary>
+        NoSuitableConstructor,
     }
 }
