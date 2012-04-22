@@ -54,6 +54,7 @@
                 ErrorsFactory.errorsDic.Add(ErrorType.ConstructorMustReturnContainingType, "A constructor must return the containing type.");
                 ErrorsFactory.errorsDic.Add(ErrorType.UnreachableCodeDetected, "Unreachable code detected.");
                 ErrorsFactory.errorsDic.Add(ErrorType.NotAllControlPathsReturnAValue, "Not all control paths return a value.");
+                ErrorsFactory.errorsDic.Add(ErrorType.OperatorMustReturnContainingType, "An assignment or a postfix operator must return the containing type.");
             }
 
             //// Level Five: Statements

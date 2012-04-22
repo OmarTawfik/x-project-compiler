@@ -239,5 +239,10 @@
         /// Unreachable code detected.
         /// </summary>
         UnreachableCodeDetected,
+
+        /// <summary>
+        /// An assignment or a postfix operator must return the containing type.
+        /// </summary>
+        OperatorMustReturnContainingType,
     }
 }

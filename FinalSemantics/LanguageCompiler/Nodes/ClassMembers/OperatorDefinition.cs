@@ -22,7 +22,7 @@
         /// <summary>
         /// Operators that don't take parameters.
         /// </summary>
-        public static readonly List<string> NoParameterOperators = new List<string>();
+        public static readonly List<string> PostfixOperators = new List<string>();
 
         /// <summary>
         /// Operators that take only one parameter.
@@ -55,7 +55,7 @@
         static OperatorDefinition()
         {
             OperatorDefinition.NonOverloadableOperators.AddRange(new string[] { "==", "!=", "not", "and", "or" });
-            OperatorDefinition.NoParameterOperators.AddRange(new string[] { "++", "--" });
+            OperatorDefinition.PostfixOperators.AddRange(new string[] { "++", "--" });
             OperatorDefinition.OneParameterOperators.AddRange(new string[] { "<", ">", "<=", ">=", "+", "-", "*", "/", "%" });
             OperatorDefinition.AssignmentOperators.AddRange(new string[] { "=", "+=", "-=", "*=", "/=", "%=" });
         }
@@ -156,7 +156,15 @@
                 foundErrors = true;
             }
 
-            if (OperatorDefinition.NoParameterOperators.Contains(this.operatorDefined) && this.parameters.Count != 0)
+            if (this.Type.Text != scopeStack.GetClass().Name.Text
+                && (OperatorDefinition.AssignmentOperators.Contains(this.operatorDefined)
+                || OperatorDefinition.PostfixOperators.Contains(this.operatorDefined)))
+            {
+                this.AddError(ErrorType.OperatorMustReturnContainingType);
+                foundErrors = true;
+            }
+
+            if (OperatorDefinition.PostfixOperators.Contains(this.operatorDefined) && this.parameters.Count != 0)
             {
                 this.AddError(ErrorType.OperatorInvalidParameters, this.operatorDefined);
                 foundErrors = true;
