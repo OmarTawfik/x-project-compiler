@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Windows.Forms;
     using Irony.Parsing;
+    using LanguageCompiler.Errors;
     using LanguageCompiler.Nodes.ClassMembers;
     using LanguageCompiler.Nodes.Statements.CommandStatements;
     using LanguageCompiler.Nodes.Statements.ControlStatements;
@@ -117,9 +118,22 @@
 
             bool foundErrors = false;
             scopeStack.AddLevel(ScopeType.Block, this);
+            bool foundReturn = false;
 
             foreach (BaseNode child in this.statements)
             {
+                if (foundReturn)
+                {
+                    CompilerService.Instance.Errors.Add(ErrorsFactory.SemanticError(ErrorType.UnreachableCodeDetected, child));
+                    foundErrors = true;
+                    break;
+                }
+
+                if (child.ReturnsAValue())
+                {
+                    foundReturn = true;
+                }
+
                 foundErrors |= child.CheckSemanticErrors(scopeStack);
 
                 if (!foundErrors && child is DeclarationStatement)
@@ -129,7 +143,7 @@
                     {
                         if (atom.Name.Text == node.Name.Text)
                         {
-                            this.AddError(Errors.ErrorType.VariableSameFunction, atom.Name.Text);
+                            this.AddError(ErrorType.VariableSameFunction, atom.Name.Text);
                             return false;
                         }
 

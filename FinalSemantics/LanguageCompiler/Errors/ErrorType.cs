@@ -234,5 +234,10 @@
         /// Not all control paths return a value.
         /// </summary>
         NotAllControlPathsReturnAValue,
+
+        /// <summary>
+        /// Unreachable code detected.
+        /// </summary>
+        UnreachableCodeDetected,
     }
 }
