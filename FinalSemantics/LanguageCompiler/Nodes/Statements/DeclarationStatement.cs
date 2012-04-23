@@ -9,6 +9,7 @@
      using LanguageCompiler.Nodes.Expressions;
      using LanguageCompiler.Nodes.Types;
      using LanguageCompiler.Semantics;
+     using LanguageCompiler.Semantics.ExpressionTypes;
 
      /// <summary>
      /// Holds all data related to a "DeclarationStatement" rule.
@@ -84,21 +85,36 @@
          /// <returns>True if errors are found, false otherwise.</returns>
          public override bool CheckSemanticErrors(ScopeStack scopeStack)
          {
-             bool foundErrors = false;
+             if (type.CheckSemanticErrors(scopeStack) || type.CheckTypeExists(true) == false)
+             {
+                 return true;
+             }
+             
+             ExpressionType myExpressionType = this.type.GetExpressionType(scopeStack);
 
              foreach (FieldAtom atom in this.atoms)
              {
-                 foundErrors |= atom.CheckSemanticErrors(scopeStack);
-
-                 if (!foundErrors && atom.Value != null
-                     && this.Type.GetExpressionType(scopeStack).IsEqualTo(atom.Value.GetExpressionType(scopeStack)) == false)
+                 if(atom.CheckSemanticErrors(scopeStack))
                  {
-                     this.AddError(ErrorType.ExpressionDoesnotMatchType);
-                     foundErrors = true;
+                     return true;
+                 }
+
+                 if ( scopeStack.DeclareVariable(new Variable(myExpressionType, atom.Name.Text), atom) == false)
+                 {
+                     return true;
+                 }
+
+                 if (atom.Value != null)
+                 {
+                     ExpressionType atomType = atom.Value.GetExpressionType(scopeStack);
+                     if ( myExpressionType.IsEqualTo(atomType) == false)
+                     {
+                         return true;
+                     }
                  }
              }
 
-             return foundErrors;
+             return false;
          }
 
          /// <summary>

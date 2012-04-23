@@ -89,6 +89,7 @@
                 ErrorsFactory.errorsDic.Add(ErrorType.WrongNumberOfParameters, "Function {0} doesn't accept {1} arguments.");
                 ErrorsFactory.errorsDic.Add(ErrorType.LHSNotAFunction, "LHS of this expression isn't a function.");
                 ErrorsFactory.errorsDic.Add(ErrorType.NoSuitableConstructor, "Cannot find a suitable constructor for type {0} that takes these arguments.");
+                ErrorsFactory.errorsDic.Add(ErrorType.VariableDoesnotExist, "A variable with the name {0} doesn't exist in the current scope.");
             }
         }
 

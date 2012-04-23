@@ -244,5 +244,10 @@
         /// An assignment or a postfix operator must return the containing type.
         /// </summary>
         OperatorMustReturnContainingType,
+
+        /// <summary>
+        /// A variable with the name {0} doesn't exist in the current scope.
+        /// </summary>
+        VariableDoesnotExist,
     }
 }

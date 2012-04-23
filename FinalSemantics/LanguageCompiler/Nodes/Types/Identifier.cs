@@ -72,6 +72,13 @@
         /// <returns>True if errors are found, false otherwise.</returns>
         public override bool CheckSemanticErrors(ScopeStack scopeStack)
         {
+            if (scopeStack.CheckParentScopes(ScopeType.Expression)
+                && scopeStack.Containes(this.text) == false)
+            {
+                this.AddError(ErrorType.VariableDoesnotExist, this.text);
+                return true;
+            }
+
             if (LanguageGrammar.ReservedWords.Contains(this.text))
             {
                 this.AddError(ErrorType.IdentifierIsReservedWord, this.text);

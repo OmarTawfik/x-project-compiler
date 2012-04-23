@@ -88,7 +88,9 @@
             foundErrors |= this.name.CheckSemanticErrors(scopeStack);
             if (this.value != null)
             {
+                scopeStack.AddLevel(ScopeType.Expression, this.value);
                 foundErrors |= this.value.CheckSemanticErrors(scopeStack);
+                scopeStack.DeleteLevel();
             }
 
             if (this.name.CheckTypeExists(false))

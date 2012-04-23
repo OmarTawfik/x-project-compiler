@@ -58,7 +58,9 @@
         public override bool CheckSemanticErrors(ScopeStack scopeStack)
         {
             bool foundErrors = false;
+            scopeStack.AddLevel(ScopeType.Expression, this.expression);
             foundErrors |= this.expression.CheckSemanticErrors(scopeStack);
+            scopeStack.DeleteLevel();
 
             if (this.expression is InvocationExpression == false
                 && this.expression is PostfixExpression == false

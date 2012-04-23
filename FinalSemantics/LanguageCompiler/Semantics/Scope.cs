@@ -27,6 +27,11 @@
         /// A loop scope.
         /// </summary>
         Loop,
+
+        /// <summary>
+        /// An expression scope.
+        /// </summary>
+        Expression,
     }
 
     /// <summary>

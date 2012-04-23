@@ -1,6 +1,7 @@
 ﻿namespace LanguageCompiler.Semantics
 {
     using System.Collections.Generic;
+    using System.Linq;
     using LanguageCompiler.Errors;
     using LanguageCompiler.Nodes;
     using LanguageCompiler.Nodes.ClassMembers;
@@ -15,7 +16,7 @@
         /// Holds all variables defined within a stack of scopes.
         /// </summary>
         private Stack<Scope> stack = new Stack<Scope>();
-
+        
         /// <summary>
         /// Declares a variable in this scope.
         /// </summary>
@@ -66,7 +67,25 @@
         {
             foreach (Scope scope in this.stack)
             {
-                if (scope.Variables.Contains(v))
+                if (scope.Variables.Any(x => x.Name == v.Name))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Checks if this stack already containes a variable.
+        /// </summary>
+        /// <param name="variableName">Variable's name to be checked.</param>
+        /// <returns>True if the variable exists in the stack, false otherwise.</returns>
+        public bool Containes(string variableName)
+        {
+            foreach (Scope scope in this.stack)
+            {
+                if (scope.Variables.Any(v => v.Name == variableName))
                 {
                     return true;
                 }
