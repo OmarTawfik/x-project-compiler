@@ -249,5 +249,15 @@
         /// A variable with the name {0} doesn't exist in the current scope.
         /// </summary>
         VariableDoesnotExist,
+
+        /// <summary>
+        /// Class must implement the abstract methods in its parent class.
+        /// </summary>
+        AbstractMethodNotImplemented,
+
+        /// <summary>
+        /// Implementation for the abstract method must be marked as "override".
+        /// </summary>
+        AbstractImplementationMethodModifierMustBeOverride
     }
 }

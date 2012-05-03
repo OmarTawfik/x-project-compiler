@@ -1,6 +1,7 @@
 ﻿namespace LanguageCompiler.Nodes.TopLevel
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Windows.Forms;
     using Irony.Parsing;
     using LanguageCompiler.Errors;
@@ -293,6 +294,7 @@
             }
 
             scopeStack.AddLevel(ScopeType.Class, this);
+            AddParentClassVariablesToVariableScoop(scopeStack, this);
             foreach (MemberDefinition member in this.members)
             {
                 if (member is FieldDefinition)
@@ -314,6 +316,57 @@
                 foreach (MemberDefinition member in this.members)
                 {
                     foundErrors |= member.CheckSemanticErrors(scopeStack);
+                }
+            }
+
+            if (this.classBase != null && this.classBase.CheckTypeExists())
+            {
+                ClassDefinition parent = CompilerService.Instance.ClassesList[this.classBase.Text];
+
+                if (this.modifierType != ClassModifierType.Abstract)
+                {
+                    List<MethodDefinition> abstractList = new List<MethodDefinition>();
+                    ClassDefinition currentClass = parent;
+                    while (true)
+                    {
+                        currentClass.Members
+                            .FindAll(x => (x as MethodDefinition) != null && x.ModifierType == MemberModifierType.Abstract)
+                            .Select(x => x as MethodDefinition).ToList()
+                            .ForEach(x => abstractList.Add(x));
+
+                        parent = currentClass;
+                        if (currentClass.classBase == null)
+                        {
+                            break;
+                        }
+
+                        currentClass = CompilerService.Instance.ClassesList[currentClass.ClassBase.Text];
+                    }
+
+                    int numberOfImplementedAbstracts = 0;
+
+                    for (int i = 0; i < abstractList.Count; i++)
+                    {
+                        MethodDefinition methodMatch = this.Members.FindAll(x => x as MethodDefinition != null)
+                            .Select(x => x as MethodDefinition).ToList()
+                            .Find(x => x.DoesMatchSignature(abstractList[i]));
+
+                        if (methodMatch == null)
+                        {
+                            this.AddError(ErrorType.AbstractMethodNotImplemented, abstractList[i].Name.Text);
+                            continue;
+                        }
+                        else
+                        {
+                            if (methodMatch.ModifierType != MemberModifierType.Override)
+                            {
+                                this.AddError(ErrorType.AbstractImplementationMethodModifierMustBeOverride, methodMatch.Name.Text);
+                                continue;
+                            }
+                        }
+
+                        numberOfImplementedAbstracts++;
+                    }
                 }
             }
 
@@ -351,6 +404,36 @@
         public override bool ReturnsAValue()
         {
             return false;
+        }
+
+        /// <summary>
+        /// Adds members of a class's parent classes to the scope stack.
+        /// </summary>
+        /// <param name="scopeStack">The target scope stack.</param>
+        /// <param name="node">The class to be used.</param>
+        private static void AddParentClassVariablesToVariableScoop(ScopeStack scopeStack, ClassDefinition node)
+        {
+            while (node.ClassBase != null)
+            {
+                ClassDefinition parent = CompilerService.Instance.ClassesList[node.ClassBase.Text];
+                foreach (MemberDefinition member in parent.members)
+                {
+                    if (member is FieldDefinition)
+                    {
+                        FieldDefinition field = member as FieldDefinition;
+                        foreach (FieldAtom atom in field.Atoms)
+                        {
+                            scopeStack.DeclareVariable(
+                                new Variable(
+                                    member.Type.GetExpressionType(scopeStack),
+                                    atom.Name.Text),
+                                parent);
+                        }
+                    }
+                }
+
+                node = parent;
+            }
         }
 
         /// <summary>

@@ -47,6 +47,8 @@
                 ErrorsFactory.errorsDic.Add(ErrorType.OperatorNotOverloadable, "Cannot overload the operator {0}.");
                 ErrorsFactory.errorsDic.Add(ErrorType.OperatorInvalidReturnType, "Operator {0} has an invalid return type.");
                 ErrorsFactory.errorsDic.Add(ErrorType.StaticConstructorsMustBePublic, "Static constructor {0} must be public.");
+                ErrorsFactory.errorsDic.Add(ErrorType.AbstractMethodNotImplemented, "Class must implement abstract method \"{0}\".");
+                ErrorsFactory.errorsDic.Add(ErrorType.AbstractImplementationMethodModifierMustBeOverride, "Implementation for the abstract method \"{0}\" must be marked as \"override\".");
             }
 
             //// Level Four: Members With Scope

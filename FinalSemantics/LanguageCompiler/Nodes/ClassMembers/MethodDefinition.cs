@@ -193,5 +193,33 @@
         {
             return false;
         }
+        
+        /// <summary>
+        /// Checks for method signature match.
+        /// </summary>
+        /// <param name="method">The method to match with.</param>
+        /// <returns>Is it a match.</returns>
+        public bool DoesMatchSignature(MethodDefinition method)
+        {
+            if (this.Type.Text != method.Type.Text)
+            {
+                return false;
+            }
+
+            if (this.parameters.Count != method.parameters.Count)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < this.parameters.Count; i++)
+            {
+                if (this.parameters[i].Type.Text != method.parameters[i].Type.Text)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }
