@@ -16,6 +16,7 @@
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            new TranslatorForm().Show();
             Application.Run(new MainForm());
         }
     }
