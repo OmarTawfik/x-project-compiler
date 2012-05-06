@@ -1,0 +1,24 @@
+﻿<Window x:Class="IDE.StartWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="X-Project" Height="300" Width="500"
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        WindowStyle="ThreeDBorderWindow" Icon="/IDE;component/Images/ProjectIcon.png">
+    <Grid>
+        <Image Height="420" Width="500" Source="/IDE;component/Images/StartWindowBackground.png" />
+        
+        <Button x:Name="OpenButton" Height="40" Width =" 170" Margin="8,234,300,-13" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" Click="OpenButton_Click" VerticalAlignment="Top">
+            <Canvas>
+                <Image Canvas.Left="-70" Canvas.Top="-10" Source="/IDE;component/Images/OpenProjectButton.png" />
+                <TextBlock Canvas.Left="-40" Canvas.Top="-7" Text="Open Existing Project"/>
+            </Canvas>
+        </Button>
+
+        <Button x:Name="NewButton" Height="40" Width=" 170" Margin="187,234,121,-13" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" VerticalAlignment="Top" Click="NewButton_Click">
+            <Canvas>
+                <Image Canvas.Left="-70" Canvas.Top="-10" Source="/IDE;component/Images/NewProjectButton.png" />
+                <TextBlock Canvas.Left="-40" Canvas.Top="-7" Text="Create New Project"/>
+            </Canvas>
+        </Button>
+    </Grid>
+</Window>

@@ -1,36 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using LanguageCompiler;
-using LanguageCompiler.Nodes.TopLevel;
-
-namespace FinalSemantics
+﻿namespace FinalSemantics
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Windows.Forms;
+    using LanguageCompiler;
+    using LanguageCompiler.Nodes.TopLevel;
+    using LanguageTranslator.Translators.CPP;
+
+    /// <summary>
+    /// Holds all events of the TranslatorForm.
+    /// </summary>
     public partial class TranslatorForm : Form
     {
+        /// <summary>
+        /// The c++ translator object.
+        /// </summary>
+        private PCCPPTranslator cpp = new PCCPPTranslator();
+
+        /// <summary>
+        /// Initializes a new instance of the TranslatorForm class.
+        /// </summary>
         public TranslatorForm()
         {
-            InitializeComponent();
-            cpp = new LanguageTranslator.Translators.CPP.PCCPPTranslator();
+            this.InitializeComponent();
         }
 
-        LanguageTranslator.Translators.CPP.PCCPPTranslator cpp;
-        
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void button1_Click(object sender, EventArgs e)
+        /// <summary>
+        /// This event fires when button1 is clicked.
+        /// </summary>
+        /// <param name="sender">Sender Object.</param>
+        /// <param name="e">Event Arguments.</param>
+        private void Button1_Click(object sender, EventArgs e)
         {
             try
             {
@@ -47,9 +47,9 @@ namespace FinalSemantics
                         classList.Add(classdef);
                     }
 
-                    cpp.Translate(classList);
+                    this.cpp.Translate(classList);
 
-                    this.textBox1.Text = cpp.GeneratedCode.ToString();
+                    this.textBox1.Text = this.cpp.GeneratedCode.ToString();
                 }
             }
             catch (Exception ex)

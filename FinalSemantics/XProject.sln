@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LanguageCompiler", "Languag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LanguageTranslator", "Translator\LanguageTranslator.csproj", "{3CDE0344-0BDE-4C4F-B350-D0C8EC4C4A33}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDE", "IDE\IDE.csproj", "{38DB0D9C-B0CF-4EE2-B6C0-B2EF59B64E8E}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -51,6 +53,16 @@ Global
 		{3CDE0344-0BDE-4C4F-B350-D0C8EC4C4A33}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{3CDE0344-0BDE-4C4F-B350-D0C8EC4C4A33}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{3CDE0344-0BDE-4C4F-B350-D0C8EC4C4A33}.Release|x86.ActiveCfg = Release|Any CPU
+		{38DB0D9C-B0CF-4EE2-B6C0-B2EF59B64E8E}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{38DB0D9C-B0CF-4EE2-B6C0-B2EF59B64E8E}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{38DB0D9C-B0CF-4EE2-B6C0-B2EF59B64E8E}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{38DB0D9C-B0CF-4EE2-B6C0-B2EF59B64E8E}.Debug|x86.ActiveCfg = Debug|x86
+		{38DB0D9C-B0CF-4EE2-B6C0-B2EF59B64E8E}.Debug|x86.Build.0 = Debug|x86
+		{38DB0D9C-B0CF-4EE2-B6C0-B2EF59B64E8E}.Release|Any CPU.ActiveCfg = Release|x86
+		{38DB0D9C-B0CF-4EE2-B6C0-B2EF59B64E8E}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{38DB0D9C-B0CF-4EE2-B6C0-B2EF59B64E8E}.Release|Mixed Platforms.Build.0 = Release|x86
+		{38DB0D9C-B0CF-4EE2-B6C0-B2EF59B64E8E}.Release|x86.ActiveCfg = Release|x86
+		{38DB0D9C-B0CF-4EE2-B6C0-B2EF59B64E8E}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
