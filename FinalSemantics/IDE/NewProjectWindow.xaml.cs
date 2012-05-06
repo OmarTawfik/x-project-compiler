@@ -18,6 +18,7 @@
         public NewProjectWindow()
         {
             this.InitializeComponent();
+            this.nameTextbox.Focus();
         }
 
         /// <summary>

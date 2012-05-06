@@ -1,8 +1,36 @@
 ﻿<Window x:Class="IDE.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="X-Project IDE" Height="300" Width="300" WindowStartupLocation="CenterScreen" WindowState="Maximized">
+        Title="X-Project IDE" Height="300" Width="800" WindowStartupLocation="CenterScreen" WindowState="Maximized" MinWidth="500" ResizeMode="CanResize">
     <Grid>
-        
+        <Canvas HorizontalAlignment="Center" VerticalAlignment="Top"  Width="320" Height="40">
+            <Button x:Name="SoundsButton" Height="40" Width="100" Canvas.Left="0" Canvas.Top="-5" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave">
+                <Button.Content>
+                    <Canvas>
+                        <Image Canvas.Left="-35" Canvas.Top="-7" Height="16" Width="16" Source="/IDE;component/Images/SoundsIcon.png"/>
+                        <TextBlock Text="Sounds" Canvas.Left="-10" Canvas.Top="-7" />
+                    </Canvas>
+                </Button.Content>
+            </Button>
+            <Button x:Name="CodeButton" Height="40" Width="100" Canvas.Left="110" Canvas.Top="-5" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave">
+                <Button.Content>
+                    <Canvas>
+                        <Image Canvas.Left="-35" Canvas.Top="-7" Height="16" Width="16" Source="/IDE;component/Images/CodeIcon.png"/>
+                        <TextBlock Text="Code" Canvas.Left="-10" Canvas.Top="-7" />
+                    </Canvas>
+                </Button.Content>
+            </Button>
+            <Button x:Name="ImagesButton" Height="40" Width="100" Canvas.Left="220" Canvas.Top="-5" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave">
+                <Button.Content>
+                    <Canvas>
+                        <Image Canvas.Left="-35" Canvas.Top="-7" Height="16" Width="16" Source="/IDE;component/Images/ImagesIcon.png"/>
+                        <TextBlock Text="Images" Canvas.Left="-10" Canvas.Top="-7" />
+                    </Canvas>
+                </Button.Content>
+            </Button>
+        </Canvas>
+        <Canvas>
+            
+        </Canvas>
     </Grid>
 </Window>
