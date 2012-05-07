@@ -1,7 +1,7 @@
 ﻿<Window x:Class="IDE.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="X-Project IDE" Height="300" Width="800" WindowStartupLocation="CenterScreen" WindowState="Maximized" MinWidth="500" ResizeMode="CanResize" Icon="/IDE;component/Images/ProjectIcon.png">
+        Title="X-Project IDE" Height="300" Width="800" WindowStartupLocation="CenterScreen" WindowState="Maximized" MinWidth="500" ResizeMode="CanResize" Icon="/IDE;component/Images/DeleteIcon.png">
     <Grid>
         <Canvas x:Name="BackgroundCanvas">
             <Canvas.Background>
@@ -9,7 +9,7 @@
             </Canvas.Background>
         </Canvas>
         <Canvas HorizontalAlignment="Left" VerticalAlignment="Center" Width="220" Height="{Binding ElementName=BackgroundCanvas, Path=ActualHeight}">
-            <TreeView x:Name="ContentsTreeView" Margin="10"  Width="200" Height="700">
+            <TreeView x:Name="filesTreeView" Margin="10"  Width="200" Height="700">
                 <TreeView.Effect>
                     <DropShadowEffect Color="Indigo" BlurRadius="8" ShadowDepth="0"/>
                 </TreeView.Effect>

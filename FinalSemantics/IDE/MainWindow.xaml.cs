@@ -63,14 +63,26 @@
         private BitmapImage imagesIcon = ResourcesHelper.GetImage("ImagesIcon.png");
 
         /// <summary>
+        /// Folder Context Menu used in the Tree View.
+        /// </summary>
+        private ContextMenu folderContextMenu = new ContextMenu();
+
+        /// <summary>
+        /// File Context Menu used in the Tree View.
+        /// </summary>
+        private ContextMenu fileContextMenu = new ContextMenu();
+
+        /// <summary>
         /// Initializes a new instance of the MainWindow class.
         /// </summary>
         /// <param name="settings">Project settings to be used.</param>
         public MainWindow(ProjectSettingsFile settings)
         {
             this.InitializeComponent();
+
             this.projectSettings = settings;
             this.projectSettings.SaveProject();
+
             this.RefreshTreeView();
         }
 
@@ -118,8 +130,9 @@
                 currentFolder = this.projectSettings.SoundsFolder;
             }
 
-            this.ContentsTreeView.Items.Clear();
-            this.ContentsTreeView.Items.Add(this.ConstructFolder(currentFolder, fileIcon));
+            this.CreateContextMenus(fileIcon);
+            this.filesTreeView.Items.Clear();
+            this.filesTreeView.Items.Add(this.ConstructFolder(currentFolder, fileIcon));
         }
 
         /// <summary>
@@ -131,6 +144,8 @@
         private TreeViewItem ConstructFolder(ProjectFolder folder, BitmapImage icon)
         {
             TreeViewItem root = this.ConstructTreeViewItem(folder.Name, this.folderIcon);
+            root.ContextMenu = this.folderContextMenu;
+            root.Tag = folder;
 
             foreach (ProjectFolder subFolder in folder.SubFolders)
             {
@@ -171,6 +186,8 @@
             TreeViewItem item = new TreeViewItem();
             item.Header = canvas;
             item.IsExpanded = true;
+            item.ContextMenu = this.fileContextMenu;
+            item.Tag = name;
             return item;
         }
 
@@ -205,6 +222,92 @@
         {
             this.currentResource = ProjectResourceType.Images;
             this.RefreshTreeView();
+        }
+
+        /// <summary>
+        /// Creates context menus to be used in the TreeView.
+        /// </summary>
+        /// <param name="fileIcon">Current File Icon.</param>
+        private void CreateContextMenus(BitmapImage fileIcon)
+        {
+            this.folderContextMenu.Items.Clear();
+            this.fileContextMenu.Items.Clear();
+
+            this.folderContextMenu.Items.Add(this.ConstructItem("Add New Folder", this.folderIcon, this.AddFolderButtonClicked));
+            this.folderContextMenu.Items.Add(this.ConstructItem("Add New File", fileIcon, this.AddFileButtonClicked));
+            this.folderContextMenu.Items.Add(new Separator());
+            this.folderContextMenu.Items.Add(this.ConstructItem("Rename Folder", ResourcesHelper.GetImage("RenameIcon.png"), this.RenameButtonClicked));
+            this.folderContextMenu.Items.Add(this.ConstructItem("Delete Folder", ResourcesHelper.GetImage("DeleteIcon.png"), this.DeleteButtonClicked));
+
+            this.fileContextMenu.Items.Add(this.ConstructItem("Open File", ResourcesHelper.GetImage("OpenIcon.png"), this.OpenFileButtonClicked));
+            this.fileContextMenu.Items.Add(this.ConstructItem("Rename File", ResourcesHelper.GetImage("RenameIcon.png"), this.RenameButtonClicked));
+            this.fileContextMenu.Items.Add(this.ConstructItem("Delete File", ResourcesHelper.GetImage("DeleteIcon.png"), this.DeleteButtonClicked));
+        }
+
+        /// <summary>
+        /// Makes a MenuItem out of data provided.
+        /// </summary>
+        /// <param name="name">Name of item.</param>
+        /// <param name="icon">Icon of item.</param>
+        /// <param name="clickHandler">ClickHandler to call when user clickes the item.</param>
+        /// <returns>A MenuItem object.</returns>
+        private MenuItem ConstructItem(string name, BitmapImage icon, RoutedEventHandler clickHandler)
+        {
+            Image image = new Image();
+            image.Source = icon;
+            image.Height = image.Width = 16;
+
+            MenuItem item = new MenuItem();
+            item.Header = name;
+            item.Icon = image;
+            item.Click += clickHandler;
+
+            return item;
+        }
+
+        /// <summary>
+        /// The RenameContextButton Click Event.
+        /// </summary>
+        /// <param name="sender">Sender Object.</param>
+        /// <param name="e">Routed Event Arguments.</param>
+        private void RenameButtonClicked(object sender, RoutedEventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// The DeleteContextButton Click Event.
+        /// </summary>
+        /// <param name="sender">Sender Object.</param>
+        /// <param name="e">Routed Event Arguments.</param>
+        private void DeleteButtonClicked(object sender, RoutedEventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// The AddFolderContextButton Click Event.
+        /// </summary>
+        /// <param name="sender">Sender Object.</param>
+        /// <param name="e">Routed Event Arguments.</param>
+        private void AddFolderButtonClicked(object sender, RoutedEventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// The AddFileContextButton Click Event.
+        /// </summary>
+        /// <param name="sender">Sender Object.</param>
+        /// <param name="e">Routed Event Arguments.</param>
+        private void AddFileButtonClicked(object sender, RoutedEventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// The OpenFileContextButton Click Event.
+        /// </summary>
+        /// <param name="sender">Sender Object.</param>
+        /// <param name="e">Routed Event Arguments.</param>
+        private void OpenFileButtonClicked(object sender, RoutedEventArgs e)
+        {
         }
     }
 }
