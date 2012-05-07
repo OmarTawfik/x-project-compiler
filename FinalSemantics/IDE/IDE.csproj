@@ -63,6 +63,7 @@
     <Compile Include="Classes\AnimationsHelper.cs" />
     <Compile Include="Classes\ProjectFolder.cs" />
     <Compile Include="Classes\ProjectSettingsFile.cs" />
+    <Compile Include="Classes\ResourcesHelper.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -134,6 +135,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\ImagesIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\DarkPattern.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\FolderIcon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

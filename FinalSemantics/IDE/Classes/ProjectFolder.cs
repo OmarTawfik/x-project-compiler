@@ -25,6 +25,20 @@
         }
 
         /// <summary>
+        /// Initializes a new instance of the ProjectFolder class.
+        /// </summary>
+        /// <param name="name">The folder's name.</param>
+        public ProjectFolder(string name)
+        {
+            this.Name = name;
+        }
+
+        /// <summary>
+        /// Gets or sets the folder's name.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
         /// Gets or sets the subfolders contained in this folder.
         /// </summary>
         public List<ProjectFolder> SubFolders

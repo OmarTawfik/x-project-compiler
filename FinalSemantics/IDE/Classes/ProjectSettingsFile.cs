@@ -1,5 +1,9 @@
 ﻿namespace IDE.Classes
 {
+    using System.IO;
+    using System.Windows;
+    using System.Xml.Serialization;
+
     /// <summary>
     /// Holds information about a project settings file.
     /// </summary>
@@ -8,17 +12,17 @@
         /// <summary>
         /// The folder containing the project sounds.
         /// </summary>
-        private ProjectFolder soundsFolder = new ProjectFolder();
+        private ProjectFolder soundsFolder = new ProjectFolder("Project Sounds");
 
         /// <summary>
-        /// The folder containing the project sprites.
+        /// The folder containing the project images.
         /// </summary>
-        private ProjectFolder spritesFolder = new ProjectFolder();
+        private ProjectFolder imagesFolder = new ProjectFolder("Project Images");
 
         /// <summary>
         /// The folder containing the project code files.
         /// </summary>
-        private ProjectFolder codeFolder = new ProjectFolder();
+        private ProjectFolder codeFolder = new ProjectFolder("Project Code Files");
 
         /// <summary>
         /// Initializes a new instance of the ProjectSettingsFile class.
@@ -66,12 +70,12 @@
         }
 
         /// <summary>
-        /// Gets or sets the folder containing the project sprites.
+        /// Gets or sets the folder containing the project images.
         /// </summary>
-        public ProjectFolder SpritesFolder
+        public ProjectFolder ImagesFolder
         {
-            get { return this.spritesFolder; }
-            set { this.spritesFolder = value; }
+            get { return this.imagesFolder; }
+            set { this.imagesFolder = value; }
         }
 
         /// <summary>
@@ -81,6 +85,24 @@
         {
             get { return this.codeFolder; }
             set { this.codeFolder = value; }
+        }
+
+        /// <summary>
+        /// Saves the project to the harddisk.
+        /// </summary>
+        public void SaveProject()
+        {
+            try
+            {
+                XmlSerializer xml = new XmlSerializer(typeof(ProjectSettingsFile));
+                FileStream fileStream = new FileStream(this.ProjectFullPath, FileMode.OpenOrCreate);
+                xml.Serialize(fileStream, this);
+                fileStream.Close();
+            }
+            catch
+            {
+                MessageBox.Show("Error saving the current project.", "Project Saving Error");
+            }
         }
     }
 }
