@@ -54,7 +54,7 @@
             
             if (dialog.ShowDialog() == true)
             {
-                //// try
+                try
                 {
                     XmlSerializer xml = new XmlSerializer(typeof(ProjectSettingsFile));
                     FileStream fileStream = new FileStream(dialog.FileName, FileMode.Open);
@@ -64,9 +64,9 @@
                     new MainWindow(project).Show();
                     this.Close();
                 }
-                //// catch
+                catch
                 {
-                    //// MessageBox.Show("Error loading the selected project.", "Project Loading Error");
+                    MessageBox.Show("Error loading the selected project.", "Project Loading Error");
                 }
             }
         }

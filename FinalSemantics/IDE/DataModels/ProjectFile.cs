@@ -32,11 +32,6 @@
     public class ProjectFile
     {
         /// <summary>
-        /// The folder that contains this file.
-        /// </summary>
-        private ProjectFolder containingFolder;
-
-        /// <summary>
         /// Initializes a new instance of the ProjectFile class.
         /// </summary>
         public ProjectFile()
@@ -46,10 +41,12 @@
         /// <summary>
         /// Initializes a new instance of the ProjectFile class.
         /// </summary>
-        /// <param name="containingFolder">The folder that contains this file.</param>
-        public ProjectFile(ProjectFolder containingFolder)
+        /// <param name="type">The resource type of this file.</param>
+        /// <param name="name">The name of this file.</param>
+        public ProjectFile(ProjectResourceType type, string name)
         {
-            this.containingFolder = containingFolder;
+            this.ResourceType = type;
+            this.Name = name;
         }
 
         /// <summary>
@@ -61,14 +58,5 @@
         /// Gets or sets the name of this file.
         /// </summary>
         public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the folder that contains this file.
-        /// </summary>
-        public ProjectFolder ContainingFolder
-        {
-            get { return this.containingFolder; }
-            set { this.containingFolder = value; }
-        }
     }
 }

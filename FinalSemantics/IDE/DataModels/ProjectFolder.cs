@@ -64,13 +64,37 @@
             get { return this.subFiles; }
             set { this.subFiles = value; }
         }
+        
+        /// <summary>
+        /// Gets the parent folder of a given child file.
+        /// </summary>
+        /// <param name="child">Child file to use.</param>
+        /// <returns>A ProjectFolder object.</returns>
+        public ProjectFolder GetParentFile(ProjectFile child)
+        {
+            if (this.subFiles.Contains(child))
+            {
+                return this;
+            }
+
+            foreach (ProjectFolder subFolder in this.subFolders)
+            {
+                ProjectFolder temp = subFolder.GetParentFile(child);
+                if (temp != null)
+                {
+                    return temp;
+                }
+            }
+
+            return null;
+        }
 
         /// <summary>
         /// Gets the parent folder of a given child folder.
         /// </summary>
         /// <param name="child">Child folder to use.</param>
         /// <returns>A ProjectFolder object.</returns>
-        public ProjectFolder GetParent(ProjectFolder child)
+        public ProjectFolder GetParentFolder(ProjectFolder child)
         {
             if (this.SubFolders.Contains(child))
             {
@@ -79,7 +103,7 @@
 
             foreach (ProjectFolder subFolder in this.subFolders)
             {
-                ProjectFolder temp = subFolder.GetParent(child);
+                ProjectFolder temp = subFolder.GetParentFolder(child);
                 if (temp != null)
                 {
                     return temp;

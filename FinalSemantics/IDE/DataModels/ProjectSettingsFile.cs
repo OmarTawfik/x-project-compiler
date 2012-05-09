@@ -93,34 +93,56 @@
         }
 
         /// <summary>
+        /// Gets the parent folder of a given child file.
+        /// </summary>
+        /// <param name="child">Child file to use.</param>
+        /// <returns>A ProjectFolder object.</returns>
+        public ProjectFolder GetParentFile(ProjectFile child)
+        {
+            ProjectFolder temp = this.codeFolder.GetParentFile(child);
+            if (temp != null)
+            {
+                return temp;
+            }
+
+            temp = this.soundsFolder.GetParentFile(child);
+            if (temp != null)
+            {
+                return temp;
+            }
+
+            return this.imagesFolder.GetParentFile(child);
+        }
+
+        /// <summary>
         /// Gets the parent folder of a given child folder.
         /// </summary>
         /// <param name="child">Child folder to use.</param>
         /// <returns>A ProjectFolder object.</returns>
-        public ProjectFolder GetParent(ProjectFolder child)
+        public ProjectFolder GetParentFolder(ProjectFolder child)
         {
             if (child == this.codeFolder || child == this.soundsFolder || child == this.imagesFolder)
             {
                 return null;
             }
 
-            ProjectFolder temp = this.codeFolder.GetParent(child);
+            ProjectFolder temp = this.codeFolder.GetParentFolder(child);
             if (temp != null)
             {
                 return temp;
             }
 
-            temp = this.soundsFolder.GetParent(child);
+            temp = this.soundsFolder.GetParentFolder(child);
             if (temp != null)
             {
                 return temp;
             }
 
-            return this.imagesFolder.GetParent(child);
+            return this.imagesFolder.GetParentFolder(child);
         }
 
         /// <summary>
-        /// Saves the project to the harddisk.
+        /// Saves the project to the hard disk.
         /// </summary>
         public void SaveProject()
         {

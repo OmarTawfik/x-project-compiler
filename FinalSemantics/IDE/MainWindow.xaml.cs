@@ -7,6 +7,7 @@
     using System.Windows.Input;
     using System.Windows.Media.Imaging;
     using IDE.DataModels;
+    using Microsoft.Win32;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -216,7 +217,7 @@
             TreeViewItem root = this.ConstructTreeViewItem(folder.Name, folder, this.folderIcon);
             root.ContextMenu = this.folderContextMenu;
 
-            folder.SubFiles.Sort();
+            folder.SubFiles = folder.SubFiles.OrderBy(x => x.Name).ToList();
             folder.SubFolders = folder.SubFolders.OrderBy(f => f.Name).ToList();
 
             foreach (ProjectFolder subFolder in folder.SubFolders)
@@ -286,7 +287,7 @@
         private void RenameButtonClicked(object sender, RoutedEventArgs e)
         {
             if (this.selectedItemByRightClick.Tag is ProjectFolder
-                && this.projectSettings.GetParent(this.selectedItemByRightClick.Tag as ProjectFolder) == null)
+                && this.projectSettings.GetParentFolder(this.selectedItemByRightClick.Tag as ProjectFolder) == null)
             {
                 MessageBox.Show("Cannot Rename Root Folder.", "Renaming Error");
             }
@@ -342,8 +343,9 @@
             else if (treeViewItem.Tag is ProjectFile)
             {
                 ProjectFile file = treeViewItem.Tag as ProjectFile;
-                string oldPath = file.ContainingFolder.Location + "\\" + file.ContainingFolder.Name + "\\" + file.Name;
-                string newPath = file.ContainingFolder.Location + "\\" + file.ContainingFolder.Name + "\\" + textbox.Text + Path.GetExtension(oldPath);
+                ProjectFolder parent = this.projectSettings.GetParentFile(file);
+                string oldPath = parent.Location + "\\" + parent.Name + "\\" + file.Name;
+                string newPath = parent.Location + "\\" + parent.Name + "\\" + textbox.Text + Path.GetExtension(oldPath);
                 if (File.Exists(newPath))
                 {
                     MessageBox.Show("A file already exists with the same name.", "Renaming Error");
@@ -371,7 +373,7 @@
             if (treeViewItem.Tag is ProjectFolder)
             {
                 ProjectFolder folder = treeViewItem.Tag as ProjectFolder;
-                if (this.projectSettings.GetParent(folder) == null)
+                if (this.projectSettings.GetParentFolder(folder) == null)
                 {
                     MessageBox.Show("Cannot delete Root Folder.", "Deletion Error");
                     return;
@@ -379,14 +381,15 @@
                 else
                 {
                     Directory.Delete(folder.Location + "\\" + folder.Name);
-                    this.projectSettings.GetParent(folder).SubFolders.Remove(folder);
+                    this.projectSettings.GetParentFolder(folder).SubFolders.Remove(folder);
                 }
             }
             else if (treeViewItem.Tag is ProjectFile)
             {
                 ProjectFile file = treeViewItem.Tag as ProjectFile;
-                File.Delete(file.ContainingFolder.Location + "\\" + file.ContainingFolder.Name + "\\" + file.Name);
-                file.ContainingFolder.SubFiles.Remove(file);
+                ProjectFolder folder = this.projectSettings.GetParentFile(file);
+                File.Delete(folder.Location + "\\" + folder.Name + "\\" + file.Name);
+                folder.SubFiles.Remove(file);
             }
 
             this.projectSettings.SaveProject();
@@ -423,6 +426,53 @@
         /// <param name="e">Routed Event Arguments.</param>
         private void AddFileButtonClicked(object sender, RoutedEventArgs e)
         {
+            ProjectFolder parent = this.selectedItemByRightClick.Tag as ProjectFolder;
+            string location = parent.Location + "\\" + parent.Name;
+
+            if (this.currentResource == ProjectResourceType.Code)
+            {
+                for (int i = 1; i < int.MaxValue; i++)
+                {
+                    if (File.Exists(location + "\\NewCodeFile" + i.ToString() + ".x") == false)
+                    {
+                        parent.SubFiles.Add(new ProjectFile(ProjectResourceType.Code, "NewCodeFile" + i.ToString() + ".x"));
+                        File.CreateText(location + "\\NewCodeFile" + i.ToString() + ".x");
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                OpenFileDialog dialog = new OpenFileDialog();
+                if (this.currentResource == ProjectResourceType.Sounds)
+                {
+                    dialog.DefaultExt = ".wav";
+                    dialog.Filter = "WAV sound files (.wav)|*.wav";
+                }
+                else if (this.currentResource == ProjectResourceType.Images)
+                {
+                    dialog.DefaultExt = ".png";
+                    dialog.Filter = "PNG image files (.png)|*.png";
+                }
+
+                if (dialog.ShowDialog() == true)
+                {
+                    string fileName = Path.GetFileName(dialog.FileName);
+                    if (File.Exists(location + "\\" + fileName))
+                    {
+                        MessageBox.Show("A file with the same name already exists.", "Error Adding File");
+                        return;
+                    }
+                    else
+                    {
+                        File.Copy(dialog.FileName, location + "\\" + fileName);
+                        parent.SubFiles.Add(new ProjectFile(this.currentResource, fileName));
+                    }
+                }
+            }
+            
+            this.projectSettings.SaveProject();
+            this.RefreshTreeView();
         }
 
         /// <summary>
