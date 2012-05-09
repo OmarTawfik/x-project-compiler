@@ -1,4 +1,4 @@
-﻿namespace IDE.Classes
+﻿namespace IDE.DataModels
 {
     using System;
     using System.Windows;

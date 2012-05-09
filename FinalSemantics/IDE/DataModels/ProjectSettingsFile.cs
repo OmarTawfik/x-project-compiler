@@ -1,5 +1,6 @@
-﻿namespace IDE.Classes
+﻿namespace IDE.DataModels
 {
+    using System;
     using System.IO;
     using System.Windows;
     using System.Xml.Serialization;
@@ -12,17 +13,17 @@
         /// <summary>
         /// The folder containing the project sounds.
         /// </summary>
-        private ProjectFolder soundsFolder = new ProjectFolder("Project Sounds");
+        private ProjectFolder soundsFolder;
 
         /// <summary>
         /// The folder containing the project images.
         /// </summary>
-        private ProjectFolder imagesFolder = new ProjectFolder("Project Images");
+        private ProjectFolder imagesFolder;
 
         /// <summary>
         /// The folder containing the project code files.
         /// </summary>
-        private ProjectFolder codeFolder = new ProjectFolder("Project Code Files");
+        private ProjectFolder codeFolder;
 
         /// <summary>
         /// Initializes a new instance of the ProjectSettingsFile class.
@@ -40,6 +41,10 @@
         {
             this.ProjectName = projectName;
             this.ProjectLocation = projectLocation;
+
+            this.soundsFolder = new ProjectFolder("Sounds", this.ProjectLocation, true);
+            this.codeFolder = new ProjectFolder("Code", this.ProjectLocation, true);
+            this.imagesFolder = new ProjectFolder("Images", this.ProjectLocation, true);
         }
 
         /// <summary>
@@ -95,13 +100,25 @@
             try
             {
                 XmlSerializer xml = new XmlSerializer(typeof(ProjectSettingsFile));
-                FileStream fileStream = new FileStream(this.ProjectFullPath, FileMode.OpenOrCreate);
+                FileStream fileStream = new FileStream(this.ProjectFullPath, FileMode.Create);
                 xml.Serialize(fileStream, this);
                 fileStream.Close();
             }
             catch
             {
-                MessageBox.Show("Error saving the current project.", "Project Saving Error");
+                MessageBox.Show("Error saving the project settings.", "Project Saving Error");
+                return;
+            }
+
+            try
+            {
+                this.soundsFolder.CheckFiles();
+                this.codeFolder.CheckFiles();
+                this.imagesFolder.CheckFiles();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("The Item " + ex.Message + " cannot be found.", "Project Saving Error");
             }
         }
     }

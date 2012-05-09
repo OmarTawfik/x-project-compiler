@@ -5,7 +5,7 @@
     using System.Windows.Controls;
     using System.Windows.Input;
     using System.Xml.Serialization;
-    using IDE.Classes;
+    using IDE.DataModels;
     using Microsoft.Win32;
 
     /// <summary>

@@ -60,10 +60,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Classes\AnimationsHelper.cs" />
-    <Compile Include="Classes\ProjectFolder.cs" />
-    <Compile Include="Classes\ProjectSettingsFile.cs" />
-    <Compile Include="Classes\ResourcesHelper.cs" />
+    <Compile Include="Helpers\AnimationsHelper.cs" />
+    <Compile Include="DataModels\ProjectFile.cs" />
+    <Compile Include="DataModels\ProjectFolder.cs" />
+    <Compile Include="DataModels\ProjectSettingsFile.cs" />
+    <Compile Include="Helpers\ResourcesHelper.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -151,6 +152,7 @@
   <ItemGroup>
     <Resource Include="Images\OpenIcon.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
