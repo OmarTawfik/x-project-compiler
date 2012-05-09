@@ -31,12 +31,10 @@
         /// </summary>
         /// <param name="name">The folder's name.</param>
         /// <param name="location">The folder's location.</param>
-        /// <param name="isRootFolder">Indicates if this folder is the root.</param>
-        public ProjectFolder(string name, string location, bool isRootFolder)
+        public ProjectFolder(string name, string location)
         {
             this.Name = name;
             this.Location = location;
-            this.IsRootFolder = isRootFolder;
         }
 
         /// <summary>
@@ -48,11 +46,6 @@
         /// Gets or sets the folder's location.
         /// </summary>
         public string Location { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this folder is the root.
-        /// </summary>
-        public bool IsRootFolder { get; set; }
 
         /// <summary>
         /// Gets or sets the subfolders contained in this folder.
@@ -70,6 +63,30 @@
         {
             get { return this.subFiles; }
             set { this.subFiles = value; }
+        }
+
+        /// <summary>
+        /// Gets the parent folder of a given child folder.
+        /// </summary>
+        /// <param name="child">Child folder to use.</param>
+        /// <returns>A ProjectFolder object.</returns>
+        public ProjectFolder GetParent(ProjectFolder child)
+        {
+            if (this.SubFolders.Contains(child))
+            {
+                return this;
+            }
+
+            foreach (ProjectFolder subFolder in this.subFolders)
+            {
+                ProjectFolder temp = subFolder.GetParent(child);
+                if (temp != null)
+                {
+                    return temp;
+                }
+            }
+
+            return null;
         }
 
         /// <summary>

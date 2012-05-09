@@ -42,9 +42,9 @@
             this.ProjectName = projectName;
             this.ProjectLocation = projectLocation;
 
-            this.soundsFolder = new ProjectFolder("Sounds", this.ProjectLocation, true);
-            this.codeFolder = new ProjectFolder("Code", this.ProjectLocation, true);
-            this.imagesFolder = new ProjectFolder("Images", this.ProjectLocation, true);
+            this.soundsFolder = new ProjectFolder("Sounds", this.ProjectLocation);
+            this.codeFolder = new ProjectFolder("Code", this.ProjectLocation);
+            this.imagesFolder = new ProjectFolder("Images", this.ProjectLocation);
         }
 
         /// <summary>
@@ -90,6 +90,33 @@
         {
             get { return this.codeFolder; }
             set { this.codeFolder = value; }
+        }
+
+        /// <summary>
+        /// Gets the parent folder of a given child folder.
+        /// </summary>
+        /// <param name="child">Child folder to use.</param>
+        /// <returns>A ProjectFolder object.</returns>
+        public ProjectFolder GetParent(ProjectFolder child)
+        {
+            if (child == this.codeFolder || child == this.soundsFolder || child == this.imagesFolder)
+            {
+                return null;
+            }
+
+            ProjectFolder temp = this.codeFolder.GetParent(child);
+            if (temp != null)
+            {
+                return temp;
+            }
+
+            temp = this.soundsFolder.GetParent(child);
+            if (temp != null)
+            {
+                return temp;
+            }
+
+            return this.imagesFolder.GetParent(child);
         }
 
         /// <summary>

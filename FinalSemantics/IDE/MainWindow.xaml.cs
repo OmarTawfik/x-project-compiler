@@ -285,7 +285,8 @@
         /// <param name="e">Routed Event Arguments.</param>
         private void RenameButtonClicked(object sender, RoutedEventArgs e)
         {
-            if (this.selectedItemByRightClick.Tag is ProjectFolder && (this.selectedItemByRightClick.Tag as ProjectFolder).IsRootFolder)
+            if (this.selectedItemByRightClick.Tag is ProjectFolder
+                && this.projectSettings.GetParent(this.selectedItemByRightClick.Tag as ProjectFolder) == null)
             {
                 MessageBox.Show("Cannot Rename Root Folder.", "Renaming Error");
             }
@@ -366,6 +367,30 @@
         /// <param name="e">Routed Event Arguments.</param>
         private void DeleteButtonClicked(object sender, RoutedEventArgs e)
         {
+            TreeViewItem treeViewItem = this.selectedItemByRightClick as TreeViewItem;
+            if (treeViewItem.Tag is ProjectFolder)
+            {
+                ProjectFolder folder = treeViewItem.Tag as ProjectFolder;
+                if (this.projectSettings.GetParent(folder) == null)
+                {
+                    MessageBox.Show("Cannot delete Root Folder.", "Deletion Error");
+                    return;
+                }
+                else
+                {
+                    Directory.Delete(folder.Location + "\\" + folder.Name);
+                    this.projectSettings.GetParent(folder).SubFolders.Remove(folder);
+                }
+            }
+            else if (treeViewItem.Tag is ProjectFile)
+            {
+                ProjectFile file = treeViewItem.Tag as ProjectFile;
+                File.Delete(file.ContainingFolder.Location + "\\" + file.ContainingFolder.Name + "\\" + file.Name);
+                file.ContainingFolder.SubFiles.Remove(file);
+            }
+
+            this.projectSettings.SaveProject();
+            this.RefreshTreeView();
         }
 
         /// <summary>
@@ -382,7 +407,7 @@
             {
                 if (Directory.Exists(location + "\\NewFolder" + i.ToString()) == false)
                 {
-                    parent.SubFolders.Add(new ProjectFolder("NewFolder" + i.ToString(), location, false));
+                    parent.SubFolders.Add(new ProjectFolder("NewFolder" + i.ToString(), location));
                     break;
                 }
             }
