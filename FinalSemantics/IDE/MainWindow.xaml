@@ -45,5 +45,15 @@
                 </Button.Content>
             </Button>
         </Canvas>
+        <ScrollViewer Grid.Row="1" Grid.Column="1">
+            <Grid HorizontalAlignment="Left" VerticalAlignment="Top" x:Name="subEditingGrid">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </Window>

@@ -482,6 +482,40 @@
         /// <param name="e">Routed Event Arguments.</param>
         private void OpenFileButtonClicked(object sender, RoutedEventArgs e)
         {
+            ProjectFile file = this.selectedItemByRightClick.Tag as ProjectFile;
+            ProjectFolder folder = this.projectSettings.GetParentFile(file);
+            string filePath = folder.Location + "\\" + folder.Name + "\\" + file.Name;
+
+            if (File.Exists(filePath) == false)
+            {
+                MessageBox.Show("File not found on hard disk.", "Error Openning File");
+                return;
+            }
+
+            if (this.currentResource == ProjectResourceType.Images)
+            {
+                MemoryStream memoryStream = new MemoryStream();
+                FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+                
+                memoryStream.SetLength(fileStream.Length);
+                fileStream.Read(memoryStream.GetBuffer(), 0, (int)fileStream.Length);
+
+                memoryStream.Flush();
+                fileStream.Close();
+
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.StreamSource = memoryStream;
+                bitmap.EndInit();
+
+                Image image = new Image();
+                image.Source = bitmap;
+                image.Height = bitmap.Height;
+                image.Width = bitmap.Width;
+
+                this.subEditingGrid.Children.Clear();
+                this.subEditingGrid.Children.Add(image);
+            }
         }
         #endregion
     }
