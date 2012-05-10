@@ -1,11 +1,16 @@
 ﻿namespace IDE
 {
+    using System.ComponentModel;
     using System.IO;
     using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
+    using System.Windows.Media;
+    using System.Windows.Media.Effects;
     using System.Windows.Media.Imaging;
+    using ICSharpCode.AvalonEdit;
+    using ICSharpCode.AvalonEdit.Highlighting;
     using IDE.DataModels;
     using Microsoft.Win32;
 
@@ -76,7 +81,9 @@
 
             this.projectSettings = settings;
             this.projectSettings.SaveProject();
-            this.RefreshTreeView();
+
+            this.Closing += this.FinishedEditingCode;
+            this.RefreshScreen();
         }
         #endregion
 
@@ -109,7 +116,7 @@
         private void SoundsButton_Click(object sender, RoutedEventArgs e)
         {
             this.currentResource = ProjectResourceType.Sounds;
-            this.RefreshTreeView();
+            this.RefreshScreen();
         }
 
         /// <summary>
@@ -120,7 +127,7 @@
         private void CodeButton_Click(object sender, RoutedEventArgs e)
         {
             this.currentResource = ProjectResourceType.Code;
-            this.RefreshTreeView();
+            this.RefreshScreen();
         }
 
         /// <summary>
@@ -131,7 +138,7 @@
         private void ImagesButton_Click(object sender, RoutedEventArgs e)
         {
             this.currentResource = ProjectResourceType.Images;
-            this.RefreshTreeView();
+            this.RefreshScreen();
         }
         #endregion
 
@@ -159,8 +166,10 @@
         /// <summary>
         /// Refreshes the TreeView and adds proper children.
         /// </summary>
-        private void RefreshTreeView()
+        private void RefreshScreen()
         {
+            this.FinishedEditingCode(null, null);
+
             BitmapImage fileIcon = null;
             ProjectFolder currentFolder = null;
 
@@ -302,7 +311,7 @@
 
                 this.selectedItemByRightClick.Header = textBox;
                 textBox.Focus();
-            }            
+            }
         }
 
         /// <summary>
@@ -359,7 +368,7 @@
             }
 
             this.projectSettings.SaveProject();
-            this.RefreshTreeView();
+            this.RefreshScreen();
         }
 
         /// <summary>
@@ -380,6 +389,7 @@
                 }
                 else
                 {
+                    this.EmptyFolder(new DirectoryInfo(folder.Location + "\\" + folder.Name));
                     Directory.Delete(folder.Location + "\\" + folder.Name);
                     this.projectSettings.GetParentFolder(folder).SubFolders.Remove(folder);
                 }
@@ -393,7 +403,24 @@
             }
 
             this.projectSettings.SaveProject();
-            this.RefreshTreeView();
+            this.RefreshScreen();
+        }
+
+        /// <summary>
+        /// Empties a given folder from subfolders/subfiles.
+        /// </summary>
+        /// <param name="directoryInfo">Directory Info to use.</param>
+        private void EmptyFolder(DirectoryInfo directoryInfo)
+        {
+            foreach (FileInfo file in directoryInfo.GetFiles())
+            {
+                file.Delete();
+            }
+
+            foreach (DirectoryInfo subfolder in directoryInfo.GetDirectories())
+            {
+                this.EmptyFolder(subfolder);
+            }
         }
 
         /// <summary>
@@ -416,7 +443,7 @@
             }
 
             this.projectSettings.SaveProject();
-            this.RefreshTreeView();
+            this.RefreshScreen();
         }
 
         /// <summary>
@@ -470,11 +497,11 @@
                     }
                 }
             }
-            
-            this.projectSettings.SaveProject();
-            this.RefreshTreeView();
-        }
 
+            this.projectSettings.SaveProject();
+            this.RefreshScreen();
+        }
+        
         /// <summary>
         /// The OpenFileContextButton Click Event.
         /// </summary>
@@ -482,6 +509,8 @@
         /// <param name="e">Routed Event Arguments.</param>
         private void OpenFileButtonClicked(object sender, RoutedEventArgs e)
         {
+            this.FinishedEditingCode(null, null);
+
             ProjectFile file = this.selectedItemByRightClick.Tag as ProjectFile;
             ProjectFolder folder = this.projectSettings.GetParentFile(file);
             string filePath = folder.Location + "\\" + folder.Name + "\\" + file.Name;
@@ -496,7 +525,7 @@
             {
                 MemoryStream memoryStream = new MemoryStream();
                 FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-                
+
                 memoryStream.SetLength(fileStream.Length);
                 fileStream.Read(memoryStream.GetBuffer(), 0, (int)fileStream.Length);
 
@@ -513,8 +542,43 @@
                 image.Height = bitmap.Height;
                 image.Width = bitmap.Width;
 
-                this.subEditingGrid.Children.Clear();
-                this.subEditingGrid.Children.Add(image);
+                this.mainEditingArea.Content = image;
+            }
+            else if (this.currentResource == ProjectResourceType.Code)
+            {
+                TextEditor textEditor = new TextEditor();
+
+                textEditor.FontFamily = new FontFamily("Consolas");
+                textEditor.HorizontalAlignment = HorizontalAlignment.Stretch;
+                textEditor.VerticalAlignment = VerticalAlignment.Stretch;
+                textEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("C#");
+                textEditor.FontSize = 14;
+                textEditor.Margin = new Thickness(6, 6, 6, 6);
+                textEditor.ShowLineNumbers = true;
+
+                DropShadowEffect shadow = new DropShadowEffect();
+                shadow.Color = Colors.Indigo;
+                shadow.BlurRadius = 8;
+                shadow.ShadowDepth = 0;
+                textEditor.Effect = shadow;
+
+                textEditor.Load(filePath);
+                textEditor.Tag = filePath;
+                this.mainEditingArea.Content = textEditor;
+            }
+        }
+
+        /// <summary>
+        /// The Finished Editing code Event Handler.
+        /// </summary>
+        /// <param name="sender">Sender Object.</param>
+        /// <param name="e">Routed Event Arguments.</param>
+        private void FinishedEditingCode(object sender, CancelEventArgs e)
+        {
+            if (this.mainEditingArea.Content is TextEditor)
+            {
+                TextEditor textEditor = this.mainEditingArea.Content as TextEditor;
+                textEditor.Save(textEditor.Tag as string);
             }
         }
         #endregion
