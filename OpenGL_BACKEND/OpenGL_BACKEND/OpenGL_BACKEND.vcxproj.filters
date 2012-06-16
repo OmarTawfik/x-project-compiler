@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{43889d0e-c1ed-49f6-9272-08875847717a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PrimaryClasses">
+      <UniqueIdentifier>{41b651f8-863d-46dd-9d74-d5c013c8b07d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RenderingObjects">
+      <UniqueIdentifier>{2b95ca0b-e2e1-4f53-b693-1527c18e2916}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PrimaryClasses\Input">
+      <UniqueIdentifier>{694e71d5-ff3a-483e-9a82-2c07a487f6dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test Classes">
+      <UniqueIdentifier>{d2a5d8af-11d4-40a2-ac40-0f3ee409ddf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External Libraries">
+      <UniqueIdentifier>{18784c2a-d3d0-427e-8ca2-77ed49b360c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External Libraries\SOIL">
+      <UniqueIdentifier>{daa0f361-91c4-4b72-9889-01fd363e4169}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Screen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UpdateArguments.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScreenManager.h">
+      <Filter>PrimaryClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="vector.h">
+      <Filter>PrimaryClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="point.h">
+      <Filter>PrimaryClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>PrimaryClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="GLObject.h">
+      <Filter>RenderingObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Keyboard.h">
+      <Filter>PrimaryClasses\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Mouse.h">
+      <Filter>PrimaryClasses\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScreenTest.h">
+      <Filter>Test Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>RenderingObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Size.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SOIL\stbi_DDS_aug_c.h">
+      <Filter>External Libraries\SOIL</Filter>
+    </ClInclude>
+    <ClInclude Include="SOIL\image_DXT.h">
+      <Filter>External Libraries\SOIL</Filter>
+    </ClInclude>
+    <ClInclude Include="SOIL\image_helper.h">
+      <Filter>External Libraries\SOIL</Filter>
+    </ClInclude>
+    <ClInclude Include="SOIL\SOIL.h">
+      <Filter>External Libraries\SOIL</Filter>
+    </ClInclude>
+    <ClInclude Include="SOIL\stb_image_aug.h">
+      <Filter>External Libraries\SOIL</Filter>
+    </ClInclude>
+    <ClInclude Include="SOIL\stbi_DDS_aug.h">
+      <Filter>External Libraries\SOIL</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="point.cpp">
+      <Filter>PrimaryClasses</Filter>
+    </ClCompile>
+    <ClCompile Include="vector.cpp">
+      <Filter>PrimaryClasses</Filter>
+    </ClCompile>
+    <ClCompile Include="ScreenManager.cpp">
+      <Filter>PrimaryClasses</Filter>
+    </ClCompile>
+    <ClCompile Include="GLObject.cpp">
+      <Filter>RenderingObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Keyboard.cpp">
+      <Filter>PrimaryClasses\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Mouse.cpp">
+      <Filter>PrimaryClasses\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Screen.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Helpers.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>RenderingObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="SOIL\image_DXT.c">
+      <Filter>External Libraries\SOIL</Filter>
+    </ClCompile>
+    <ClCompile Include="SOIL\image_helper.c">
+      <Filter>External Libraries\SOIL</Filter>
+    </ClCompile>
+    <ClCompile Include="SOIL\SOIL.c">
+      <Filter>External Libraries\SOIL</Filter>
+    </ClCompile>
+    <ClCompile Include="SOIL\stb_image_aug.c">
+      <Filter>External Libraries\SOIL</Filter>
+    </ClCompile>
+    <ClCompile Include="Shaders.cpp">
+      <Filter>Shaders</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shader2D.f">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shader2D.v">
+      <Filter>Shaders</Filter>
+    </None>
+  </ItemGroup>
+</Project>
