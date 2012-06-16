@@ -29,9 +29,14 @@
         public string Language { get; set; }
 
         /// <summary>
-        /// Gets or sets the actual code lines.
+        /// Gets or sets the targeted language code definition.
         /// </summary>
-        public string Code { get; set; }
+        public string CodeDefinition { get; set; }
+
+        /// <summary>
+        /// Gets or sets the targeted language code declaration.
+        /// </summary>
+        public string CodeDeclaration { get; set; }
 
         /// <summary>
         /// Gets or sets the abstract Xlang class code.

@@ -69,6 +69,14 @@
         }
 
         /// <summary>
+        /// Gets the translator's subdirectory.
+        /// </summary>
+        protected abstract string PluginDirectory
+        {
+            get;
+        }
+
+        /// <summary>
         /// Translates to the targeted platform.
         /// </summary>
         /// <param name="classes">Classes to be translated.</param>

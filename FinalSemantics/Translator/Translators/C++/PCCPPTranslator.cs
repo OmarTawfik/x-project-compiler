@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using System.IO;
     using LanguageCompiler.Nodes;
     using LanguageCompiler.Nodes.ClassMembers;
     using LanguageCompiler.Nodes.Expressions;
@@ -55,7 +56,15 @@
         /// </summary>
         public override string Compiler
         {
-            get { throw new NotImplementedException(); }
+            get { return Environment.GetFolderPath(Environment.SpecialFolder.Windows) + "\\Microsoft.NET\\Framework\\v4.0.30319\\MsBuild.exe"; }
+        }
+
+        /// <summary>
+        /// Gets the translator's subdirectory.
+        /// </summary>
+        protected override string PluginDirectory
+        {
+            get { return Directory.GetCurrentDirectory() + "\\Translators\\Win32CPP\\"; }
         }
 
         /// <summary>
@@ -98,7 +107,7 @@
         /// </summary>
         public override void Build()
         {
-            throw new NotImplementedException();
+            
         }
 
         /// <summary>
@@ -144,8 +153,12 @@
         {
             for (int i = 0; i < this.BackendClasses.Count; i++)
             {
-                this.Append(this.BackendClasses[i].Code);
-                this.AppendLine("//========================//");
+                this.Append(this.BackendClasses[i].CodeDeclaration);
+            }
+
+            for (int i = 0; i < this.BackendClasses.Count; i++)
+            {
+                this.Append(this.BackendClasses[i].CodeDefinition);
             }
         }
 
@@ -461,7 +474,7 @@
         private void GenerateDeclarationStatement(LanguageCompiler.Nodes.Statements.DeclarationStatement node)
         {
             this.StartLine();
-            this.Append(node.Type.Text + "HANDLE PTR" + " ");
+            this.Append("shared_ptr<" + node.Type.Text + "> ");
 
             for (int i = 0; i < node.Atoms.Count; i++)
             {
@@ -752,7 +765,7 @@
         /// <param name="node">Object creation expression to create.</param>
         private void GenerateObjectCreationExpression(LanguageCompiler.Nodes.Expressions.Complex.ObjectCreationExpression node)
         {
-            this.Append("new " + node.Type + "(");
+            this.Append("shared_ptr<" + node.Type.Text + ">(new " + node.Type.Text + "(");
 
             bool firstArgument = true;
             for (int i = 0; i < node.Arguments.Count; i++)
@@ -765,6 +778,8 @@
                 firstArgument = false;
                 this.GenerateExpressionNode(node.Arguments[i]);
             }
+
+            this.Append("))");
         }
 
         /// <summary>
@@ -786,7 +801,7 @@
                             if (field.Atoms[j].Value != null)
                             {
                                 this.StartLine();
-                                this.Append(field.Type.Text + " HANDLE PTR " + field.Atoms[j].Name.Text + " = ");
+                                this.Append("shared_ptr<" + field.Type.Text + "> " + field.Atoms[j].Name.Text + " = ");
                                 this.GenerateExpressionNode(field.Atoms[j].Value);
                                 this.Append(";");
                                 this.EndLine();
@@ -816,7 +831,7 @@
                             if (field.Atoms[j].Value != null)
                             {
                                 this.StartLine();
-                                this.Append(field.Type.Text + " HANDLE PTR " + field.Atoms[j].Name.Text + " = ");
+                                this.Append("shared_ptr<" + field.Type.Text + "> " + field.Atoms[j].Name.Text + " = ");
                                 this.GenerateExpressionNode(field.Atoms[j].Value);
                                 this.Append(";");
                                 this.EndLine();
