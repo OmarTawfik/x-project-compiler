@@ -127,6 +127,11 @@
             if (!foundErrors)
             {
                 ClassDefinition lhsClass = (lhsType as ObjectExpressionType).DataType;
+                if (this.operatorDefined == "=" && lhsType.IsEqualTo(rhsType))
+                {
+                    return false;
+                }
+
                 bool foundOperator = false;
 
                 foreach (MemberDefinition member in lhsClass.Members)

@@ -87,6 +87,7 @@
             if (lhsType is ObjectExpressionType)
             {
                 lhsObject = lhsType as ObjectExpressionType;
+                lhsObject.StaticType = MemberStaticType.Normal;
                 lhsMembers = lhsObject.DataType.Members;
             }
             else

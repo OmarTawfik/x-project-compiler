@@ -83,7 +83,7 @@
             // 
             this.splitContainer2.Panel2.Controls.Add(this.errorsGridView);
             this.splitContainer2.Size = new System.Drawing.Size(500, 425);
-            this.splitContainer2.SplitterDistance = 200;
+            this.splitContainer2.SplitterDistance = 300;
             this.splitContainer2.TabIndex = 1;
             // 
             // codeRichTextBox
@@ -92,7 +92,7 @@
             this.codeRichTextBox.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.codeRichTextBox.Location = new System.Drawing.Point(0, 0);
             this.codeRichTextBox.Name = "codeRichTextBox";
-            this.codeRichTextBox.Size = new System.Drawing.Size(500, 200);
+            this.codeRichTextBox.Size = new System.Drawing.Size(500, 300);
             this.codeRichTextBox.TabIndex = 0;
             this.codeRichTextBox.Text = "class int{}\nclass x\n{\nint main()\n{\n\n}}";
             this.codeRichTextBox.TextChanged += new System.EventHandler(this.CodeRichTextBox_TextChanged);
@@ -109,7 +109,7 @@
             this.errorsGridView.Location = new System.Drawing.Point(0, 0);
             this.errorsGridView.Name = "errorsGridView";
             this.errorsGridView.RowHeadersVisible = false;
-            this.errorsGridView.Size = new System.Drawing.Size(500, 221);
+            this.errorsGridView.Size = new System.Drawing.Size(500, 121);
             this.errorsGridView.TabIndex = 0;
             this.errorsGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ErrorsGridView_CellContentClick);
             // 

@@ -252,6 +252,11 @@
         /// <returns>True if errors are found, false otherwise.</returns>
         public override bool CheckSemanticErrors(ScopeStack scopeStack)
         {
+            if (this.isBackend)
+            {
+                return false;
+            }
+
             if (this.name.CheckSemanticErrors(scopeStack))
             {
                 return true;

@@ -161,7 +161,7 @@
 
             if (this.block != null)
             {
-                if (this.Type.Text != "void" && this.block.ReturnsAValue() == false)
+                if (this.Type.Text != "void" && this.name.Text != "constructor" && this.block.ReturnsAValue() == false)
                 {
                     this.AddError(ErrorType.NotAllControlPathsReturnAValue);
                     foundErrors = true;
