@@ -84,7 +84,7 @@
         /// <returns>True if errors are found, false otherwise.</returns>
         public override bool CheckSemanticErrors(ScopeStack scopeStack)
         {
-            if (this.type.CheckSemanticErrors(scopeStack) || this.type.CheckTypeExists() == false)
+            if (this.type.CheckTypeExists() == false)
             {
                 return true;
             }

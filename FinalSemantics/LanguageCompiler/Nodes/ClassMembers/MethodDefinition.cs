@@ -170,12 +170,12 @@
                 scopeStack.AddLevel(ScopeType.Function, this);
                 foreach (Parameter param in this.parameters)
                 {
-                    foundErrors |= param.CheckSemanticErrors(scopeStack);
-                    foundErrors |= scopeStack.DeclareVariable(
-                        new Variable(
-                            param.Type.GetExpressionType(scopeStack),
-                            param.Name.Text),
-                        this);
+                    foundErrors |= param.CheckSemanticErrors(scopeStack)
+                        || scopeStack.DeclareVariable(
+                            new Variable(
+                                param.Type.GetExpressionType(scopeStack),
+                                param.Name.Text),
+                            this);
                 }
 
                 this.block.CheckSemanticErrors(scopeStack);

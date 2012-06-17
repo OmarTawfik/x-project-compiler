@@ -300,6 +300,12 @@
                 if (member is FieldDefinition)
                 {
                     FieldDefinition field = member as FieldDefinition;
+                    if (CompilerService.Instance.ClassesList.ContainsKey(field.Type.Text) == false)
+                    {
+                        this.AddError(ErrorType.TypeNotFound, field.Type.Text);
+                        return true;
+                    }
+
                     foreach (FieldAtom atom in field.Atoms)
                     {
                         scopeStack.DeclareVariable(

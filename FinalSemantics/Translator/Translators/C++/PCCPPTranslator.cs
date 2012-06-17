@@ -2,9 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     using System.IO;
+    using System.Linq;
     using LanguageCompiler.Nodes;
     using LanguageCompiler.Nodes.ClassMembers;
     using LanguageCompiler.Nodes.Expressions;
@@ -107,7 +106,6 @@
         /// </summary>
         public override void Build()
         {
-            
         }
 
         /// <summary>

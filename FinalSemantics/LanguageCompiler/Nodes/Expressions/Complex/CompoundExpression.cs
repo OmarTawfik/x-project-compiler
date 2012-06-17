@@ -75,7 +75,7 @@
         /// <returns>True if errors are found, false otherwise.</returns>
         public override bool CheckSemanticErrors(ScopeStack scopeStack)
         {
-            if (this.rhs.CheckSemanticErrors(scopeStack) || this.rhs.CheckSemanticErrors(scopeStack))
+            if (this.lhs.CheckSemanticErrors(scopeStack))
             {
                 return true;
             }

@@ -32,30 +32,22 @@
         /// <param name="e">Event Arguments.</param>
         private void Button1_Click(object sender, EventArgs e)
         {
-            try
-            {
-                CompilerService.Instance.Clear();
-                CompilerService.Instance.ParseFile(this.textBox2.Text, "main.x");
-                CompilerService.Instance.CheckSemantics();
+            CompilerService.Instance.Clear();
+            CompilerService.Instance.ParseFile(this.textBox2.Text, "main.x");
+            CompilerService.Instance.CheckSemantics();
 
-                if (CompilerService.Instance.Errors.Count == 0 || true)
+            if (CompilerService.Instance.Errors.Count == 0 || true)
+            {
+                List<ClassDefinition> classList = new List<ClassDefinition>();
+
+                foreach (ClassDefinition classdef in CompilerService.Instance.ClassesList.Values)
                 {
-                    List<ClassDefinition> classList = new List<ClassDefinition>();
-
-                    foreach (ClassDefinition classdef in CompilerService.Instance.ClassesList.Values)
-                    {
-                        classList.Add(classdef);
-                    }
-
-                    this.cpp.Translate(classList);
-
-                    this.textBox1.Text = this.cpp.GeneratedCode.ToString();
+                    classList.Add(classdef);
                 }
-            }
-            catch (Exception ex)
-            {
-                this.textBox1.Text = "EXCEPTION!!" + Environment.NewLine;
-                this.textBox1.Text += ex.Message + Environment.NewLine + ex.StackTrace;
+
+                this.cpp.Translate(classList);
+
+                this.textBox1.Text = this.cpp.GeneratedCode.ToString();
             }
         }
     }

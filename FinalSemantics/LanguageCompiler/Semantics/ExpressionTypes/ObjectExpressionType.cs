@@ -30,11 +30,12 @@
         }
 
         /// <summary>
-        /// Gets a value indicating whether this expression is static.
+        /// Gets or sets a value indicating whether this expression is static.
         /// </summary>
         public MemberStaticType StaticType
         {
             get { return this.staticType; }
+            set { this.staticType = value; }
         }
 
         /// <summary>

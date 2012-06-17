@@ -114,8 +114,6 @@
         /// <returns>True if errors are found, false otherwise.</returns>
         public override bool CheckSemanticErrors(ScopeStack scopeStack)
         {
-            MethodDefinition node = scopeStack.GetFunction();
-
             bool foundErrors = false;
             scopeStack.AddLevel(ScopeType.Block, this);
             bool foundReturn = false;
@@ -135,25 +133,6 @@
                 }
 
                 foundErrors |= child.CheckSemanticErrors(scopeStack);
-
-                if (!foundErrors && child is DeclarationStatement)
-                {
-                    DeclarationStatement decl = child as DeclarationStatement;
-                    foreach (FieldAtom atom in decl.Atoms)
-                    {
-                        if (atom.Name.Text == node.Name.Text)
-                        {
-                            this.AddError(ErrorType.VariableSameFunction, atom.Name.Text);
-                            return false;
-                        }
-
-                        foundErrors |= scopeStack.DeclareVariable(
-                            new Variable(
-                                decl.Type.GetExpressionType(scopeStack),
-                                atom.Name.Text),
-                                decl);
-                    }
-                }
             }
 
             scopeStack.DeleteLevel();
