@@ -216,6 +216,15 @@
                         this.EndLine();
                         continue;
                     }
+
+                    if ((members[i] as OperatorDefinition) != null)
+                    {
+                        this.StartLine();
+                        this.GenerateClassOperatorDeclaration(members[i] as OperatorDefinition);
+                        this.Append(";");
+                        this.EndLine();
+                        continue;
+                    }
                 }
 
                 this.EndBlock();
@@ -261,6 +270,14 @@
                     {
                         this.StartLine();
                         this.GenerateClassMethodDefinition(members[i] as MethodDefinition);
+                        this.EndLine();
+                        continue;
+                    }
+
+                    if ((members[i] as OperatorDefinition) != null)
+                    {
+                        this.StartLine();
+                        this.GenerateClassOperatorDefinition(members[i] as OperatorDefinition);
                         this.EndLine();
                         continue;
                     }
@@ -355,7 +372,7 @@
                     this.Append(", ");
                 }
 
-                this.Append("shared_ptr<" + node.Parameters[i].Type.Text + "> " + node.Parameters[i].Name);
+                this.Append("shared_ptr<" + node.Parameters[i].Type.Text + "> " + node.Parameters[i].Name.Text);
             }
 
             this.Append(")");
@@ -401,7 +418,7 @@
                     this.Append(", ");
                 }
 
-                this.Append("shared_ptr<" + node.Parameters[i].Type.Text + "> " + node.Parameters[i].Name);
+                this.Append("shared_ptr<" + node.Parameters[i].Type.Text + "> " + node.Parameters[i].Name.Text);
             }
 
             this.Append(")");
@@ -434,6 +451,12 @@
         private void GenerateBlockStatement(LanguageCompiler.Nodes.Statements.Block node)
         {
             this.StartBlock();
+
+            if (node == null)
+            {
+                this.EndBlock();
+                return;
+            }
 
             for (int i = 0; i < node.Statements.Count; i++)
             {
@@ -865,6 +888,64 @@
                         }
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Generates operator header.
+        /// </summary>
+        /// <param name="node">Class operator to generate.</param>
+        private void GenerateClassOperatorDeclaration(OperatorDefinition node)
+        {
+            if (node.ModifierType != LanguageCompiler.Nodes.ClassMembers.MemberModifierType.Normal)
+            {
+                this.Append("virtual" + " ");
+            }
+
+            this.Append(node.Type.Text + " operator");
+            this.Append(node.OperatorDefined);
+            this.Append("(");
+
+            for (int i = 0; i < node.Parameters.Count; i++)
+            {
+                if (i != 0)
+                {
+                    this.Append(", ");
+                }
+
+                this.Append("shared_ptr<" + node.Parameters[i].Type.Text + "> " + node.Parameters[i].Name.Text);
+            }
+
+            this.Append(")");
+        }
+
+        /// <summary>
+        /// Generates operator definition.
+        /// </summary>
+        /// <param name="node">Class operator to generate.</param>
+        private void GenerateClassOperatorDefinition(OperatorDefinition node)
+        {
+            this.Append(node.Type.Text + " " + node.Parent.Name.Text + "::operator");
+            this.Append(node.OperatorDefined);
+            this.Append("(");
+
+            for (int i = 0; i < node.Parameters.Count; i++)
+            {
+                if (i != 0)
+                {
+                    this.Append(", ");
+                }
+
+                this.Append("shared_ptr<" + node.Parameters[i].Type.Text + "> " + node.Parameters[i].Name.Text);
+            }
+
+            this.Append(")");
+
+            this.GenerateBlockStatement(node.Block);
+
+            if (node.Type.Text == "constructor")
+            {
+                this.EndBlock();
             }
         }
     }

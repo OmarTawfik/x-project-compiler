@@ -86,6 +86,14 @@
         }
 
         /// <summary>
+        /// Gets the block of the method.
+        /// </summary>
+        public Block Block
+        {
+            get { return this.block; }
+        }
+
+        /// <summary>
         /// Forms a valid tree node representing this object.
         /// </summary>
         /// <returns>The formed tree node.</returns>
