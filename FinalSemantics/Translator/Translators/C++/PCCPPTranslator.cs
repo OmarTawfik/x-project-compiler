@@ -286,8 +286,7 @@
                 this.Append(field.ModifierType.ToString().ToLower() + " ");
             }
 
-            this.Append(field.Type.Text);
-            this.Append(" ");
+            this.Append("shared_ptr<" + field.Type.Text + "> ");
 
             bool firstFlag = true;
             foreach (FieldAtom atom in field.Atoms)
@@ -328,7 +327,17 @@
                 this.Append("virtual" + " ");
             }
 
-            this.Append(node.Type.Text + " ");
+            if (node.Type.Text != "constructor")
+            {
+                this.Append(node.Type.Text + " ");
+            }
+            else
+            {
+                if (node.StaticType == MemberStaticType.Static)
+                {
+                    this.Append("void ");
+                }
+            }
 
             if (node.Type.Text == "constructor" && node.StaticType == MemberStaticType.Static)
             {
@@ -348,7 +357,7 @@
                     this.Append(", ");
                 }
 
-                this.Append(node.Parameters[i].Type.Text + " TODO: HANDLE REF " + node.Parameters[i].Name);
+                this.Append("shared_ptr<" + node.Parameters[i].Type.Text + "> " + node.Parameters[i].Name);
             }
 
             this.Append(")");
@@ -362,7 +371,19 @@
         {
             this.AppendLine(string.Empty);
 
-            this.Append("void " + node.Parent.Name.Text + "::");
+            if (node.Type.Text != "constructor")
+            {
+                this.Append(node.Type.Text + " ");
+            }
+            else
+            {
+                if (node.StaticType == MemberStaticType.Static)
+                {
+                    this.Append("void ");
+                }
+            }
+
+            this.Append(node.Parent.Name.Text + "::");
 
             if (node.Type.Text == "constructor" && node.StaticType == MemberStaticType.Static)
             {
@@ -382,7 +403,7 @@
                     this.Append(", ");
                 }
 
-                this.Append(node.Parameters[i].Type.Text + " TODO: HANDLE REF " + node.Parameters[i].Name);
+                this.Append("shared_ptr<" + node.Parameters[i].Type.Text + "> " + node.Parameters[i].Name);
             }
 
             this.Append(")");
@@ -459,6 +480,12 @@
                 if (statement as WhileStatement != null)
                 {
                     this.GenerateWhileStatement(statement as WhileStatement);
+                }
+
+                if (statement as ExpressionStatement != null)
+                {
+                    this.GenerateExpressionNode((statement as ExpressionStatement).Expresssion as ExpressionNode);
+                    this.Append(";");
                 }
 
                 this.EndLine();
@@ -732,6 +759,7 @@
         private void GenerateCompoundExpression(LanguageCompiler.Nodes.Expressions.Complex.CompoundExpression node)
         {
             this.GenerateExpressionNode(node.LHS);
+            this.Append("->");
             this.Append(node.RHS.Text);
         }
 
