@@ -87,6 +87,11 @@
         private bool isBackend;
 
         /// <summary>
+        /// Indicates whether this class is a value type rather than a reference type.
+        /// </summary>
+        private bool isPrimitive;
+
+        /// <summary>
         /// Members of this class.
         /// </summary>
         private List<MemberDefinition> members = new List<MemberDefinition>();
@@ -144,6 +149,14 @@
         {
             get { return this.isBackend; }
         }
+        
+        /// <summary>
+        /// Gets a value indicating whether this class is a value type rather than a reference type.
+        /// </summary>
+        public bool IsPrimitive
+        {
+            get { return this.isPrimitive; }
+        }
 
         /// <summary>
         /// Forms a valid tree node representing this object.
@@ -152,8 +165,9 @@
         public override TreeNode GetGUINode()
         {
             TreeNode classNode = new TreeNode(string.Format(
-                "{0} {1} {2} {3}",
+                "{0} {1} {2} {3} {4}",
                 this.modifierType.ToString(),
+                this.isPrimitive ? "Primitive" : string.Empty,
                 this.isBackend ? "Backend" : string.Empty,
                 this.label.ToString(),
                 this.name.Text));
@@ -197,32 +211,33 @@
                 }
             }
 
-            this.isBackend = node.ChildNodes[1].ChildNodes.Count > 0;
+            this.isPrimitive = node.ChildNodes[1].ChildNodes.Count > 0;
+            this.isBackend = node.ChildNodes[2].ChildNodes.Count > 0;
 
-            if (node.ChildNodes[2].Token.Text == "class")
+            if (node.ChildNodes[3].Token.Text == "class")
             {
                 this.label = ClassLabel.Class;
             }
-            else if (node.ChildNodes[2].Token.Text == "screen")
+            else if (node.ChildNodes[3].Token.Text == "screen")
             {
                 this.label = ClassLabel.Screen;
             }
 
             if (this.StartLocation.Position == -1)
             {
-                this.StartLocation = node.ChildNodes[2].Token.Location;
+                this.StartLocation = node.ChildNodes[3].Token.Location;
             }
 
             this.name = new Identifier();
-            this.name.RecieveData(node.ChildNodes[3]);
+            this.name.RecieveData(node.ChildNodes[4]);
 
-            if (node.ChildNodes[4].ChildNodes.Count > 0)
+            if (node.ChildNodes[5].ChildNodes.Count > 0)
             {
                 this.classBase = new Identifier();
-                this.classBase.RecieveData(node.ChildNodes[4].ChildNodes[1]);
+                this.classBase.RecieveData(node.ChildNodes[5].ChildNodes[1]);
             }
 
-            foreach (ParseTreeNode memberNode in node.ChildNodes[6].ChildNodes)
+            foreach (ParseTreeNode memberNode in node.ChildNodes[7].ChildNodes)
             {
                 MemberDefinition member = null;
                 if (memberNode.Term.Name == LanguageGrammar.MethodDefinition.Name)

@@ -392,7 +392,7 @@
         {
             LanguageGrammar.reservedWords.AddRange(new string[]
             {
-                "new", "if", "using", "abstract", "concrete", "class", "screen", "extends", "backend",
+                "new", "if", "using", "abstract", "concrete", "class", "screen", "extends", "backend", "primitive",
                 "public", "private", "protected", "virtual", "override", "abstract", "static",
                 "operator", "continue", "break", "for", "else", "while", "do", "true", "false"
             });
@@ -414,8 +414,8 @@
             ClassMember.Rule = MethodDefinition | OperatorDefinition | FieldDefinition;
             ClassMembersList.Rule = MakeStarRule(ClassMembersList, ClassMember);
             ClassBase.Rule = this.Empty | ("extends" + ID);
-            ClassDefinition.Rule = ClassModifier + (this.Empty | "backend") + ClassLabel
-                + ID + ClassBase + "{" + ClassMembersList + "}";
+            ClassDefinition.Rule = ClassModifier + (this.Empty | "primitive") + (this.Empty | "backend")
+                + ClassLabel + ID + ClassBase + "{" + ClassMembersList + "}";
 
             MemberAccessor.Rule = this.Empty | "public" | "private" | "protected";
             MemberModifier.Rule = this.Empty | "virtual" | "override" | "abstract";
