@@ -75,7 +75,7 @@
             this.falseChoice = ExpressionsFactory.GetBaseExpr(node.ChildNodes[1].ChildNodes[3]);
 
             this.StartLocation = this.condition.StartLocation;
-            this.EndLocation = node.ChildNodes[1].ChildNodes[4].Token.Location;
+            this.EndLocation = this.falseChoice.EndLocation;
         }
 
         /// <summary>

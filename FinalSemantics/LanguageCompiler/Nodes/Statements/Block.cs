@@ -133,6 +133,10 @@
                 }
 
                 foundErrors |= child.CheckSemanticErrors(scopeStack);
+                if (foundErrors)
+                {
+                    break;
+                }
             }
 
             scopeStack.DeleteLevel();

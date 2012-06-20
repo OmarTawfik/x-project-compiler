@@ -207,12 +207,6 @@
                     foundErrors = true;
                 }
 
-                if (this.ModifierType != MemberModifierType.Abstract)
-                {
-                    this.AddError(ErrorType.MissingBodyOfNonAbstractMember, this.operatorDefined);
-                    foundErrors = true;
-                }
-
                 scopeStack.AddLevel(ScopeType.Function, this);
                 foreach (Parameter param in this.parameters)
                 {
@@ -226,6 +220,14 @@
 
                 this.block.CheckSemanticErrors(scopeStack);
                 scopeStack.DeleteLevel();
+            }
+            else
+            {
+                if (this.ModifierType != MemberModifierType.Abstract)
+                {
+                    this.AddError(ErrorType.MissingBodyOfNonAbstractMember, this.operatorDefined);
+                    foundErrors = true;
+                }
             }
 
             return foundErrors;

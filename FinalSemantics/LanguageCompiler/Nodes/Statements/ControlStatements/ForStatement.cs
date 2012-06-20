@@ -143,14 +143,15 @@
             {
                 this.body = new Block();
                 this.body.RecieveData(node.ChildNodes[8]);
+                this.EndLocation = this.body.EndLocation;
             }
             else
             {
                 this.body = null;
+                this.EndLocation = node.ChildNodes[7].Token.Location;
             }
 
             this.StartLocation = node.ChildNodes[0].Token.Location;
-            this.EndLocation = node.ChildNodes[node.ChildNodes.Count - 1].Token.Location;
         }
 
         /// <summary>
