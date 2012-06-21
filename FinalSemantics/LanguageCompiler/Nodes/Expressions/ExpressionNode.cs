@@ -9,6 +9,20 @@
     public abstract class ExpressionNode : BaseNode
     {
         /// <summary>
+        /// The expression type of this node.
+        /// </summary>
+        private ExpressionType expressionType;
+
+        /// <summary>
+        /// Gets or sets the expression type of this node.
+        /// </summary>
+        public ExpressionType ExpressionType
+        {
+            get { return this.expressionType; }
+            protected set { this.expressionType = value; }
+        }
+
+        /// <summary>
         /// Gets the expression type of this node.
         /// </summary>
         /// <param name="stack">Current Scope Stack.</param>

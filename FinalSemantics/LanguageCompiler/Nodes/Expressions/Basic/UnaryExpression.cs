@@ -67,7 +67,7 @@
         /// <returns>The expression type of this node.</returns>
         public override ExpressionType GetExpressionType(ScopeStack stack)
         {
-            return this.rhs.GetExpressionType(stack);
+            return this.ExpressionType = this.rhs.GetExpressionType(stack);
         }
 
         /// <summary>

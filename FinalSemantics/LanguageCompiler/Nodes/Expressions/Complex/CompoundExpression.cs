@@ -142,7 +142,7 @@
                     {
                         if (atom.Name.Text == this.rhs.Text)
                         {
-                            return field.Type.GetExpressionType(stack);
+                            return this.ExpressionType = field.Type.GetExpressionType(stack);
                         }
                     }
                 }
@@ -151,7 +151,7 @@
                     MethodDefinition method = member as MethodDefinition;
                     if (method.Name.Text == this.rhs.Text)
                     {
-                        return new MethodExpressionType(method);
+                        return this.ExpressionType = new MethodExpressionType(method);
                     }
                 }
             }

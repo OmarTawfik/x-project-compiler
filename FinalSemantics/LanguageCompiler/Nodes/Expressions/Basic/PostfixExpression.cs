@@ -80,7 +80,7 @@
                     OperatorDefinition op = member as OperatorDefinition;
                     if (op.OperatorDefined == this.operatorDefined)
                     {
-                        return op.Type.GetExpressionType(stack);
+                        return this.ExpressionType = op.Type.GetExpressionType(stack);
                     }
                 }
             }

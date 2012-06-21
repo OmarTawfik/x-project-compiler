@@ -143,7 +143,9 @@
         /// <returns>The expression type of this node.</returns>
         public override ExpressionType GetExpressionType(ScopeStack stack)
         {
-            return (this.lhs.GetExpressionType(stack) as MethodExpressionType).Method.Type.GetExpressionType(stack);
+            return this.ExpressionType =
+                (this.lhs.GetExpressionType(stack) as MethodExpressionType)
+                .Method.Type.GetExpressionType(stack);
         }
 
         /// <summary>

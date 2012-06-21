@@ -116,7 +116,7 @@
         /// <returns>The expression type of this node.</returns>
         public override ExpressionType GetExpressionType(ScopeStack stack)
         {
-            return this.trueChoice.GetExpressionType(stack);
+            return this.ExpressionType = this.trueChoice.GetExpressionType(stack);
         }
 
         /// <summary>
