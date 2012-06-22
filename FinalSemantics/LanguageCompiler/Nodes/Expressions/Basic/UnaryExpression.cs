@@ -59,6 +59,24 @@
             this.StartLocation = node.ChildNodes[0].Token.Location;
             this.EndLocation = this.rhs.EndLocation;
         }
+        
+        /// <summary>
+        /// Checks for semantic errors within this node.
+        /// </summary>
+        /// <param name="scopeStack">The scope stack associated with this node.</param>
+        /// <returns>True if errors are found, false otherwise.</returns>
+        public override bool CheckSemanticErrors(ScopeStack scopeStack)
+        {
+            if (this.rhs.CheckSemanticErrors(scopeStack))
+            {
+                return true;
+            }
+            else
+            {
+                this.GetExpressionType(scopeStack);
+                return false;
+            }
+        }
 
         /// <summary>
         /// Gets the expression type of this node.
