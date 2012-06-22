@@ -190,6 +190,21 @@
                 foundErrors = true;
             }
 
+            if (!foundErrors)
+            {
+                foreach (FieldAtom atom in this.firstPartList)
+                {
+                    atom.Value.GetExpressionType(scopeStack);
+                }
+
+                this.secondPart.GetExpressionType(scopeStack);
+
+                foreach (ExpressionNode node in this.thidPartList)
+                {
+                    node.GetExpressionType(scopeStack);
+                }
+            }
+
             return foundErrors;
         }
 
