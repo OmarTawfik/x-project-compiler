@@ -113,7 +113,15 @@
             }
             else
             {
-                return stack.GetVariable(this.text).Type;
+                Variable var = stack.GetVariable(this.text);
+                if (var != null)
+                {
+                    return var.Type;
+                }
+                else
+                {
+                    return new MethodExpressionType(stack.GetFunction() as MethodDefinition);
+                }
             }
         }
 

@@ -110,7 +110,26 @@
                 return true;
             }
 
-            return this.lhs.CheckSemanticErrors(scopeStack);
+            if (this.lhs.CheckSemanticErrors(scopeStack))
+            {
+                return true;
+            }
+
+            ClassDefinition lhsType = (this.lhs.GetExpressionType(scopeStack) as ObjectExpressionType).DataType;
+            foreach (MemberDefinition member in lhsType.Members)
+            {
+                if (member is OperatorDefinition)
+                {
+                    OperatorDefinition op = member as OperatorDefinition;
+                    if (op.OperatorDefined == this.operatorDefined)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            this.AddError(ErrorType.NotAValidLHS, this.operatorDefined);
+            return true;
         }
     }
 }
