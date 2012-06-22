@@ -27,7 +27,7 @@
         /// <summary>
         /// Third part list of expressions.
         /// </summary>
-        private List<ExpressionNode> thidPartList = new List<ExpressionNode>();
+        private List<ExpressionNode> thirdPartList = new List<ExpressionNode>();
 
         /// <summary>
         /// Body of the for statement.
@@ -55,7 +55,7 @@
         /// </summary>
         public List<ExpressionNode> ThirdPartList
         {
-            get { return this.ThirdPartList; }
+            get { return this.thirdPartList; }
         }
 
         /// <summary>
@@ -90,7 +90,7 @@
             }
 
             TreeNode thirdPartNode = new TreeNode("Third Part");
-            foreach (BaseNode child in this.thidPartList)
+            foreach (BaseNode child in this.thirdPartList)
             {
                 thirdPartNode.Nodes.Add(child.GetGUINode());
             }
@@ -136,7 +136,7 @@
 
             foreach (ParseTreeNode child in node.ChildNodes[6].ChildNodes)
             {
-                this.thidPartList.Add(ExpressionsFactory.GetBaseExpr(child));
+                this.thirdPartList.Add(ExpressionsFactory.GetBaseExpr(child));
             }
 
             if (node.ChildNodes[8].Term.Name == LanguageGrammar.Block.Name)
@@ -170,7 +170,7 @@
 
             foundErrors |= this.secondPart.CheckSemanticErrors(scopeStack);
 
-            foreach (BaseNode node in this.thidPartList)
+            foreach (BaseNode node in this.thirdPartList)
             {
                 foundErrors |= node.CheckSemanticErrors(scopeStack);
             }
@@ -199,7 +199,7 @@
 
                 this.secondPart.GetExpressionType(scopeStack);
 
-                foreach (ExpressionNode node in this.thidPartList)
+                foreach (ExpressionNode node in this.thirdPartList)
                 {
                     node.GetExpressionType(scopeStack);
                 }

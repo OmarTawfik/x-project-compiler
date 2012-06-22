@@ -97,6 +97,8 @@
                 return true;
             }
 
+            this.ExpressionType = this.GetExpressionType(scopeStack);
+
             return false;
         }
 
