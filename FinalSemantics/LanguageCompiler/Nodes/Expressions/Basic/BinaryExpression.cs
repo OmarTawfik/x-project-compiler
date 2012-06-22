@@ -6,6 +6,7 @@
     using LanguageCompiler.Errors;
     using LanguageCompiler.Nodes.ClassMembers;
     using LanguageCompiler.Nodes.TopLevel;
+    using LanguageCompiler.Nodes.Types;
     using LanguageCompiler.Semantics;
     using LanguageCompiler.Semantics.ExpressionTypes;
 
@@ -99,58 +100,61 @@
             ExpressionType lhsType = this.lhs.GetExpressionType(scopeStack);
             ExpressionType rhsType = this.rhs.GetExpressionType(scopeStack);
 
-            if (OperatorDefinition.AssignmentOperators.Contains(this.operatorDefined) && this.lhs.IsAssignable() == false)
+            if (OperatorDefinition.NonOverloadableOperators.Contains(this.operatorDefined) == false)
             {
-                this.AddError(ErrorType.CannotAssignTo);
-                foundErrors = true;
-            }
-
-            if (lhsType is ObjectExpressionType == false)
-            {
-                this.AddError(ErrorType.NotAValidLHS, this.operatorDefined);
-                return true;
-            }
-
-            if (lhsType is ObjectExpressionType && rhsType is ObjectExpressionType)
-            {
-                ObjectExpressionType rhsObject = rhsType as ObjectExpressionType;
-                ObjectExpressionType lhsObject = lhsType as ObjectExpressionType;
-
-                if (rhsObject.DataType.IsMyParent(lhsObject.DataType.Name.Text) == false
-                    && rhsObject.DataType.Name.Text != lhsObject.DataType.Name.Text)
+                if (OperatorDefinition.AssignmentOperators.Contains(this.operatorDefined) && this.lhs.IsAssignable() == false)
                 {
-                    this.AddError(ErrorType.CannotAssignRHSToLHS);
+                    this.AddError(ErrorType.CannotAssignTo);
+                    foundErrors = true;
+                }
+
+                if (lhsType is ObjectExpressionType == false)
+                {
+                    this.AddError(ErrorType.NotAValidLHS, this.operatorDefined);
                     return true;
                 }
-            }
 
-            if (!foundErrors)
-            {
-                ClassDefinition lhsClass = (lhsType as ObjectExpressionType).DataType;
-                if (this.operatorDefined == "=" && lhsType.IsEqualTo(rhsType))
+                if (lhsType is ObjectExpressionType && rhsType is ObjectExpressionType)
                 {
-                    return false;
-                }
+                    ObjectExpressionType rhsObject = rhsType as ObjectExpressionType;
+                    ObjectExpressionType lhsObject = lhsType as ObjectExpressionType;
 
-                bool foundOperator = false;
-
-                foreach (MemberDefinition member in lhsClass.Members)
-                {
-                    if (member is OperatorDefinition)
+                    if (rhsObject.DataType.IsMyParent(lhsObject.DataType.Name.Text) == false
+                        && rhsObject.DataType.Name.Text != lhsObject.DataType.Name.Text)
                     {
-                        OperatorDefinition op = member as OperatorDefinition;
-                        if (op.OperatorDefined == this.operatorDefined
-                            && rhsType.IsEqualTo(op.Parameters[0].Type.GetExpressionType(scopeStack)))
-                        {
-                            foundOperator = true;
-                        }
+                        this.AddError(ErrorType.CannotAssignRHSToLHS);
+                        return true;
                     }
                 }
 
-                if (foundOperator == false)
+                if (!foundErrors)
                 {
-                    this.AddError(ErrorType.NotAValidRHS, rhsType.GetName());
-                    foundErrors = true;
+                    ClassDefinition lhsClass = (lhsType as ObjectExpressionType).DataType;
+                    if (this.operatorDefined == "=" && lhsType.IsEqualTo(rhsType))
+                    {
+                        return false;
+                    }
+
+                    bool foundOperator = false;
+
+                    foreach (MemberDefinition member in lhsClass.Members)
+                    {
+                        if (member is OperatorDefinition)
+                        {
+                            OperatorDefinition op = member as OperatorDefinition;
+                            if (op.OperatorDefined == this.operatorDefined
+                                && rhsType.IsEqualTo(op.Parameters[0].Type.GetExpressionType(scopeStack)))
+                            {
+                                foundOperator = true;
+                            }
+                        }
+                    }
+
+                    if (foundOperator == false)
+                    {
+                        this.AddError(ErrorType.NotAValidRHS, rhsType.GetName());
+                        foundErrors = true;
+                    }
                 }
             }
 
@@ -164,21 +168,30 @@
         /// <returns>The expression type of this node.</returns>
         public override ExpressionType GetExpressionType(ScopeStack stack)
         {
-            ClassDefinition lhsType = (this.lhs.GetExpressionType(stack) as ObjectExpressionType).DataType;
-
-            foreach (MemberDefinition member in lhsType.Members)
+            if (OperatorDefinition.NonOverloadableOperators.Contains(this.operatorDefined))
             {
-                if (member is OperatorDefinition)
+                return new ObjectExpressionType(
+                    CompilerService.Instance.ClassesList[Literal.Bool],
+                    MemberStaticType.Normal);
+            }
+            else
+            {
+                ClassDefinition lhsType = (this.lhs.GetExpressionType(stack) as ObjectExpressionType).DataType;
+
+                foreach (MemberDefinition member in lhsType.Members)
                 {
-                    OperatorDefinition op = member as OperatorDefinition;
-                    if (op.OperatorDefined == this.operatorDefined)
+                    if (member is OperatorDefinition)
                     {
-                        return this.ExpressionType = op.Type.GetExpressionType(stack);
+                        OperatorDefinition op = member as OperatorDefinition;
+                        if (op.OperatorDefined == this.operatorDefined)
+                        {
+                            return this.ExpressionType = op.Type.GetExpressionType(stack);
+                        }
                     }
                 }
-            }
 
-            throw new Exception("Faulty Type. Should be handled in semantics.");
+                throw new Exception("Faulty Type. Should be handled in semantics.");
+            }
         }
 
         /// <summary>
