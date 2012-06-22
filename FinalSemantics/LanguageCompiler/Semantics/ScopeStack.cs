@@ -137,13 +137,13 @@
         /// Gets the function or operator in this scope.
         /// </summary>
         /// <returns>A MemberDefinition object.</returns>
-        public MethodDefinition GetFunction()
+        public MemberDefinition GetFunction()
         {
             foreach (Scope scope in this.stack)
             {
                 if (scope.Type == ScopeType.Function)
                 {
-                    return scope.Node as MethodDefinition;
+                    return scope.Node as MemberDefinition;
                 }
             }
 

@@ -1,11 +1,11 @@
 ﻿namespace LanguageCompiler.Nodes.Statements.CommandStatements
 {
-    using System.Collections.Generic;
     using System.Windows.Forms;
     using Irony.Parsing;
-    using LanguageCompiler.Nodes.ClassMembers;
+    using LanguageCompiler.Errors;
     using LanguageCompiler.Nodes.Expressions;
     using LanguageCompiler.Semantics;
+    using LanguageCompiler.Semantics.ExpressionTypes;
 
     /// <summary>
     /// Holds all data related to a "ReturnStatement" rule.
@@ -62,46 +62,38 @@
         /// <returns>True if errors are found, false otherwise.</returns>
         public override bool CheckSemanticErrors(ScopeStack scopeStack)
         {
-            MemberDefinition node = scopeStack.GetFunction();
+            string functionType = scopeStack.GetFunction().Type.Text;
 
-            string retStatment, functionRetStatment;
-
-            try
+            if (this.expression == null)
             {
-                functionRetStatment = node.Type.GetExpressionType(scopeStack).GetName();
+                if (functionType == "void")
+                {
+                    return false;
+                }
+                else
+                {
+                    this.AddError(ErrorType.FunctionReturn, functionType, "void");
+                    return true;
+                }
             }
-            catch (System.Exception)
+            else
             {
-                if (this.expression == null)
+                if (this.expression.CheckSemanticErrors(scopeStack))
                 {
                     return true;
                 }
 
-                if (this.expression != null)
+                string expressionType = (this.expression.GetExpressionType(scopeStack) as ObjectExpressionType).DataType.Name.Text;
+                if (functionType == expressionType)
                 {
-                    this.AddError(Errors.ErrorType.FunctionReturn, "void", string.Empty);
                     return false;
                 }
+                else
+                {
+                    this.AddError(ErrorType.FunctionReturn, functionType, expressionType);
+                    return true;
+                }
             }
-
-            retStatment = this.expression.GetExpressionType(scopeStack).GetName();
-
-            if (node != null && this.expression == null)
-            {
-                functionRetStatment = node.Type.GetExpressionType(scopeStack).GetName();
-                this.AddError(Errors.ErrorType.FunctionReturn, functionRetStatment, string.Empty);
-                return false;
-            }
-
-            if (node.Type.GetExpressionType(scopeStack).GetName()
-                == this.expression.GetExpressionType(scopeStack).GetName())
-            {
-                return true;
-            }
-
-            functionRetStatment = node.Type.GetExpressionType(scopeStack).GetName();
-            this.AddError(Errors.ErrorType.FunctionReturn, functionRetStatment, retStatment);
-            return false;
         }
 
         /// <summary>

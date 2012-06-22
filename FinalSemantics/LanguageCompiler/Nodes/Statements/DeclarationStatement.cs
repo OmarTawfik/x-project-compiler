@@ -92,7 +92,6 @@
              
              ExpressionType myExpressionType = this.type.GetExpressionType(scopeStack);
              (myExpressionType as ObjectExpressionType).StaticType = MemberStaticType.Normal;
-             MethodDefinition functionNode = scopeStack.GetFunction();
 
              foreach (FieldAtom atom in this.atoms)
              {
@@ -115,7 +114,8 @@
                      }
                  }
 
-                 if (atom.Name.Text == functionNode.Name.Text)
+                 MethodDefinition functionNode = (scopeStack.GetFunction() as MethodDefinition);
+                 if (functionNode != null && atom.Name.Text == functionNode.Name.Text)
                  {
                      this.AddError(ErrorType.VariableSameFunction, atom.Name.Text);
                      return true;
