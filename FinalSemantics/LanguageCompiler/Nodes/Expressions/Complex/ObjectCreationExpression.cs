@@ -101,7 +101,7 @@
             }
 
             ClassDefinition classObj = CompilerService.Instance.ClassesList[this.type.Text];
-            bool foundHiddenDefaultCtor = false;
+            bool foundACtor = false;
 
             foreach (MemberDefinition member in classObj.Members)
             {
@@ -110,12 +110,8 @@
                     MethodDefinition method = member as MethodDefinition;
                     if (method.Name.Text == "constructor")
                     {
-                        if ((method.AccessorType == MemberAccessorType.Protected || method.AccessorType == MemberAccessorType.Private)
-                            && this.arguments.Count == 0 && method.Parameters.Count == 0)
-                        {
-                            foundHiddenDefaultCtor = true;
-                        }
-                        else if (method.Parameters.Count == this.arguments.Count)
+                        foundACtor = true;
+                        if (method.Parameters.Count == this.arguments.Count)
                         {
                             bool correctCtor = true;
                             for (int i = 0; i < method.Parameters.Count; i++)
@@ -137,14 +133,14 @@
                 }
             }
 
-            if (foundHiddenDefaultCtor)
+            if (!foundACtor && this.arguments.Count == 0)
             {
-                this.AddError(ErrorType.NoSuitableConstructor, this.type.Text);
-                return true;
+                return false;
             }
             else
             {
-                return false;
+                this.AddError(ErrorType.NoSuitableConstructor, this.type.Text);
+                return true;
             }
         }
 
