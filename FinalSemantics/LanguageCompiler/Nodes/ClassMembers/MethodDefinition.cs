@@ -39,6 +39,43 @@
         }
 
         /// <summary>
+        /// Initializes a new instance of the MethodDefinition class.
+        /// </summary>
+        /// <param name="parent">The class where this member was defined in.</param>
+        /// <param name="name">Name of this method.</param>
+        /// <param name="type">Return type of this method.</param>
+        public MethodDefinition(ClassDefinition parent, string name, string type)
+            : base(parent)
+        {
+            this.name = new Identifier(name);
+            this.Type = new Identifier(type);
+            this.block = new Block();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the MethodDefinition class.
+        /// </summary>
+        /// <param name="parent">The class where this member was defined in.</param>
+        /// <param name="name">Name of this method.</param>
+        /// <param name="type">Return type of this method.</param>
+        /// <param name="accessorType">The access type for this method.</param>
+        /// <param name="modifierType">The modifier type for this method.</param>
+        /// <param name="staticType">The static type for this method.</param>
+        public MethodDefinition(
+            ClassDefinition parent,
+            string name,
+            string type,
+            MemberAccessorType accessorType,
+            MemberModifierType modifierType,
+            MemberStaticType staticType)
+            : this(parent, name, type)
+        {
+            this.AccessorType = accessorType;
+            this.ModifierType = modifierType;
+            this.StaticType = staticType;
+        }
+
+        /// <summary>
         /// Gets the name of this method.
         /// </summary>
         public Identifier Name

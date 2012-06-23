@@ -109,11 +109,12 @@
         }
 
         /// <summary>
-        /// Gets the base node of the member type.
+        /// Gets or sets the base node of the member type.
         /// </summary>
         public Identifier Type
         {
             get { return this.type; }
+            protected set { this.type = value; }
         }
 
         /// <summary>
@@ -125,27 +126,30 @@
         }
 
         /// <summary>
-        /// Gets the access type for this member.
+        /// Gets or sets the access type for this member.
         /// </summary>
         public MemberAccessorType AccessorType
         {
             get { return this.accessorType; }
+            protected set { this.accessorType = value; }
         }
 
         /// <summary>
-        /// Gets the modifier type for this member.
+        /// Gets or sets the modifier type for this member.
         /// </summary>
         public MemberModifierType ModifierType
         {
             get { return this.modifierType; }
+            protected set { this.modifierType = value; }
         }
 
         /// <summary>
-        /// Gets the static type for this member.
+        /// Gets or sets the static type for this member.
         /// </summary>
         public MemberStaticType StaticType
         {
             get { return this.staticType; }
+            protected set { this.staticType = value; }
         }
 
         /// <summary>

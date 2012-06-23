@@ -19,6 +19,22 @@
         private string text;
 
         /// <summary>
+        /// Initializes a new instance of the Identifier class.
+        /// </summary>
+        public Identifier()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Identifier class.
+        /// </summary>
+        /// <param name="text">Text contained within the identifier.</param>
+        public Identifier(string text)
+        {
+            this.text = text;
+        }
+
+        /// <summary>
         /// Gets the text of this identifier.
         /// </summary>
         public string Text
