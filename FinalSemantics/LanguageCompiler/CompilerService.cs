@@ -141,7 +141,7 @@
                 {
                     this.classesList.Add(listName.Key, ClassDefinition.GenerateList(listName.Key, listName.Value));
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     ////Multiple list declaration with the same type.
                 }
