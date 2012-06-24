@@ -8,6 +8,7 @@
     using LanguageCompiler.Nodes.ClassMembers;
     using LanguageCompiler.Nodes.Types;
     using LanguageCompiler.Semantics;
+    using LanguageCompiler.Semantics.ExpressionTypes;
 
     /// <summary>
     /// The class modifier type.
@@ -149,13 +150,54 @@
         {
             get { return this.isBackend; }
         }
-        
+
         /// <summary>
         /// Gets a value indicating whether this class is a value type rather than a reference type.
         /// </summary>
         public bool IsPrimitive
         {
             get { return this.isPrimitive; }
+        }
+
+        /// <summary>
+        /// Generates a list backend class with a template type.
+        /// </summary>
+        /// <param name="fullType">Full type in the form of (int_list) or (double_list).</param>
+        /// <param name="fileName">The name of the file it was requested in.</param>
+        /// <returns>A ClassDefinition object.</returns>
+        public static ClassDefinition GenerateList(string fullType, string fileName)
+        {
+            string subType = fullType.Split('_')[0];
+            ClassDefinition list = new ClassDefinition(fileName);
+
+            list.modifierType = ClassModifierType.Concrete;
+            list.label = ClassLabel.Class;
+            list.name = new Identifier(subType + "_list");
+            list.classBase = null;
+            list.isBackend = true;
+            list.isPrimitive = false;
+
+            MethodDefinition append = new MethodDefinition(list, "Append", "void", MemberAccessorType.Public, MemberModifierType.Normal, MemberStaticType.Normal);
+            append.Parameters.Add(new Parameter(subType, "item"));
+
+            MethodDefinition removeAt = new MethodDefinition(list, "RemoveAt", "void", MemberAccessorType.Public, MemberModifierType.Normal, MemberStaticType.Normal);
+            removeAt.Parameters.Add(new Parameter(Literal.Int, "position"));
+
+            MethodDefinition clear = new MethodDefinition(list, "Clear", "void", MemberAccessorType.Public, MemberModifierType.Normal, MemberStaticType.Normal);
+
+            MethodDefinition at = new MethodDefinition(list, "At", subType, MemberAccessorType.Public, MemberModifierType.Normal, MemberStaticType.Normal);
+            at.Parameters.Add(new Parameter(Literal.Int, "position"));
+
+            MethodDefinition replace = new MethodDefinition(list, "Replace", "void", MemberAccessorType.Public, MemberModifierType.Normal, MemberStaticType.Normal);
+            replace.Parameters.Add(new Parameter(Literal.Int, "position"));
+            replace.Parameters.Add(new Parameter(subType, "item"));
+
+            MethodDefinition insert = new MethodDefinition(list, "Insert", "void", MemberAccessorType.Public, MemberModifierType.Normal, MemberStaticType.Normal);
+            insert.Parameters.Add(new Parameter(Literal.Int, "position"));
+            insert.Parameters.Add(new Parameter(subType, "item"));
+
+            list.Members.AddRange(new MethodDefinition[] { append, removeAt, clear, at, replace, insert });
+            return list;
         }
 
         /// <summary>
@@ -315,24 +357,47 @@
 
             scopeStack.AddLevel(ScopeType.Class, this);
             AddParentClassVariablesToVariableScoop(scopeStack, this);
+
             foreach (MemberDefinition member in this.members)
             {
                 if (member is FieldDefinition)
                 {
                     FieldDefinition field = member as FieldDefinition;
-                    if (CompilerService.Instance.ClassesList.ContainsKey(field.Type.Text) == false)
+                    if (field.Type.CheckSemanticErrors(scopeStack) || field.Type.CheckTypeExists() == false)
                     {
                         this.AddError(ErrorType.TypeNotFound, field.Type.Text);
                         return true;
                     }
 
+                    ExpressionType myExpressionType = field.Type.GetExpressionType(scopeStack);
+
                     foreach (FieldAtom atom in field.Atoms)
                     {
-                        scopeStack.DeclareVariable(
-                            new Variable(
-                                member.Type.GetExpressionType(scopeStack),
-                                atom.Name.Text),
-                            this);
+                        if (atom.CheckSemanticErrors(scopeStack))
+                        {
+                            return true;
+                        }
+
+                        if (scopeStack.DeclareVariable(new Variable(atom.Value.GetExpressionType(scopeStack), atom.Name.Text), atom) == false)
+                        {
+                            return true;
+                        }
+
+                        if (atom.Value != null)
+                        {
+                            ExpressionType atomExpressionType = atom.Value.GetExpressionType(scopeStack);
+                            if ((atomExpressionType is ObjectExpressionType) == false)
+                            {
+                                this.AddError(ErrorType.CannotAssignRHSToLHS);
+                                return false;
+                            }
+
+                            if (myExpressionType.IsEqualTo(atomExpressionType) == false)
+                            {
+                                this.AddError(ErrorType.CannotAssignRHSToLHS);
+                                return true;
+                            }
+                        }
                     }
                 }
             }

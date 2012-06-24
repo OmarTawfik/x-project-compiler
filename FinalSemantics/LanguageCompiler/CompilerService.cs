@@ -23,6 +23,16 @@
         private List<CompilerError> errors = new List<CompilerError>();
 
         /// <summary>
+        /// List of all templates in input.
+        /// </summary>
+        private List<KeyValuePair<string, string>> listTemplates = new List<KeyValuePair<string, string>>();
+
+        /// <summary>
+        /// The name of the currently parsed file.
+        /// </summary>
+        private string currentFile;
+
+        /// <summary>
         /// Irony parser object to use in parsing.
         /// </summary>
         private Parser parser = new Parser(new LanguageGrammar());
@@ -64,11 +74,27 @@
         }
 
         /// <summary>
+        /// Gets the list of templates found in input.
+        /// </summary>
+        public List<KeyValuePair<string, string>> ListTemplates
+        {
+            get { return this.listTemplates; }
+        }
+
+        /// <summary>
         /// Gets all class definitions parsed in project.
         /// </summary>
         public Dictionary<string, ClassDefinition> ClassesList
         {
             get { return this.classesList; }
+        }
+
+        /// <summary>
+        /// Gets the name of the currently parsed file.
+        /// </summary>
+        public string CurrentFile
+        {
+            get { return this.currentFile; }
         }
 
         /// <summary>
@@ -78,6 +104,7 @@
         /// <param name="fileName">The name of the file this class was declared in.</param>
         public void ParseFile(string text, string fileName)
         {
+            this.currentFile = fileName;
             ParseTree tree = this.parser.Parse(text);
             foreach (LogMessage message in tree.ParserMessages)
             {
@@ -107,6 +134,11 @@
         /// </summary>
         public void CheckSemantics()
         {
+            foreach (KeyValuePair<string, string> listName in this.listTemplates)
+            {
+                this.classesList.Add(listName.Key, ClassDefinition.GenerateList(listName.Key, listName.Value));
+            }
+
             if (this.errors.Count == 0)
             {
                 foreach (KeyValuePair<string, ClassDefinition> pair in this.classesList)
@@ -123,6 +155,7 @@
         {
             this.errors.Clear();
             this.classesList.Clear();
+            this.listTemplates.Clear();
         }
     }
 }

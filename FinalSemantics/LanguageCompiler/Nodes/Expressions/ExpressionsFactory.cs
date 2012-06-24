@@ -133,6 +133,10 @@
             {
                 expr = new InvocationExpression();
             }
+            else if (node.Term.Name == LanguageGrammar.ListCreationExpression.Name)
+            {
+                expr = new ListCreationExpression();
+            }
             else
             {
                 expr = new Literal();

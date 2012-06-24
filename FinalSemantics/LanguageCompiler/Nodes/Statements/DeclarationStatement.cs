@@ -85,13 +85,12 @@
          /// <returns>True if errors are found, false otherwise.</returns>
          public override bool CheckSemanticErrors(ScopeStack scopeStack)
          {
-             if (type.CheckSemanticErrors(scopeStack) || type.CheckTypeExists(true) == false)
+             if (type.CheckSemanticErrors(scopeStack) || type.CheckTypeExists() == false)
              {
                  return true;
              }
-             
+
              ExpressionType myExpressionType = this.type.GetExpressionType(scopeStack);
-             (myExpressionType as ObjectExpressionType).StaticType = MemberStaticType.Normal;
 
              foreach (FieldAtom atom in this.atoms)
              {
@@ -100,16 +99,23 @@
                      return true;
                  }
 
-                 if ( scopeStack.DeclareVariable(new Variable(myExpressionType, atom.Name.Text), atom) == false)
+                 if (scopeStack.DeclareVariable(new Variable(atom.Value.GetExpressionType(scopeStack), atom.Name.Text), atom) == false)
                  {
                      return true;
-                 }
+                 } 
 
                  if (atom.Value != null)
                  {
-                     ExpressionType atomType = atom.Value.GetExpressionType(scopeStack);
-                     if ( myExpressionType.IsEqualTo(atomType) == false)
+                     ExpressionType atomExpressionType = atom.Value.GetExpressionType(scopeStack);
+                     if ((atomExpressionType is ObjectExpressionType) == false)
                      {
+                         this.AddError(ErrorType.CannotAssignRHSToLHS);
+                         return false;
+                     }
+
+                     if (myExpressionType.IsEqualTo(atomExpressionType) == false)
+                     {
+                         this.AddError(ErrorType.CannotAssignRHSToLHS);
                          return true;
                      }
                  }

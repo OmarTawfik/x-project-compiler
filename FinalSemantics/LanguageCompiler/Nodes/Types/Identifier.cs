@@ -69,7 +69,7 @@
         /// <returns>True if this type exists, false otherwise.</returns>
         public bool CheckTypeExists(bool reportError = true)
         {
-            if (CompilerService.Instance.ClassesList.ContainsKey(this.text))
+            if (this.text == "list" || CompilerService.Instance.ClassesList.ContainsKey(this.text))
             {
                 return true;
             }
@@ -125,7 +125,11 @@
         /// <returns>The expression type of this node.</returns>
         public override ExpressionType GetExpressionType(ScopeStack stack)
         {
-            if (this.CheckTypeExists(false))
+            if (this.text == "list")
+            {
+                return new ListExpressionType();
+            }
+            else if (this.CheckTypeExists(false))
             {
                 return new ObjectExpressionType(CompilerService.Instance.ClassesList[this.text], MemberStaticType.Static);
             }

@@ -362,7 +362,12 @@
         /// The non terminal object for the "Object Creation Expression" rule.
         /// </summary>
         public static readonly NonTerminal ObjectCreationExpression = new NonTerminal("Object Creation Expression");
-
+        
+        /// <summary>
+        /// The non terminal object for the "Object Creation Expression" rule.
+        /// </summary>
+        public static readonly NonTerminal ListCreationExpression = new NonTerminal("List Creation Expression");
+        
         /// <summary>
         /// The non terminal object for the "Expression Statement" rule.
         /// </summary>
@@ -472,7 +477,7 @@
             PrimaryExpression.Rule = ParenExpression | CompoundExpression
                 | ID | CharLiteral | StringLiteral | DecimalLiteral | NaturalLiteral | "true" | "false"
                 | PostfixIncrementExpression | PostfixDecrementExpression
-                | ObjectCreationExpression | InvocationExpression;
+                | ObjectCreationExpression | InvocationExpression | ListCreationExpression;
 
             ParenExpression.Rule = "(" + Expression + ")";
             CompoundExpression.Rule = PrimaryExpression + "." + ID;
@@ -481,6 +486,7 @@
             PostfixDecrementExpression.Rule = PrimaryExpression + "--";
 
             ObjectCreationExpression.Rule = "new" + ID + "(" + ExpressionsList + ")";
+            ListCreationExpression.Rule = "new" + ID + "list" + "(" + ExpressionsList + ")";
 
             InvocationExpression.Rule = PrimaryExpression + "(" + ExpressionsList + ")";
 

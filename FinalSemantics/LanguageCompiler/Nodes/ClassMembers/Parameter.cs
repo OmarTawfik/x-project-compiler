@@ -22,6 +22,24 @@
         private Identifier name;
 
         /// <summary>
+        /// Initializes a new instance of the Parameter class.
+        /// </summary>
+        public Parameter()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Parameter class.
+        /// </summary>
+        /// <param name="type">Type of this parameter.</param>
+        /// <param name="name">Name of this parameter.</param>
+        public Parameter(string type, string name)
+        {
+            this.type = new Identifier(type);
+            this.name = new Identifier(name);
+        }
+
+        /// <summary>
         /// Gets the type of this parameter.
         /// </summary>
         public Identifier Type
