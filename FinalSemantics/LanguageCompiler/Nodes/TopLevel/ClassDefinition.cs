@@ -378,9 +378,19 @@
                             return true;
                         }
 
-                        if (scopeStack.DeclareVariable(new Variable(atom.Value.GetExpressionType(scopeStack), atom.Name.Text), atom) == false)
+                        if (atom.Value != null)
                         {
-                            return true;
+                            if (scopeStack.DeclareVariable(new Variable(atom.Value.GetExpressionType(scopeStack), atom.Name.Text), atom) == false)
+                            {
+                                return true;
+                            }
+                        }
+                        else
+                        {
+                            if (scopeStack.DeclareVariable(new Variable(field.Type.GetExpressionType(scopeStack), atom.Name.Text), atom) == false)
+                            {
+                                return true;
+                            }
                         }
 
                         if (atom.Value != null)

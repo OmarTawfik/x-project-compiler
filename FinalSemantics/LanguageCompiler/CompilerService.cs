@@ -1,5 +1,6 @@
 ﻿namespace LanguageCompiler
 {
+    using System;
     using System.Collections.Generic;
     using Irony;
     using Irony.Parsing;
@@ -136,7 +137,14 @@
         {
             foreach (KeyValuePair<string, string> listName in this.listTemplates)
             {
-                this.classesList.Add(listName.Key, ClassDefinition.GenerateList(listName.Key, listName.Value));
+                try
+                {
+                    this.classesList.Add(listName.Key, ClassDefinition.GenerateList(listName.Key, listName.Value));
+                }
+                catch (Exception e)
+                {
+                    ////Multiple list declaration with the same type.
+                }
             }
 
             if (this.errors.Count == 0)
