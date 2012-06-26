@@ -360,6 +360,9 @@
             scopeStack.AddLevel(ScopeType.Class, this);
             AddParentClassVariablesToVariableScoop(scopeStack, this);
 
+            Variable thisVar = new Variable(new Identifier(this.name.Text).GetExpressionType(scopeStack), "this");
+            scopeStack.DeclareVariable(thisVar, this);
+
             foreach (MemberDefinition member in this.members)
             {
                 if (member is FieldDefinition)
