@@ -196,7 +196,9 @@
             insert.Parameters.Add(new Parameter(Literal.Int, "position"));
             insert.Parameters.Add(new Parameter(subType, "item"));
 
-            list.Members.AddRange(new MethodDefinition[] { append, removeAt, clear, at, replace, insert });
+            MethodDefinition size = new MethodDefinition(list, "Size", "int", MemberAccessorType.Public, MemberModifierType.Normal, MemberStaticType.Normal);
+
+            list.Members.AddRange(new MethodDefinition[] { append, removeAt, clear, at, replace, insert, size });
             return list;
         }
 
