@@ -49,7 +49,6 @@
         {
             this.name = new Identifier(name);
             this.Type = new Identifier(type);
-            this.block = new Block();
         }
 
         /// <summary>
@@ -190,7 +189,7 @@
                 foundErrors = true;
             }
 
-            if (this.ModifierType != MemberModifierType.Abstract && this.block == null)
+            if (this.ModifierType != MemberModifierType.Abstract && this.block == null && !this.Parent.IsBackend)
             {
                 this.AddError(ErrorType.MissingBodyOfNonAbstractMember, this.name.Text);
                 foundErrors = true;
