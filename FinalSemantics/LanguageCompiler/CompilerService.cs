@@ -151,6 +151,12 @@
             {
                 foreach (KeyValuePair<string, ClassDefinition> pair in this.classesList)
                 {
+                    ClassDefinition.BackendClasses.Add(pair.Value.Name.Text);
+                }
+
+                foreach (KeyValuePair<string, ClassDefinition> pair in this.classesList)
+                {
+                    this.currentFile = pair.Value.Name.Text;
                     pair.Value.CheckSemanticErrors(new ScopeStack());
                 }
             }
