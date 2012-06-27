@@ -114,18 +114,18 @@
                     return true;
                 }
 
-                if (lhsType is ObjectExpressionType && rhsType is ObjectExpressionType)
-                {
-                    ObjectExpressionType rhsObject = rhsType as ObjectExpressionType;
-                    ObjectExpressionType lhsObject = lhsType as ObjectExpressionType;
+                ////if (lhsType is ObjectExpressionType && rhsType is ObjectExpressionType)
+                ////{
+                ////    ObjectExpressionType rhsObject = rhsType as ObjectExpressionType;
+                ////    ObjectExpressionType lhsObject = lhsType as ObjectExpressionType;
 
-                    if (rhsObject.DataType.IsMyParent(lhsObject.DataType.Name.Text) == false
-                        && rhsObject.DataType.Name.Text != lhsObject.DataType.Name.Text)
-                    {
-                        this.AddError(ErrorType.CannotAssignRHSToLHS);
-                        return true;
-                    }
-                }
+                ////    if (rhsObject.DataType.IsMyParent(lhsObject.DataType.Name.Text) == false
+                ////        && rhsObject.DataType.Name.Text != lhsObject.DataType.Name.Text)
+                ////    {
+                ////        this.AddError(ErrorType.CannotAssignRHSToLHS);
+                ////        return true;
+                ////    }
+                ////}
 
                 if (!foundErrors)
                 {
