@@ -108,31 +108,7 @@
         public override ExpressionType GetExpressionType(ScopeStack stack)
         {
             ClassDefinition lhsType = (this.lhs.GetExpressionType(stack) as ObjectExpressionType).DataType;
-
-            foreach (MemberDefinition member in lhsType.Members)
-            {
-                if (member is FieldDefinition)
-                {
-                    FieldDefinition field = member as FieldDefinition;
-                    foreach (FieldAtom atom in field.Atoms)
-                    {
-                        if (atom.Name.Text == this.rhs.Text)
-                        {
-                            return this.ExpressionType = field.Type.GetExpressionType(stack);
-                        }
-                    }
-                }
-                else if (member is MethodDefinition)
-                {
-                    MethodDefinition method = member as MethodDefinition;
-                    if (method.Name.Text == this.rhs.Text)
-                    {
-                        return this.ExpressionType = new MethodExpressionType(method);
-                    }
-                }
-            }
-
-            throw new Exception("Faulty Type. Should be handled in semantics.");
+            return this.GetParentExpressionType(lhsType, stack);
         }
 
         /// <summary>
@@ -258,6 +234,49 @@
             {
                 this.AddError(ErrorType.NoMemberWithThisName, lhsObject.Name.Text, this.rhs.Text);
                 return true;
+            }
+        }
+
+        /// <summary>
+        /// Returns the expression type from parent members recursively.
+        /// </summary>
+        /// <param name="lhsType">LHS class definition.</param>
+        /// <param name="stack">Scope stack.</param>
+        /// <returns>An ExpressionType object.</returns>
+        private ExpressionType GetParentExpressionType(ClassDefinition lhsType, ScopeStack stack)
+        {
+            foreach (MemberDefinition member in lhsType.Members)
+            {
+                if (member is FieldDefinition)
+                {
+                    FieldDefinition field = member as FieldDefinition;
+                    foreach (FieldAtom atom in field.Atoms)
+                    {
+                        if (atom.Name.Text == this.rhs.Text)
+                        {
+                            return this.ExpressionType = field.Type.GetExpressionType(stack);
+                        }
+                    }
+                }
+                else if (member is MethodDefinition)
+                {
+                    MethodDefinition method = member as MethodDefinition;
+                    if (method.Name.Text == this.rhs.Text)
+                    {
+                        return this.ExpressionType = new MethodExpressionType(method);
+                    }
+                }
+            }
+
+            if (lhsType.ClassBase != null)
+            {
+                return this.GetParentExpressionType(
+                    CompilerService.Instance.ClassesList[lhsType.ClassBase.Text],
+                    stack);
+            }
+            else
+            {
+                throw new Exception("Faulty Type. Should be handled in semantics.");
             }
         }
     }

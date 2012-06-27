@@ -503,7 +503,7 @@
             this.RegisterBracePair("[", "]");
             this.RegisterBracePair("{", "}");
 
-            this.NonGrammarTerminals.Add(new CommentTerminal("Single Line Comment", "/", "\r\n", "\n", "\r"));
+            this.NonGrammarTerminals.Add(new CommentTerminal("Single Line Comment", "//", "\r\n", "\n", "\r"));
             this.NonGrammarTerminals.Add(new CommentTerminal("Multi Line Comment", "/*", "*/"));
 
             this.RegisterOperators(13, Associativity.Neutral, "=", "+=", "-=", "*=", "/=", "%=");
