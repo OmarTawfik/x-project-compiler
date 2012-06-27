@@ -54,7 +54,7 @@
         /// </summary>
         static OperatorDefinition()
         {
-            OperatorDefinition.NonOverloadableOperators.AddRange(new string[] { "==", "!=", "not", "and", "or" });
+            OperatorDefinition.NonOverloadableOperators.AddRange(new string[] { });////"==", "!=", "not", "and", "or" });
             OperatorDefinition.PostfixOperators.AddRange(new string[] { "++", "--" });
             OperatorDefinition.OneParameterOperators.AddRange(new string[] { "<", ">", "<=", ">=", "+", "-", "*", "/", "%" });
             OperatorDefinition.AssignmentOperators.AddRange(new string[] { "=", "+=", "-=", "*=", "/=", "%=" });
@@ -129,7 +129,15 @@
         public override void RecieveData(ParseTreeNode node)
         {
             base.RecieveData(node);
-            this.operatorDefined = node.ChildNodes[5].Token.Text;
+            if (node.ChildNodes[5].Token != null)
+            {
+                this.operatorDefined = node.ChildNodes[5].Token.Text;
+            }
+            else
+            {
+                this.operatorDefined = node.ChildNodes[5].ChildNodes[0].Token.Text;
+            }
+
             foreach (ParseTreeNode child in node.ChildNodes[6].ChildNodes[1].ChildNodes)
             {
                 Parameter p = new Parameter();
@@ -223,7 +231,7 @@
             }
             else
             {
-                if (this.ModifierType != MemberModifierType.Abstract)
+                if (this.ModifierType != MemberModifierType.Abstract && !this.Parent.IsBackend)
                 {
                     this.AddError(ErrorType.MissingBodyOfNonAbstractMember, this.operatorDefined);
                     foundErrors = true;
