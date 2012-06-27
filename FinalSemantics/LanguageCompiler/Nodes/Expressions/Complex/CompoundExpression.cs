@@ -97,31 +97,7 @@
                 lhsMembers = type.Members;
             }
 
-            foreach (MemberDefinition member in lhsMembers)
-            {
-                if (member is MethodDefinition)
-                {
-                    MethodDefinition memberMethod = member as MethodDefinition;
-                    if (memberMethod.Name.Text == this.rhs.Text)
-                    {
-                        return this.CheckMemberErrors(member, memberMethod.Name.Text, scopeStack, lhsObject.StaticType);
-                    }
-                }
-                else if (member is FieldDefinition)
-                {
-                    FieldDefinition memberField = member as FieldDefinition;
-                    foreach (FieldAtom atom in memberField.Atoms)
-                    {
-                        if (atom.Name.Text == this.rhs.Text)
-                        {
-                            return this.CheckMemberErrors(member, atom.Name.Text, scopeStack, lhsObject.StaticType);
-                        }
-                    }
-                }
-            }
-
-            this.AddError(ErrorType.NoMemberWithThisName, lhsObject.DataType.Name.Text, this.rhs.Text);
-            return true;
+            return this.CheckParentMembers(lhsObject.DataType, scopeStack, lhsObject.StaticType);
         }
 
         /// <summary>
@@ -237,6 +213,52 @@
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Checks on parent members recursively.
+        /// </summary>
+        /// <param name="lhsObject">LHS class definition.</param>
+        /// <param name="scopeStack">Current scope stack.</param>
+        /// <param name="staticType">Expression static type.</param>
+        /// <returns>True if errors are found, false otherwise.</returns>
+        private bool CheckParentMembers(ClassDefinition lhsObject, ScopeStack scopeStack, MemberStaticType staticType)
+        {
+            foreach (MemberDefinition member in lhsObject.Members)
+            {
+                if (member is MethodDefinition)
+                {
+                    MethodDefinition memberMethod = member as MethodDefinition;
+                    if (memberMethod.Name.Text == this.rhs.Text)
+                    {
+                        return this.CheckMemberErrors(member, memberMethod.Name.Text, scopeStack, staticType);
+                    }
+                }
+                else if (member is FieldDefinition)
+                {
+                    FieldDefinition memberField = member as FieldDefinition;
+                    foreach (FieldAtom atom in memberField.Atoms)
+                    {
+                        if (atom.Name.Text == this.rhs.Text)
+                        {
+                            return this.CheckMemberErrors(member, atom.Name.Text, scopeStack, staticType);
+                        }
+                    }
+                }
+            }
+
+            if (lhsObject.ClassBase != null)
+            {
+                return this.CheckParentMembers(
+                    CompilerService.Instance.ClassesList[lhsObject.ClassBase.Text],
+                    scopeStack,
+                    staticType);
+            }
+            else
+            {
+                this.AddError(ErrorType.NoMemberWithThisName, lhsObject.Name.Text, this.rhs.Text);
+                return true;
+            }
         }
     }
 }
