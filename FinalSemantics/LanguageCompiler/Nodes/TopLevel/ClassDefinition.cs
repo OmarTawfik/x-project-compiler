@@ -120,6 +120,15 @@
         }
 
         /// <summary>
+        /// Gets or sets the list of backend classes names.
+        /// </summary>
+        internal static List<string> BackendClasses
+        {
+            get { return backendClasses; }
+            set { backendClasses = value; }
+        }
+
+        /// <summary>
         /// Gets the members of this class.
         /// </summary>
         public List<MemberDefinition> Members
@@ -313,12 +322,16 @@
         {
             if (this.isBackend)
             {
-                return false;
+                //return false;
             }
 
-            if (this.name.CheckSemanticErrors(scopeStack))
+            if (!this.isBackend)
             {
-                return true;
+                if (this.name.CheckSemanticErrors(scopeStack))
+                {
+
+                    return true;
+                }
             }
 
             bool foundErrors = false;
@@ -584,6 +597,12 @@
                 {
                     OperatorDefinition op = member as OperatorDefinition;
                     string name = string.Format("{0}_{1}", op.OperatorDefined, op.Parameters.Count);
+
+                    foreach (Parameter parameter in op.Parameters)
+                    {
+                        name += "_" + parameter.Type.Text;
+                    }
+
                     if (memberNames.Contains(name))
                     {
                         this.AddError(ErrorType.ItemAlreadyDefined, op.OperatorDefined);
