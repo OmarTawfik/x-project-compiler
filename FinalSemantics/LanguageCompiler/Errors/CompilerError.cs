@@ -58,5 +58,14 @@
         {
             get { return this.message; }
         }
+
+        /// <summary>
+        /// Returns the message describing this error.
+        /// </summary>
+        /// <returns>The message.</returns>
+        public override string ToString()
+        {
+            return this.message;
+        }
     }
 }
