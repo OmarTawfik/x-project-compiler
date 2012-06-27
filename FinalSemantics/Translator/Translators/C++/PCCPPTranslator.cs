@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using LanguageCompiler;
     using LanguageCompiler.Nodes;
     using LanguageCompiler.Nodes.ClassMembers;
     using LanguageCompiler.Nodes.Expressions;
@@ -27,11 +28,37 @@
         private List<string> staticClassConstructors;
 
         /// <summary>
+        /// Controls whether to use static objects or shared_ptrs.
+        /// </summary>
+        private bool enableSharedPtrSupport = false;
+
+        /// <summary>
         /// Initializes a new instance of the PCCPPTranslator class.
         /// </summary>
         public PCCPPTranslator()
         {
             this.BackendClasses = new List<BackendClass>();
+            string[] backendFiles = null;
+
+            try
+            {
+                backendFiles = Directory.GetFiles(this.PluginDirectory + "\\BackendClasses\\");
+            }
+            catch (Exception)
+            {
+                return;
+            }
+
+            foreach (string file in backendFiles)
+            {
+                try
+                {
+                    this.BackendClasses.Add(BackendClass.LoadBackendClassFromFile(file));
+                }
+                catch (Exception)
+                {
+                }
+            }
         }
 
         /// <summary>
@@ -80,6 +107,11 @@
 
             for (int i = 0; i < classes.Count; i++)
             {
+                this.AddDefaultConstructor(classes[i]);
+            }
+
+            for (int i = 0; i < classes.Count; i++)
+            {
                 this.GenerateClassDeclaration(classes[i]);
             }
 
@@ -88,15 +120,13 @@
                 this.GenerateClassDefinition(classes[i]);
             }
 
-            this.AppendLine("void main()");
+            this.AppendLine("void _INIT_STATIC_CONSTRUCTORS()");
             this.StartBlock();
 
             for (int i = 0; i < this.staticClassConstructors.Count; i++)
             {
                 this.AppendLine(this.staticClassConstructors[i]);
             }
-
-            ////TODO: GLUT INITIALIZeRS
 
             this.EndBlock();
         }
@@ -139,7 +169,7 @@
                 if (headers[i] != previouslyIncludedHeader)
                 {
                     previouslyIncludedHeader = headers[i];
-                    this.AppendLine("#include <" + headers[i] + ">");
+                    this.AppendLine("#include \"" + headers[i] + "\"");
                 }
             }
         }
@@ -166,8 +196,20 @@
         /// <param name="node">Class to generate.</param>
         private void GenerateClassDeclaration(ClassDefinition node)
         {
+            if (node.IsPrimitive)
+            {
+                return;
+            }
+
             if (node.IsBackend)
             {
+                if (node.Name.Text.IndexOf("_list") > 0)
+                {
+                    string listType = node.Name.Text.Substring(0, node.Name.Text.IndexOf("_list"));
+                    this.AppendLine("class " + node.Name.Text + " : public list<" + listType + "> {};");
+                    return;
+                }
+
                 if (this.BackendClasses.Find(x => x.Classname == node.Name.Text) == null)
                 {
                     throw new Exception("Backend class implementation not found.");
@@ -176,7 +218,7 @@
             else
             {
                 this.StartLine();
-                this.Append("class " + node.Name.Text + ((node.ClassBase != null) ? " : " + node.ClassBase.Text : string.Empty));
+                this.Append("class " + node.Name.Text + ((node.ClassBase != null) ? " : public " + node.ClassBase.Text : string.Empty));
 
                 this.StartBlock();
 
@@ -194,11 +236,7 @@
 
                     if ((members[i] as FieldDefinition) != null)
                     {
-                        this.StartLine();
                         this.GenerateClassFieldDeclaration(members[i] as FieldDefinition);
-                        this.Append(";");
-                        this.EndLine();
-
                         continue;
                     }
 
@@ -240,6 +278,11 @@
         {
             if (node.IsBackend)
             {
+                if (node.IsPrimitive)
+                {
+                    return;
+                }
+
                 if (this.BackendClasses.Find(x => x.Classname == node.Name.Text) == null)
                 {
                     throw new Exception("Backend class implementation not found.");
@@ -291,29 +334,47 @@
         /// <param name="field">Class field to generate.</param>
         private void GenerateClassFieldDeclaration(FieldDefinition field)
         {
-            if (field.StaticType == MemberStaticType.Static)
-            {
-                this.Append(field.StaticType.ToString().ToLower() + " ");
-            }
-
-            if (field.ModifierType != LanguageCompiler.Nodes.ClassMembers.MemberModifierType.Normal)
-            {
-                this.Append(field.ModifierType.ToString().ToLower() + " ");
-            }
-
-            this.Append("shared_ptr<" + field.Type.Text + "> ");
-
-            bool firstFlag = true;
             foreach (FieldAtom atom in field.Atoms)
             {
-                if (!firstFlag)
+                this.StartLine();
+
+                if (field.StaticType == MemberStaticType.Static)
                 {
-                    this.Append(", ");
+                    this.Append(field.StaticType.ToString().ToLower() + " ");
                 }
 
-                firstFlag = false;
-                ////TODO: primative and ref types.
+                if (field.ModifierType != LanguageCompiler.Nodes.ClassMembers.MemberModifierType.Normal)
+                {
+                    this.Append(field.ModifierType.ToString().ToLower() + " ");
+                }
+
+                if (atom.Value != null)
+                {
+                    if (this.GetTypeOfNode(atom.Value).IsPrimitive || !this.enableSharedPtrSupport)
+                    {
+                        this.Append(atom.Value.ExpressionType.GetName() + " ");
+                    }
+                    else
+                    {
+                        this.Append("shared_ptr<" + atom.Value.ExpressionType.GetName() + "> ");
+                    }
+                }
+                else
+                {
+                    if (this.GetTypeOfNode(field.Type).IsPrimitive || !this.enableSharedPtrSupport)
+                    {
+                        this.Append(field.Type.Text + " ");
+                    }
+                    else
+                    {
+                        this.Append("shared_ptr<" + field.Type.Text + "> ");
+                    }
+                }
+
                 this.Append(atom.Name.Text);
+
+                this.Append(";");
+                this.EndLine();
             }
         }
 
@@ -342,9 +403,30 @@
                 this.Append("virtual" + " ");
             }
 
-            if (node.Type.Text != "constructor")
+            if (node.Name.Text != "constructor")
             {
-                this.Append(node.Type.Text + " ");
+                if (node.Type.Text == "void")
+                {
+                    this.Append("void ");
+                }
+                else
+                {
+                    if (this.GetTypeOfNode(node.Type).IsPrimitive)
+                    {
+                        this.Append(node.Type.Text + " ");
+                    }
+                    else
+                    {
+                        if (this.enableSharedPtrSupport)
+                        {
+                            this.Append("shared_ptr<" + node.Type.Text + "> ");
+                        }
+                        else
+                        {
+                            this.Append(node.Type.Text + "& ");
+                        }
+                    }
+                }
             }
             else
             {
@@ -354,28 +436,23 @@
                 }
             }
 
-            if (node.Type.Text == "constructor" && node.StaticType == MemberStaticType.Static)
+            if (node.Name.Text == "constructor")
             {
-                this.Append("_static_init");
+                if (node.StaticType == MemberStaticType.Static)
+                {
+                    this.Append("_static_init");
+                }
+                else
+                {
+                    this.Append(node.Type.Text);
+                }
             }
             else
             {
                 this.Append(node.Name.Text);
             }
 
-            this.Append("(");
-
-            for (int i = 0; i < node.Parameters.Count; i++)
-            {
-                if (i != 0)
-                {
-                    this.Append(", ");
-                }
-
-                this.Append("shared_ptr<" + node.Parameters[i].Type.Text + "> " + node.Parameters[i].Name.Text);
-            }
-
-            this.Append(")");
+            this.GenerateMethodHeaderParameters(node.Parameters);
         }
 
         /// <summary>
@@ -386,9 +463,35 @@
         {
             this.AppendLine(string.Empty);
 
-            if (node.Type.Text != "constructor")
+            if (node.ModifierType == MemberModifierType.Abstract)
             {
-                this.Append(node.Type.Text + " ");
+                return;
+            }
+
+            if (node.Name.Text != "constructor")
+            {
+                if (node.Type.Text == "void")
+                {
+                    this.Append("void ");
+                }
+                else
+                {
+                    if (this.GetTypeOfNode(node.Type).IsPrimitive)
+                    {
+                        this.Append(node.Type.Text + " ");
+                    }
+                    else
+                    {
+                        if (this.enableSharedPtrSupport)
+                        {
+                            this.Append("shared_ptr<" + node.Type.Text + "> ");
+                        }
+                        else
+                        {
+                            this.Append(node.Type.Text + "& ");
+                        }
+                    }
+                }
             }
             else
             {
@@ -400,30 +503,25 @@
 
             this.Append(node.Parent.Name.Text + "::");
 
-            if (node.Type.Text == "constructor" && node.StaticType == MemberStaticType.Static)
+            if (node.Name.Text == "constructor")
             {
-                this.Append("_static_init");
+                if (node.StaticType == MemberStaticType.Static)
+                {
+                    this.Append("_static_init");
+                }
+                else
+                {
+                    this.Append(node.Type.Text);
+                }
             }
             else
             {
                 this.Append(node.Name.Text);
             }
 
-            this.Append("(");
+            this.GenerateMethodHeaderParameters(node.Parameters);
 
-            for (int i = 0; i < node.Parameters.Count; i++)
-            {
-                if (i != 0)
-                {
-                    this.Append(", ");
-                }
-
-                this.Append("shared_ptr<" + node.Parameters[i].Type.Text + "> " + node.Parameters[i].Name.Text);
-            }
-
-            this.Append(")");
-
-            if (node.Type.Text == "constructor")
+            if (node.Name.Text == "constructor")
             {
                 this.StartBlock();
                 if (node.StaticType == MemberStaticType.Static)
@@ -438,7 +536,7 @@
             
             this.GenerateBlockStatement(node.Block);
 
-            if (node.Type.Text == "constructor")
+            if (node.Name.Text == "constructor")
             {
                 this.EndBlock();
             }
@@ -466,26 +564,31 @@
                 if (statement as DeclarationStatement != null)
                 {
                     this.GenerateDeclarationStatement(statement as DeclarationStatement);
+                    this.Append(";");
                 }
 
                 if (statement as BreakStatement != null)
                 {
                     this.GenerateBreakStatement(statement as BreakStatement);
+                    this.Append(";");
                 }
 
                 if (statement as ContinueStatement != null)
                 {
                     this.GenerateContinueStatement(statement as ContinueStatement);
+                    this.Append(";");
                 }
 
                 if (statement as ReturnStatement != null)
                 {
                     this.GenerateReturnStatement(statement as ReturnStatement);
+                    this.Append(";");
                 }
 
                 if (statement as DoWhileStatement != null)
                 {
                     this.GenerateDoWhileStatement(statement as DoWhileStatement);
+                    this.Append(";");
                 }
 
                 if (statement as ForStatement != null)
@@ -521,11 +624,33 @@
         /// <param name="node">Declaration statement to generate.</param>
         private void GenerateDeclarationStatement(LanguageCompiler.Nodes.Statements.DeclarationStatement node)
         {
-            this.StartLine();
-            this.Append("shared_ptr<" + node.Type.Text + "> ");
-
             for (int i = 0; i < node.Atoms.Count; i++)
             {
+                this.StartLine();
+
+                if (node.Atoms[i].Value != null)
+                {
+                    if (this.GetTypeOfNode(node.Atoms[i].Value).IsPrimitive || !this.enableSharedPtrSupport)
+                    {
+                        this.Append(node.Atoms[i].Value.ExpressionType.GetName() + " ");
+                    }
+                    else
+                    {
+                        this.Append("shared_ptr<" + node.Atoms[i].Value.ExpressionType.GetName() + "> ");
+                    }
+                }
+                else
+                {
+                    if (this.GetTypeOfNode(node.Type).IsPrimitive || !this.enableSharedPtrSupport)
+                    {
+                        this.Append(node.Type.Text + " ");
+                    }
+                    else
+                    {
+                        this.Append("shared_ptr<" + node.Type.Text + "> ");
+                    }
+                }
+
                 this.Append(node.Atoms[i].Name.Text);
 
                 if (node.Atoms[i].Value != null)
@@ -533,6 +658,9 @@
                     this.Append(" = ");
                     this.GenerateExpressionNode(node.Atoms[i].Value);
                 }
+
+                this.Append(";");
+                this.EndLine();
             }
         }
 
@@ -542,7 +670,7 @@
         /// <param name="node">Break statement to generate.</param>
         private void GenerateBreakStatement(LanguageCompiler.Nodes.Statements.CommandStatements.BreakStatement node)
         {
-            this.Append("break;");
+            this.Append("break");
         }
 
         /// <summary>
@@ -551,7 +679,7 @@
         /// <param name="node">Continue statement to generate.</param>
         private void GenerateContinueStatement(LanguageCompiler.Nodes.Statements.CommandStatements.ContinueStatement node)
         {
-            this.Append("continue;");
+            this.Append("continue");
         }
 
         /// <summary>
@@ -566,8 +694,6 @@
                 this.Append(" ");
                 this.GenerateExpressionNode(node.Expression);
             }
-
-            this.Append(";");
         }
 
         /// <summary>
@@ -576,12 +702,12 @@
         /// <param name="node">Do while statement to generate.</param>
         private void GenerateDoWhileStatement(LanguageCompiler.Nodes.Statements.ControlStatements.DoWhileStatement node)
         {
-            this.Append("do {");
+            this.Append("do");
             this.EndLine();
             this.GenerateBlockStatement(node.Block);
             this.Append(" while(");
             this.GenerateExpressionNode(node.Expression);
-            this.Append(");");
+            this.Append(")");
         }
 
         /// <summary>
@@ -608,10 +734,14 @@
                 }
             }
 
+            this.Append(";");
+
             if (node.SecondPart != null)
             {
                 this.GenerateExpressionNode(node.SecondPart);
             }
+
+            this.Append(";");
 
             if (node.ThirdPartList != null)
             {
@@ -627,6 +757,9 @@
                     this.GenerateExpressionNode(node.ThirdPartList[i]);
                 }
             }
+
+            this.Append(")");
+            this.GenerateBlockStatement(node.Block);
         }
 
         /// <summary>
@@ -683,7 +816,14 @@
         {
             if (node as Identifier != null)
             {
-                this.Append((node as Identifier).Text);
+                if (this.GetTypeOfNode(node).IsPrimitive || !this.enableSharedPtrSupport)
+                {
+                    this.Append((node as Identifier).Text);
+                }
+                else
+                {
+                    this.Append("(*(" + (node as Identifier).Text + ".get()))");
+                }
             }
 
             if (node as Literal != null)
@@ -769,7 +909,15 @@
         /// <param name="node">Unary expression to generate.</param>
         private void GenerateUnaryExpression(LanguageCompiler.Nodes.Expressions.Basic.UnaryExpression node)
         {
-            this.Append(node.OperatorDefined);
+            if (node.OperatorDefined == "not")
+            {
+                this.Append("!");
+            }
+            else
+            {
+                this.Append(node.OperatorDefined);
+            }
+            
             this.GenerateExpressionNode(node.RHS);
         }
 
@@ -780,7 +928,26 @@
         private void GenerateCompoundExpression(LanguageCompiler.Nodes.Expressions.Complex.CompoundExpression node)
         {
             this.GenerateExpressionNode(node.LHS);
-            this.Append("->");
+
+            if (node.LHS as Identifier != null)
+            {
+                if ((node.LHS as Identifier).Text == "this")
+                {
+                    this.Append("->");
+                    this.Append(node.RHS.Text);
+                    return;
+                }
+            }
+
+            if (this.GetTypeOfNode(node.LHS).IsPrimitive || !this.enableSharedPtrSupport)
+            {
+                this.Append(".");
+            }
+            else
+            {
+                this.Append("->");
+            }
+
             this.Append(node.RHS.Text);
         }
 
@@ -814,7 +981,14 @@
         /// <param name="node">Object creation expression to create.</param>
         private void GenerateObjectCreationExpression(LanguageCompiler.Nodes.Expressions.Complex.ObjectCreationExpression node)
         {
-            this.Append("shared_ptr<" + node.Type.Text + ">(new " + node.Type.Text + "(");
+            if (this.GetTypeOfNode(node).IsPrimitive || !this.enableSharedPtrSupport)
+            {
+                this.Append(node.Type.Text + "(");
+            }
+            else
+            {
+                this.Append("shared_ptr<" + node.Type.Text + ">(new " + node.Type.Text + "(");
+            }
 
             bool firstArgument = true;
             for (int i = 0; i < node.Arguments.Count; i++)
@@ -828,7 +1002,14 @@
                 this.GenerateExpressionNode(node.Arguments[i]);
             }
 
-            this.Append("))");
+            if (this.GetTypeOfNode(node).IsPrimitive || !this.enableSharedPtrSupport)
+            {
+                this.Append(")");
+            }
+            else
+            {
+                this.Append("))");
+            }
         }
 
         /// <summary>
@@ -850,7 +1031,7 @@
                             if (field.Atoms[j].Value != null)
                             {
                                 this.StartLine();
-                                this.Append("shared_ptr<" + field.Type.Text + "> " + field.Atoms[j].Name.Text + " = ");
+                                this.Append(field.Atoms[j].Name.Text + " = ");
                                 this.GenerateExpressionNode(field.Atoms[j].Value);
                                 this.Append(";");
                                 this.EndLine();
@@ -880,7 +1061,7 @@
                             if (field.Atoms[j].Value != null)
                             {
                                 this.StartLine();
-                                this.Append("shared_ptr<" + field.Type.Text + "> " + field.Atoms[j].Name.Text + " = ");
+                                this.Append(field.Atoms[j].Name.Text + " = ");
                                 this.GenerateExpressionNode(field.Atoms[j].Value);
                                 this.Append(";");
                                 this.EndLine();
@@ -902,21 +1083,39 @@
                 this.Append("virtual" + " ");
             }
 
-            this.Append(node.Type.Text + " operator");
-            this.Append(node.OperatorDefined);
-            this.Append("(");
-
-            for (int i = 0; i < node.Parameters.Count; i++)
+            if (node.Type.Text == "void")
             {
-                if (i != 0)
+                this.Append("void ");
+            }
+            else
+            {
+                if (this.GetTypeOfNode(node.Type).IsPrimitive || !this.enableSharedPtrSupport)
                 {
-                    this.Append(", ");
-                }
+                    this.Append(node.Type.Text);
 
-                this.Append("shared_ptr<" + node.Parameters[i].Type.Text + "> " + node.Parameters[i].Name.Text);
+                    switch (node.OperatorDefined)
+                    {
+                        case "+=":
+                        case "-=":
+                        case "*=":
+                        case "/=":
+                        case "^=":
+                            this.Append("& ");
+                            break;
+                        default:
+                            this.Append(" ");
+                            break;
+                    }
+                }
+                else
+                {
+                    this.Append("shared_ptr<" + node.Type.Text + "> ");
+                }
             }
 
-            this.Append(")");
+            this.Append("operator");
+            this.Append(node.OperatorDefined);
+            this.GenerateMethodHeaderParameters(node.Parameters);
         }
 
         /// <summary>
@@ -925,28 +1124,152 @@
         /// <param name="node">Class operator to generate.</param>
         private void GenerateClassOperatorDefinition(OperatorDefinition node)
         {
-            this.Append(node.Type.Text + " " + node.Parent.Name.Text + "::operator");
-            this.Append(node.OperatorDefined);
-            this.Append("(");
-
-            for (int i = 0; i < node.Parameters.Count; i++)
+            if (node.Type.Text == "void")
             {
-                if (i != 0)
+                this.Append("void ");
+            }
+            else
+            {
+                if (this.GetTypeOfNode(node.Type).IsPrimitive || !this.enableSharedPtrSupport)
                 {
-                    this.Append(", ");
-                }
+                    this.Append(node.Type.Text);
 
-                this.Append("shared_ptr<" + node.Parameters[i].Type.Text + "> " + node.Parameters[i].Name.Text);
+                    switch (node.OperatorDefined)
+                    {
+                        case "+=":
+                        case "-=":
+                        case "*=":
+                        case "/=":
+                        case "^=":
+                            this.Append("& ");
+                            break;
+                        default:
+                            this.Append(" ");
+                            break;
+                    }
+                }
+                else
+                {
+                    this.Append("shared_ptr<" + node.Type.Text + "> ");
+                }
             }
 
-            this.Append(")");
-
+            this.Append(node.Parent.Name.Text + "::operator");
+            this.Append(node.OperatorDefined);
+            this.GenerateMethodHeaderParameters(node.Parameters);
             this.GenerateBlockStatement(node.Block);
 
             if (node.Type.Text == "constructor")
             {
                 this.EndBlock();
             }
+        }
+
+        /// <summary>
+        /// Returns the class definition of the type of a node.
+        /// </summary>
+        /// <param name="node">The node.</param>
+        /// <returns>Type's class definition.</returns>
+        private ClassDefinition GetTypeOfNode(ExpressionNode node)
+        {
+            if (node.ExpressionType == null)
+            {
+                if ((node as Identifier) != null)
+                {
+                    return CompilerService.Instance.ClassesList[(node as Identifier).Text];
+                }
+                else
+                {
+                    throw new Exception("CANNOT");
+                }
+            }
+            
+            return CompilerService.Instance.ClassesList[node.ExpressionType.GetName()];
+        }
+
+        /// <summary>
+        /// Adds a default constructor if didn't exist, to call field initializers.
+        /// </summary>
+        /// <param name="node">The class definition</param>
+        private void AddDefaultConstructor(ClassDefinition node)
+        {
+            MethodDefinition[] constructors = node.Members.Where(x => (x as MethodDefinition) != null).Where(x => ((MethodDefinition)x).Name.Text == "constructor" && x.StaticType == MemberStaticType.Normal).Cast<MethodDefinition>().ToArray();
+            MethodDefinition[] staticConstructors = node.Members.Where(x => (x as MethodDefinition) != null).Where(x => ((MethodDefinition)x).Name.Text == "constructor" && x.StaticType == MemberStaticType.Static).Cast<MethodDefinition>().ToArray();
+
+            if (constructors.Length != 0 && staticConstructors.Length != 0)
+            {
+                return;
+            }
+
+            FieldDefinition[] fields = node.Members.Where(x => (x as FieldDefinition) != null).Cast<FieldDefinition>().ToArray();
+
+            bool constructorNeeded = false;
+            bool staticConstructorNeeded = false;
+
+            for (int i = 0; i < fields.Length; i++)
+            {
+                for (int j = 0; j < fields[i].Atoms.Count; j++)
+                {
+                    if (fields[i].Atoms[j].Value != null)
+                    {
+                        if (fields[i].StaticType == MemberStaticType.Normal)
+                        {
+                            constructorNeeded = true;
+                        }
+                        else
+                        {
+                            staticConstructorNeeded = true;
+                        }
+                    }
+                }
+            }
+
+            if (constructorNeeded && constructors.Length == 0)
+            {
+                MethodDefinition constructor = new MethodDefinition(node, "constructor", node.Name.Text, MemberAccessorType.Public, MemberModifierType.Normal, MemberStaticType.Normal);
+                node.Members.Add(constructor);
+            }
+
+            if (staticConstructorNeeded && staticConstructors.Length == 0)
+            {
+                MethodDefinition constructor = new MethodDefinition(node, "constructor", node.Name.Text, MemberAccessorType.Public, MemberModifierType.Normal, MemberStaticType.Static);
+                node.Members.Add(constructor);
+            }
+        }
+
+        /// <summary>
+        /// Generates the parameters of a method header.
+        /// </summary>
+        /// <param name="parameters">The parameters</param>
+        private void GenerateMethodHeaderParameters(List<Parameter> parameters)
+        {
+            this.Append("(");
+
+            for (int i = 0; i < parameters.Count; i++)
+            {
+                if (i != 0)
+                {
+                    this.Append(", ");
+                }
+
+                if (this.GetTypeOfNode(parameters[i].Type).IsPrimitive)
+                {
+                    this.Append(parameters[i].Type.Text + " " + parameters[i].Name.Text);
+                }
+                else
+                {
+                    if (this.enableSharedPtrSupport)
+                    {
+                        this.Append("shared_ptr<" + parameters[i].Type.Text + "> " + parameters[i].Name.Text);
+                    }
+                    else
+                    {
+                        this.Append(parameters[i].Type.Text + "& " + parameters[i].Name.Text);
+                    }
+                }
+            }
+
+            this.Append(")");
         }
     }
 }
