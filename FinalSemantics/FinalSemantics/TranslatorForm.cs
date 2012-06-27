@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Windows.Forms;
     using LanguageCompiler;
+    using LanguageCompiler.Errors;
     using LanguageCompiler.Nodes.TopLevel;
     using LanguageTranslator.Translators.CPP;
 
@@ -34,9 +35,19 @@
         {
             CompilerService.Instance.Clear();
             CompilerService.Instance.ParseFile(this.textBox2.Text, "main.x");
+
+            for (int i = 0; i < this.cpp.BackendClasses.Count; i++)
+            {
+                CompilerService.Instance.ParseFile(this.cpp.BackendClasses[i].XlangCode, this.cpp.BackendClasses[i].Classname);
+                if (CompilerService.Instance.Errors.Count != 0)
+                {
+                    Console.Write("BLA");
+                }
+            }
+
             CompilerService.Instance.CheckSemantics();
 
-            if (CompilerService.Instance.Errors.Count == 0 || true)
+            if (CompilerService.Instance.Errors.Count == 0)
             {
                 List<ClassDefinition> classList = new List<ClassDefinition>();
 
@@ -48,6 +59,17 @@
                 this.cpp.Translate(classList);
 
                 this.textBox1.Text = this.cpp.GeneratedCode.ToString();
+
+                this.cpp.Build();
+                this.cpp.Run();
+            } else {
+                this.textBox1.Text = "";
+
+                foreach (CompilerError error in CompilerService.Instance.Errors)
+	            {
+                    this.textBox1.Text += Environment.NewLine + error.ClassName + ":";
+                    this.textBox1.Text += error.Message;
+	            }
             }
         }
     }
