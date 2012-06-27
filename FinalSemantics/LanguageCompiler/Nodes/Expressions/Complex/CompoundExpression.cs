@@ -208,8 +208,8 @@
             }
             else if (staticType == MemberStaticType.Normal && member.StaticType == MemberStaticType.Static)
             {
-                this.AddError(ErrorType.CallStaticMembersFromObject, name);
-                return true;
+                //this.AddError(ErrorType.CallStaticMembersFromObject, name);
+                //return true;
             }
 
             return false;
