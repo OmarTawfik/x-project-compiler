@@ -100,6 +100,8 @@
                         for (int i = 0; i < this.arguments.Count; i++)
                         {
                             ExpressionType argType = this.arguments[i].GetExpressionType(scopeStack);
+                            this.arguments[i].ExpressionType = argType;
+
                             if (argType is ObjectExpressionType)
                             {
                                 ObjectExpressionType argObject = argType as ObjectExpressionType;
