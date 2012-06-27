@@ -136,6 +136,32 @@
         /// </summary>
         public override void Build()
         {
+            FileStream file = new FileStream(this.PluginDirectory + "\\BackendProject\\OpenGL_BACKEND\\GENCODE.h", FileMode.OpenOrCreate);
+            file.SetLength(0);
+            file.Flush();
+            StreamWriter wr = new StreamWriter(file);
+            wr.Write(this.GeneratedCode.ToString());
+            wr.Close();
+            file.Close();
+
+            try
+            {
+                System.Diagnostics.ProcessStartInfo procStartInfo =
+                    new System.Diagnostics.ProcessStartInfo(this.Compiler, this.PluginDirectory + "\\BackendProject\\OpenGL_BACKEND.sln");
+
+                procStartInfo.RedirectStandardOutput = true;
+                procStartInfo.UseShellExecute = false;
+                procStartInfo.CreateNoWindow = true;
+                System.Diagnostics.Process proc = new System.Diagnostics.Process();
+                proc.StartInfo = procStartInfo;
+                proc.Start();
+                string result = proc.StandardOutput.ReadToEnd();
+                Console.WriteLine(result);
+            }
+            catch (Exception objException)
+            {
+                
+            }
         }
 
         /// <summary>
@@ -143,7 +169,24 @@
         /// </summary>
         public override void Run()
         {
-            throw new NotImplementedException();
+            try
+            {
+                System.Diagnostics.ProcessStartInfo procStartInfo =
+                    new System.Diagnostics.ProcessStartInfo(this.PluginDirectory + "\\BackendProject\\Release\\OpenGL_BACKEND.exe");
+
+                procStartInfo.RedirectStandardOutput = true;
+                procStartInfo.UseShellExecute = false;
+                procStartInfo.CreateNoWindow = true;
+                System.Diagnostics.Process proc = new System.Diagnostics.Process();
+                proc.StartInfo = procStartInfo;
+                proc.Start();
+                string result = proc.StandardOutput.ReadToEnd();
+                Console.WriteLine(result);
+            }
+            catch (Exception objException)
+            {
+
+            }
         }
 
         /// <summary>
