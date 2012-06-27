@@ -62,7 +62,7 @@
         /// <summary>
         /// Gets or sets the backend classes.
         /// </summary>
-        protected List<BackendClass> BackendClasses
+        public List<BackendClass> BackendClasses
         {
             get { return this.backendClasses; }
             set { this.backendClasses = value; }
