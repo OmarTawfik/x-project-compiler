@@ -19,7 +19,7 @@
         public ExpressionType ExpressionType
         {
             get { return this.expressionType; }
-            protected set { this.expressionType = value; }
+            set { this.expressionType = value; }
         }
 
         /// <summary>
