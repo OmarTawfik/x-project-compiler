@@ -23,6 +23,11 @@
         private string message;
 
         /// <summary>
+        /// File name containing the error.
+        /// </summary>
+        private string className;
+
+        /// <summary>
         /// Initializes a new instance of the CompilerError struct.
         /// </summary>
         /// <param name="startingLocation">Starting location of this error.</param>
@@ -33,6 +38,7 @@
             this.startingLocation = startingLocation;
             this.endingLocation = endingLocation;
             this.message = message;
+            this.className = CompilerService.Instance.CurrentFile;
         }
 
         /// <summary>
@@ -57,6 +63,14 @@
         public string Message
         {
             get { return this.message; }
+        }
+
+        /// <summary>
+        /// Gets the file name containing the error.
+        /// </summary>
+        public string ClassName
+        {
+            get { return this.className; }
         }
 
         /// <summary>
