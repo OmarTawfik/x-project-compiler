@@ -1221,6 +1221,11 @@
                 {
                     return CompilerService.Instance.ClassesList[(node as Identifier).Text];
                 }
+                else if ((node as Literal) != null)
+                {
+                    node.ExpressionType = node.GetExpressionType(null);
+                    return CompilerService.Instance.ClassesList[(node as Literal).Type];
+                }
                 else
                 {
                     throw new Exception("CANNOT");
