@@ -91,6 +91,14 @@
         }
 
         /// <summary>
+        /// Gets the type of the literal.
+        /// </summary>
+        public string Type
+        {
+            get { return this.type; }
+        }
+
+        /// <summary>
         /// Constructs a new expression type based on a name of a type.
         /// </summary>
         /// <param name="type">Name of type to use.</param>
