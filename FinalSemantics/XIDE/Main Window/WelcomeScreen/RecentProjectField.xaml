@@ -1,0 +1,11 @@
+﻿<UserControl x:Class="XIDE.Main_Window.WelcomeScreen.RecentProjectField"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" mc:Ignorable="d"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Height="41" d:DesignWidth="324" MouseEnter="UserControl_MouseEnter" MouseLeave="UserControl_MouseLeave" MouseUp="UserControl_MouseUp">
+    <Grid>
+        <Label Content="Project title" FontSize="18" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="30,0,0,0" Name="lablelProjectName" VerticalAlignment="Stretch" />
+        <Rectangle Name="hoverRectangle" Margin="2" Stroke="#aaa" RadiusX="10" RadiusY="10" StrokeThickness="1" Opacity="0"/>
+        <Ellipse Width="13" Height="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Fill="Green" />
+    </Grid>
+</UserControl>

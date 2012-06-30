@@ -1,4 +1,5 @@
-﻿namespace IDE
+﻿
+namespace IDE
 {
     using System.ComponentModel;
     using System.IO;

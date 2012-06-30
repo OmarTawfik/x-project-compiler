@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="XIDE.Main_Window.Window_Buttons.xWindowBarButtonsList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" xmlns:my="clr-namespace:XIDE.Main_Window.Window_Buttons" Height="26" Width="69">
+    <Grid>
+        <Rectangle RadiusX="10" RadiusY="10" Stroke="#444">
+            <Rectangle.Fill>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#8d8d8d" Offset="1" />
+                    <GradientStop Color="#737373" Offset="0" />
+
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        <my:xWindowBarButton ButtonType="Close" Height="16" HorizontalAlignment="Right" Margin="0,0,6,0" x:Name="closeButton" VerticalAlignment="Center" Width="16" MouseUp="closeButton_MouseUp" />
+        <my:xWindowBarButton ButtonType="Maximize" Height="16" HorizontalAlignment="Right" Margin="0,0,26,0" x:Name="maxButton" VerticalAlignment="Center" Width="16" MouseUp="maxButton_MouseUp" />
+        <my:xWindowBarButton ButtonType="Minimize" Height="16" HorizontalAlignment="Right" Margin="0,0,46,0" x:Name="minButton" VerticalAlignment="Center" Width="16" MouseUp="minButton_MouseUp" />
+    </Grid>
+</UserControl>

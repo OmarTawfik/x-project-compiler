@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="WPF_UVA.Controls.SoundItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+            Height="217" Width="225">
+    <Grid>
+        <Image x:Name="thumbnail" Margin="20,20,20,30"
+                MouseEnter="HoveredIcon_MouseEnter"/>
+        <Image x:Name="hoveredIcon" Margin="20,20,20,30"
+               Visibility="Hidden"
+                MouseLeave="HoveredIcon_MouseLeave" MouseDown="HoveredIcon_MouseDown"/>
+        <Canvas x:Name="animationCanvas" Margin="20,20,20,30" Visibility="Hidden"
+                Opacity="0.5" Background="Black" MouseDown="HoveredIcon_MouseDown">
+        </Canvas>
+        <TextBlock x:Name="titleBlock" TextAlignment="Center" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="15,0,15,4" />
+        <Image x:Name="DeleteButton" HorizontalAlignment="Right" VerticalAlignment="Top" Height="20" Width="20" MouseDown="Button_Click" Margin="0,10,10,0" />
+    </Grid>
+</UserControl>

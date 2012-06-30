@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LanguageTranslator", "Trans
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDE", "IDE\IDE.csproj", "{38DB0D9C-B0CF-4EE2-B6C0-B2EF59B64E8E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XIDE", "XIDE\XIDE.csproj", "{46010A39-F7BA-41C4-9355-D9EF07D2B9DE}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -63,6 +65,16 @@ Global
 		{38DB0D9C-B0CF-4EE2-B6C0-B2EF59B64E8E}.Release|Mixed Platforms.Build.0 = Release|x86
 		{38DB0D9C-B0CF-4EE2-B6C0-B2EF59B64E8E}.Release|x86.ActiveCfg = Release|x86
 		{38DB0D9C-B0CF-4EE2-B6C0-B2EF59B64E8E}.Release|x86.Build.0 = Release|x86
+		{46010A39-F7BA-41C4-9355-D9EF07D2B9DE}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{46010A39-F7BA-41C4-9355-D9EF07D2B9DE}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{46010A39-F7BA-41C4-9355-D9EF07D2B9DE}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{46010A39-F7BA-41C4-9355-D9EF07D2B9DE}.Debug|x86.ActiveCfg = Debug|x86
+		{46010A39-F7BA-41C4-9355-D9EF07D2B9DE}.Debug|x86.Build.0 = Debug|x86
+		{46010A39-F7BA-41C4-9355-D9EF07D2B9DE}.Release|Any CPU.ActiveCfg = Release|x86
+		{46010A39-F7BA-41C4-9355-D9EF07D2B9DE}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{46010A39-F7BA-41C4-9355-D9EF07D2B9DE}.Release|Mixed Platforms.Build.0 = Release|x86
+		{46010A39-F7BA-41C4-9355-D9EF07D2B9DE}.Release|x86.ActiveCfg = Release|x86
+		{46010A39-F7BA-41C4-9355-D9EF07D2B9DE}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

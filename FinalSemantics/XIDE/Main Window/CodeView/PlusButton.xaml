@@ -1,0 +1,12 @@
+﻿<UserControl x:Class="XIDE.Main_Window.CodeView.PlusButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="37" d:DesignWidth="38" MouseDown="UserControl_MouseDown" MouseUp="UserControl_MouseUp">
+    <Grid>
+        <Rectangle Name="pressRectangle" Fill="#4000" RadiusX="5" RadiusY="5" />
+        <Image Name="imgIcon" Source="/XIDE;component/Main%20Window/CodeView/Images/Plus.png" Stretch="Uniform" Margin="4" />
+    </Grid>
+</UserControl>

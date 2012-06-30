@@ -1,0 +1,21 @@
+﻿<Window x:Class="XIDE.Main_Window.NavigationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:m="clr-namespace:XIDE.Main_Window.Window_Buttons"
+        Title="NavigationWindow" Background="LightGray" WindowStartupLocation="CenterScreen" xmlns:my="clr-namespace:XIDE.Main_Window.Toolbar" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Height="550" Width="850">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <m:xWindowBarButtonsList Grid.Row="0" Height="26" HorizontalAlignment="Right" x:Name="xWindowBarButtonsList1" VerticalAlignment="Top" Width="69" />
+        <Grid Name="mainGrid" Grid.Row="1">
+        </Grid>
+        <my:xToolBar HorizontalAlignment="Stretch" x:Name="xToolBar1" VerticalAlignment="Top" Height="86" Margin="0,0,0,0" Grid.Row="0">
+            <my:xToolBar.Effect>
+                <DropShadowEffect Direction="270" BlurRadius="15" Opacity="0.2" />
+            </my:xToolBar.Effect>
+        </my:xToolBar>
+    </Grid>
+</Window>

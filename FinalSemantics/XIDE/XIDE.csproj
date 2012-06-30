@@ -1,0 +1,229 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{46010A39-F7BA-41C4-9355-D9EF07D2B9DE}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>XIDE</RootNamespace>
+    <AssemblyName>XIDE</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>XIDE.Program</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ICSharpCode.AvalonEdit, Version=4.2.0.8783, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Binaries\ICSharpCode.AvalonEdit.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Main Window\CodeView\CodeFileItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Main Window\CodeView\CodeFilesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Main Window\CodeView\CodePanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Main Window\CodeView\PlusButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Main Window\Image View\ImageItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Main Window\Image View\ImagePanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Main Window\Sound View\SoundItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Main Window\Sound View\SoundPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Main Window\Toolbar\xToolBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Main Window\Toolbar\xToolbarButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Main Window\WelcomeScreen\RecentProjectField.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Main Window\WelcomeScreen\WelcomeScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Main Window\Window Buttons\xWindowBarButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Main Window\Window Buttons\xWindowBarButtonsList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="Helpers\Helpers.cs" />
+    <Compile Include="Main Window\CodeView\CodeFileItem.xaml.cs">
+      <DependentUpon>CodeFileItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Main Window\CodeView\CodeFilesView.xaml.cs">
+      <DependentUpon>CodeFilesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Main Window\CodeView\CodePanel.xaml.cs">
+      <DependentUpon>CodePanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Main Window\CodeView\PlusButton.xaml.cs">
+      <DependentUpon>PlusButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Main Window\Image View\ImageData.cs" />
+    <Compile Include="Main Window\Image View\ImageItem.xaml.cs">
+      <DependentUpon>ImageItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Main Window\Image View\ImagePanel.xaml.cs">
+      <DependentUpon>ImagePanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Main Window\Sound View\SoundData.cs" />
+    <Compile Include="Main Window\Sound View\SoundItem.xaml.cs">
+      <DependentUpon>SoundItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Main Window\Sound View\SoundPanel.xaml.cs">
+      <DependentUpon>SoundPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Main Window\Toolbar\xToolBar.xaml.cs">
+      <DependentUpon>xToolBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Main Window\Toolbar\xToolbarButton.xaml.cs">
+      <DependentUpon>xToolbarButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Main Window\WelcomeScreen\RecentProjectField.xaml.cs">
+      <DependentUpon>RecentProjectField.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Main Window\WelcomeScreen\WelcomeScreen.xaml.cs">
+      <DependentUpon>WelcomeScreen.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Main Window\Window Buttons\xWindowBarButton.xaml.cs">
+      <DependentUpon>xWindowBarButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Main Window\Window Buttons\xWindowBarButtonsList.xaml.cs">
+      <DependentUpon>xWindowBarButtonsList.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Main Window\NavigationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Main Window\NavigationWindow.xaml.cs">
+      <DependentUpon>NavigationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Manager\ProjectSettings.cs" />
+    <Compile Include="Manager\ProjectsManager.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Main Window\WelcomeScreen\Images\X Logo.png" />
+    <Resource Include="Main Window\WelcomeScreen\Images\X Mask.png" />
+    <Resource Include="Main Window\WelcomeScreen\Images\X Reflection.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Main Window\Window Buttons\Button Images\Close_Hover.png" />
+    <Resource Include="Main Window\Window Buttons\Button Images\Close_Normal.png" />
+    <Resource Include="Main Window\Window Buttons\Button Images\Close_Press.png" />
+    <Resource Include="Main Window\Window Buttons\Button Images\Max_Hover.png" />
+    <Resource Include="Main Window\Window Buttons\Button Images\Max_Normal.png" />
+    <Resource Include="Main Window\Window Buttons\Button Images\Max_Press.png" />
+    <Resource Include="Main Window\Window Buttons\Button Images\Min_Hover.png" />
+    <Resource Include="Main Window\Window Buttons\Button Images\Min_Normal.png" />
+    <Resource Include="Main Window\Window Buttons\Button Images\Min_Press.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Main Window\CodeView\Images\Plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Binaries\ICSharpCode.AvalonEdit.dll" />
+    <Resource Include="Main Window\CodeView\Images\Save.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

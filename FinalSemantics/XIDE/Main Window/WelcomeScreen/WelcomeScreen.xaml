@@ -1,0 +1,69 @@
+﻿<UserControl x:Class="XIDE.Main_Window.WelcomeScreen.WelcomeScreen"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="640" d:DesignWidth="802" Background="#000">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Storyboard x:Key="StartupStoryboard">
+                <DoubleAnimation BeginTime="00:00:00" Duration="00:00:10" Storyboard.TargetName="reflectionRotation" Storyboard.TargetProperty="(RotateTransform.Angle)" From="0" To="360" RepeatBehavior="Forever" />
+                <DoubleAnimation BeginTime="00:00:02" Duration="00:00:01" Storyboard.TargetName="XLogo" Storyboard.TargetProperty="(FrameworkElement.Opacity)" From="0" To="1" />
+                <DoubleAnimation BeginTime="00:00:04" Duration="00:00:02" Storyboard.TargetName="backlightScaler" Storyboard.TargetProperty="ScaleX" From="0" To="3" />
+                <DoubleAnimation BeginTime="00:00:04" Duration="00:00:02" Storyboard.TargetName="backlightScaler" Storyboard.TargetProperty="ScaleY" From="0" To="3" />
+                <ColorAnimation BeginTime="00:00:05" Duration="00:00:02" Storyboard.TargetProperty="Background.Color" From="#F000" To="#0FFF" AccelerationRatio="1" />
+                <DoubleAnimation BeginTime="00:00:04" Duration="00:00:01.7" Storyboard.TargetName="backlight" Storyboard.TargetProperty="(Rectangle.Opacity)" From="0" To="1" AccelerationRatio="1" />
+                <ThicknessAnimation BeginTime="00:00:05.5" Duration="00:00:01" Storyboard.TargetName="XLogo" Storyboard.TargetProperty="(FrameworkElement.Margin)" From="0,0,0,0" To="200,0,-200,0" AccelerationRatio="0.4" DecelerationRatio="0.4" />
+                <ThicknessAnimation BeginTime="00:00:06" Duration="00:00:00.7" Storyboard.TargetName="welcomeLabel" Storyboard.TargetProperty="(Label.Margin)" From="100,0,-100,0" To="-200,0,200,0" DecelerationRatio="0.6" />
+                <DoubleAnimation BeginTime="00:00:06" Duration="00:00:00.7" Storyboard.TargetName="welcomeLabel" Storyboard.TargetProperty="(Label.Opacity)" From="0" To="1" />
+                <ThicknessAnimation BeginTime="00:00:09" Duration="00:00:00.5" Storyboard.TargetName="welcomeLabel" Storyboard.TargetProperty="(Label.Margin)" From="-200,0,200,0" To="-200,100,200,0" AccelerationRatio="1" />
+                <DoubleAnimation BeginTime="00:00:09" Duration="00:00:00.5" Storyboard.TargetName="welcomeLabel" Storyboard.TargetProperty="(Label.Opacity)" From="1" To="0" />
+
+                <ThicknessAnimation BeginTime="00:00:09" Duration="00:00:00.5" Storyboard.TargetName="recentProjectsContainer" Storyboard.TargetProperty="(Label.Margin)" From="-200,-100,200,0" To="-200,0,200,0" DecelerationRatio="1" />
+                <DoubleAnimation BeginTime="00:00:09" Duration="00:00:00.5" Storyboard.TargetName="recentProjectsContainer" Storyboard.TargetProperty="(Label.Opacity)" From="0" To="1" />
+            </Storyboard>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="Loaded">
+            <EventTrigger.Actions>
+                <BeginStoryboard Storyboard="{StaticResource StartupStoryboard}"/>
+            </EventTrigger.Actions>
+        </EventTrigger>
+    </UserControl.Triggers>
+    <Grid>
+        <Rectangle Name="backlight" Opacity="0">
+            <Rectangle.Fill>
+                <RadialGradientBrush Center="0.5, 0.5">
+                    <GradientStop x:Name="backlightGradient1" Color="LightGray" Offset="0.3" />
+                    <GradientStop x:Name="backlightGradient2" Color="#00D3D3D3" Offset="1" />
+                    <RadialGradientBrush.RelativeTransform>
+                        <ScaleTransform x:Name="backlightScaler" CenterX="0.5" CenterY="0.5" ScaleX="0" ScaleY="0" />
+                    </RadialGradientBrush.RelativeTransform>
+                </RadialGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Grid Name="XLogo" Width="400" Height="400" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0">
+            <Image Source="/XIDE;component/Main%20Window/WelcomeScreen/Images/X%20Logo.png" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Uniform">
+                <Image.Effect>
+                    <DropShadowEffect BlurRadius="30" ShadowDepth="0" />
+                </Image.Effect>
+            </Image>
+            <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Rectangle.OpacityMask>
+                    <ImageBrush ImageSource="/XIDE;component/Main%20Window/WelcomeScreen/Images/X%20Mask.png" Stretch="Uniform" Opacity="1"></ImageBrush>
+                </Rectangle.OpacityMask>
+                <Rectangle.Fill>
+                    <ImageBrush ImageSource="/XIDE;component/Main%20Window/WelcomeScreen/Images/X%20Reflection.png" Stretch="Uniform">
+                        <ImageBrush.RelativeTransform>
+                            <RotateTransform x:Name="reflectionRotation" Angle="0" CenterX="0.5" CenterY="0.5" />
+                        </ImageBrush.RelativeTransform>
+                    </ImageBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+        </Grid>
+        <Label Name="welcomeLabel" Foreground="#222" Content="Welcome :)" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" Opacity="0"/>
+        <StackPanel Opacity="0" Name="recentProjectsContainer" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" Height="300" Margin="-200,0,200,0" />
+    </Grid>
+</UserControl>

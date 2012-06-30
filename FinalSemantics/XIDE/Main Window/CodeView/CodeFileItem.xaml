@@ -1,0 +1,13 @@
+﻿<UserControl x:Class="XIDE.Main_Window.CodeView.CodeFileItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             Height="50" d:DesignWidth="174">
+    <Grid>
+        <Rectangle Name="selectionRectangle" Fill="#006cff" RadiusX="7" RadiusY="7" Margin="3" Opacity="0"/>
+        <Rectangle Width="30" Height="30" HorizontalAlignment="Left" Margin="10,0,0,0" Fill="Green"/>
+        <TextBox Name="labelCodeFileName" Text="CODE file .x" FontSize="16" Background="#0000" BorderBrush="#0000" IsEnabled="True" IsReadOnly="True" HorizontalAlignment="Stretch" VerticalAlignment="Center" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="50,0,0,0" MouseDoubleClick="labelCodeFileName_MouseDoubleClick" LostFocus="labelCodeFileName_LostFocus" KeyDown="labelCodeFileName_KeyDown" />
+    </Grid>
+</UserControl>

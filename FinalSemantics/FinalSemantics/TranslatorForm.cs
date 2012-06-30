@@ -34,7 +34,7 @@
         private void Button1_Click(object sender, EventArgs e)
         {
             CompilerService.Instance.Clear();
-            CompilerService.Instance.ParseFile(this.textBox2.Text, "main.x");
+            CompilerService.Instance.ParseFile(this.richTextBox1.Text, "main.x");
 
             for (int i = 0; i < this.cpp.BackendClasses.Count; i++)
             {
@@ -58,19 +58,24 @@
 
                 this.cpp.Translate(classList);
 
-                this.textBox1.Text = this.cpp.GeneratedCode.ToString();
+                this.richTextBox2.Text = this.cpp.GeneratedCode.ToString();
 
                 this.cpp.Build();
                 this.cpp.Run();
             } else {
-                this.textBox1.Text = "";
+                this.richTextBox2.Text = "Errors Found!" + Environment.NewLine + Environment.NewLine;
 
                 foreach (CompilerError error in CompilerService.Instance.Errors)
 	            {
-                    this.textBox1.Text += Environment.NewLine + error.ClassName + ":";
-                    this.textBox1.Text += error.Message;
+                    this.richTextBox2.Text += Environment.NewLine + "class " + error.ClassName + ":";
+                    this.richTextBox2.Text += error.Message + ". At line(" + error.StartingLocation.Line + "), column(" + error.StartingLocation.Column + ".";
 	            }
             }
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

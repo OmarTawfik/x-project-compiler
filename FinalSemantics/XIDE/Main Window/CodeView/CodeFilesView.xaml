@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="XIDE.Main_Window.CodeView.CodeFilesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:m="clr-namespace:XIDE.Main_Window.CodeView"
+             mc:Ignorable="d" 
+             d:DesignHeight="323" d:DesignWidth="149">
+    <Grid>
+        <ScrollViewer Margin="0,0,0,30">
+        <StackPanel Name="codeFilesContainer">
+        </StackPanel>
+        </ScrollViewer>
+        <Rectangle VerticalAlignment="Bottom" Height="30">
+            <Rectangle.Fill>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#d0e3ff" Offset="0.0" />
+                    <GradientStop Color="#5995ef" Offset="1" />
+                </LinearGradientBrush>   
+            </Rectangle.Fill>
+        </Rectangle>
+        <m:PlusButton HorizontalAlignment="Left" VerticalAlignment="Bottom" x:Name="addButton" Width="26" Height="26" Margin="3,0,0,3" MouseDown="plusButton1_MouseDown" />
+        <m:PlusButton HorizontalAlignment="Right" VerticalAlignment="Bottom" x:Name="saveButton" Width="26" Height="26" Margin="0,0,3,3" MouseDown="saveButton_MouseDown" Icon="/XIDE;component/Main%20Window/CodeView/Images/Save.png" />
+    </Grid>
+</UserControl>

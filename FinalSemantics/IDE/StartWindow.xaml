@@ -5,7 +5,7 @@
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
         WindowStyle="ThreeDBorderWindow" Icon="/IDE;component/Images/ProjectIcon.png">
     <Grid>
-        <Image Height="420" Width="500" Source="/IDE;component/Images/StartWindowBackground.png" />
+        <Image Height="420" Width="500" Source="/IDE;component/Images/StartWindowBackground.png" ImageFailed="Image_ImageFailed" />
         
         <Button x:Name="OpenButton" Height="40" Width =" 170" Margin="8,234,300,-13" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" Click="OpenButton_Click" VerticalAlignment="Top">
             <Canvas>
