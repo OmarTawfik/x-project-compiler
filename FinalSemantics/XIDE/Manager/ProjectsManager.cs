@@ -40,7 +40,6 @@
         {
             ////HERE WE CHECK FOR THE PROJECTS DIRECTORY AND LOAD THE ALL.
             recentProjects = new List<ProjectData>();
-            recentProjects.Add(new ProjectData("ProjectBeta1", "C:\\Users\\Muhammad\\Desktop\\ProjectBeta1.xproject"));
         }
 
         public static ProjectSettings CurrentProject
