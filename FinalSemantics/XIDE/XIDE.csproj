@@ -43,6 +43,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Binaries\ICSharpCode.AvalonEdit.dll</HintPath>
     </Reference>
+    <Reference Include="NAudio, Version=1.5.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Binaries\NAudio.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Forms" />
@@ -72,6 +76,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Main Window\CodeView\PlusButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Main Window\Image View\ImageDisplay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -129,6 +137,9 @@
       <DependentUpon>PlusButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="Main Window\Image View\ImageData.cs" />
+    <Compile Include="Main Window\Image View\ImageDisplay.xaml.cs">
+      <DependentUpon>ImageDisplay.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Main Window\Image View\ImageItem.xaml.cs">
       <DependentUpon>ImageItem.xaml</DependentUpon>
     </Compile>
@@ -216,6 +227,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Binaries\ICSharpCode.AvalonEdit.dll" />
+    <Content Include="Binaries\NAudio.dll" />
+    <Resource Include="Images\Play.png" />
+    <Resource Include="Images\MusicFile.png" />
+    <Resource Include="Images\Delete.png" />
+    <Resource Include="Images\Add.png" />
+    <Resource Include="Images\Magnify.png" />
+    <Resource Include="Images\CodeIcon.png" />
+    <Resource Include="Images\ImagesIcon.png" />
+    <Resource Include="Images\SoundsIcon.png" />
     <Resource Include="Main Window\CodeView\Images\Save.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

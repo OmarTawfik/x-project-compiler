@@ -4,6 +4,11 @@
     using System.Collections.Generic;
     using System.Windows.Controls;
     using System.Windows.Media.Imaging;
+    using XIDE.Manager;
+    using System.IO;
+    using System.Windows;
+    using NAudio.Wave;
+    using Microsoft.Win32;
 
     /// <summary>
     /// Interaction logic for SoundPanel.xaml
@@ -47,31 +52,25 @@
         }
 
         /// <summary>
-        /// Event fired when user deletes an item.
-        /// </summary>
-        public event Action<int> DeleteItem;
-
-        /// <summary>
-        /// Event fired when user adds an item.
-        /// </summary>
-        public event Action AddNewItem;
-
-        /// <summary>
-        /// Event fired when user starts a sound.
-        /// </summary>
-        public event Action<int> SoundStarted;
-
-        /// <summary>
-        /// Event fired when user ends a sound.
-        /// </summary>
-        public event Action<int> SoundEnded;
-
-        /// <summary>
         /// Updates the contents of the panel.
         /// </summary>
         /// <param name="items">List of ImageData objects.</param>
-        public void UpdateItems(List<SoundData> items)
+        public void UpdateItems()
         {
+            List<SoundData> items = new List<SoundData>();
+            foreach (string sound in ProjectsManager.CurrentProject.SoundFiles)
+            {
+                string location = ProjectsManager.CurrentProject.GetFullPath(sound, ProjectResourceType.Sound);
+                if (File.Exists(location))
+                {
+                    items.Add(new SoundData(sound, (int)Math.Ceiling(new WaveFileReader(location).TotalTime.TotalSeconds)));
+                }
+                else
+                {
+                    MessageBox.Show("Cannot Load " + sound);
+                }
+            }
+
             this.mainWrapPanel.Children.Clear();
 
             for (int i = 0; i < items.Count; i++)
@@ -97,7 +96,21 @@
         /// <param name="i">Index of item.</param>
         private void DeleteItemHandler(int i)
         {
-            this.DeleteItem(i);
+            string sound = ProjectsManager.CurrentProject.SoundFiles[i];
+            string location = ProjectsManager.CurrentProject.GetFullPath(sound, ProjectResourceType.Sound);
+
+            if (File.Exists(location))
+            {
+                try
+                {
+                    File.Delete(location);
+                }
+                catch { }
+            }
+
+            ProjectsManager.CurrentProject.SoundFiles.RemoveAt(i);
+            ProjectsManager.CurrentProject.SaveProject();
+            this.UpdateItems();
         }
 
         /// <summary>
@@ -112,7 +125,8 @@
             }
             else
             {
-                this.SoundStarted(i);
+                ProjectsManager.CurrentProject.LoadSoundFile(
+                    ProjectsManager.CurrentProject.SoundFiles[i]).Play();
             }
         }
 
@@ -128,7 +142,35 @@
             }
             else
             {
-                this.SoundEnded(i);
+                ProjectsManager.CurrentProject.LoadSoundFile(
+                    ProjectsManager.CurrentProject.SoundFiles[i]).Stop();
+            }
+        }
+
+        private void AddNewItem()
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.DefaultExt = ".wav";
+            dialog.Filter = "WAV sound files (.wav)|*.wav";
+
+            if (dialog.ShowDialog() == true)
+            {
+                string remoteFileFullPath = dialog.FileName;
+                string remoteFileName = Path.GetFileName(remoteFileFullPath);
+                string localFileFullPath = ProjectsManager.CurrentProject.GetFullPath(remoteFileName, ProjectResourceType.Sound);
+                string localFileName = Path.GetFileName(localFileFullPath);
+
+                if (File.Exists(localFileFullPath))
+                {
+                    MessageBox.Show("A file with the same name already exists.");
+                    return;
+                }
+
+                File.Copy(remoteFileFullPath, localFileFullPath);
+
+                ProjectsManager.CurrentProject.SoundFiles.Add(localFileName);
+                ProjectsManager.CurrentProject.SaveProject();
+                this.UpdateItems();
             }
         }
     }

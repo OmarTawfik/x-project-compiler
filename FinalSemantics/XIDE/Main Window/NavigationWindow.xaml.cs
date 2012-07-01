@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using XIDE.Main_Window.Toolbar;
 using XIDE.Main_Window.CodeView;
+using WPF_UVA.Controls;
+using XIDE.Manager;
 
 namespace XIDE.Main_Window
 {
@@ -62,18 +64,32 @@ namespace XIDE.Main_Window
             }
 
             this.ViewCurrentView();
+
             xToolbarButton codeViewButton = new xToolbarButton();
-            codeViewButton.Icon = new BitmapImage(new Uri("C:/Users/Muhammad/Desktop/icon.png"));
+            codeViewButton.Icon = new BitmapImage(new Uri("/Images/CodeIcon.png", UriKind.Relative));
             codeViewButton.SubView = new CodePanel();
 
-            xToolbarButton codeViewButton2 = new xToolbarButton();
-            codeViewButton2.Icon = new BitmapImage(new Uri("C:/Users/Muhammad/Desktop/icon.png"));
-            codeViewButton2.SubView = new Image();
-            (codeViewButton2.SubView as Image).Source = new BitmapImage(new Uri("C:/Users/Muhammad/Desktop/Texture.png"));
+            xToolbarButton imagesViewButton = new xToolbarButton();
+            imagesViewButton.Icon = new BitmapImage(new Uri("/Images/ImagesIcon.png", UriKind.Relative));
+            imagesViewButton.SubView = new ImagePanel(
+                new BitmapImage(new Uri("/Images/Magnify.png", UriKind.Relative)),
+                new BitmapImage(new Uri("/Images/Add.png", UriKind.Relative)),
+                new BitmapImage(new Uri("/Images/Delete.png", UriKind.Relative)));
+            ProjectsManager.CurrentProjectChanged += delegate { (imagesViewButton.SubView as ImagePanel).UpdateItems(); };
+
+            xToolbarButton soundsViewButton = new xToolbarButton();
+            soundsViewButton.Icon = new BitmapImage(new Uri("/Images/SoundsIcon.png", UriKind.Relative));
+            soundsViewButton.SubView = new SoundPanel(
+                new BitmapImage(new Uri("/Images/MusicFile.png", UriKind.Relative)),
+                new BitmapImage(new Uri("/Images/Play.png", UriKind.Relative)),
+                new BitmapImage(new Uri("/Images/Add.png", UriKind.Relative)),
+                new BitmapImage(new Uri("/Images/Delete.png", UriKind.Relative)));
+            ProjectsManager.CurrentProjectChanged += delegate { (soundsViewButton.SubView as SoundPanel).UpdateItems(); };
 
             List<xToolbarButton> buttonList = new List<xToolbarButton>();
             buttonList.Add(codeViewButton);
-            buttonList.Add(codeViewButton2);
+            buttonList.Add(imagesViewButton);
+            buttonList.Add(soundsViewButton);
             this.xToolBar1.ToolbarButtons = buttonList;
         }
 

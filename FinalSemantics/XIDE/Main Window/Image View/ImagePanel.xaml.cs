@@ -4,6 +4,12 @@
     using System.Collections.Generic;
     using System.Windows.Controls;
     using System.Windows.Media.Imaging;
+    using XIDE.Manager;
+    using System.IO;
+    using System.Windows;
+    using Microsoft.Win32;
+    using XIDE.Main_Window;
+    using XIDE.Main_Window.Image_View;
 
     /// <summary>
     /// Interaction logic for ImagePanel.xaml
@@ -41,26 +47,25 @@
         }
 
         /// <summary>
-        /// Event fired when user deletes an item.
-        /// </summary>
-        public event Action<int> DeleteItem;
-
-        /// <summary>
-        /// Event fired when user adds an item.
-        /// </summary>
-        public event Action AddNewItem;
-
-        /// <summary>
-        /// Event fired when user opens an item.
-        /// </summary>
-        public event Action<int> ItemClicked;
-
-        /// <summary>
         /// Updates the contents of the panel.
         /// </summary>
         /// <param name="items">List of ImageData objects.</param>
-        public void UpdateItems(List<ImageData> items)
+        public void UpdateItems()
         {
+            List<ImageData> items = new List<ImageData>();
+            foreach (string sprite in ProjectsManager.CurrentProject.SpriteFiles)
+            {
+                string location = ProjectsManager.CurrentProject.GetFullPath(sprite, ProjectResourceType.Sprite);
+                if (File.Exists(location))
+                {
+                    items.Add(new ImageData(sprite, ProjectsManager.CurrentProject.LoadSpriteFile(sprite)));
+                }
+                else
+                {
+                    MessageBox.Show("Cannot Load " + sprite);
+                }
+            }
+
             this.mainWrapPanel.Children.Clear();
 
             for (int i = 0; i < items.Count; i++)
@@ -84,7 +89,21 @@
         /// <param name="i">Index of item.</param>
         private void DeleteItemHandler(int i)
         {
-            this.DeleteItem(i);
+            string sprite = ProjectsManager.CurrentProject.SpriteFiles[i];
+            string location = ProjectsManager.CurrentProject.GetFullPath(sprite, ProjectResourceType.Sprite);
+
+            if (File.Exists(location))
+            {
+                try
+                {
+                    File.Delete(location);
+                }
+                catch { }
+            }
+
+            ProjectsManager.CurrentProject.SpriteFiles.RemoveAt(i);
+            ProjectsManager.CurrentProject.SaveProject();
+            this.UpdateItems();
         }
 
         /// <summary>
@@ -95,11 +114,36 @@
         {
             if (i < 0)
             {
-                this.AddNewItem();
+                OpenFileDialog dialog = new OpenFileDialog();
+                dialog.DefaultExt = ".png";
+                dialog.Filter = "PNG image files (.png)|*.png";
+
+                if (dialog.ShowDialog() == true)
+                {
+                    string remoteFileFullPath = dialog.FileName;
+                    string remoteFileName = Path.GetFileName(remoteFileFullPath);
+                    string localFileFullPath = ProjectsManager.CurrentProject.GetFullPath(remoteFileName, ProjectResourceType.Sprite);
+                    string localFileName = Path.GetFileName(localFileFullPath);
+
+                    if (File.Exists(localFileFullPath))
+                    {
+                        MessageBox.Show("A file with the same name already exists.");
+                        return;
+                    }
+
+                    File.Copy(remoteFileFullPath, localFileFullPath);
+
+                    ProjectsManager.CurrentProject.SpriteFiles.Add(localFileName);
+                    ProjectsManager.CurrentProject.SaveProject();
+                    this.UpdateItems();
+                }
             }
             else
             {
-                this.ItemClicked(i);
+                NavigationWindow.CurrentNavigationWindow.PushView(
+                    new ImageDisplay(ProjectsManager.CurrentProject.LoadSpriteFile(
+                        ProjectsManager.CurrentProject.SpriteFiles[i])),
+                    true);
             }
         }
     }
