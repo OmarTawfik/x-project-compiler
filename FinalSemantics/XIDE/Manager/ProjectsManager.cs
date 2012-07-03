@@ -72,40 +72,40 @@
         public static bool BuildAndRunCurrentProject()
         {
             PCCPPTranslator cpp = new PCCPPTranslator();
-            CompilerService.Instance.Clear();
+            //CompilerService.Instance.Clear();
 
-            for (int i = 0; i < cpp.BackendClasses.Count; i++)
-            {
-                CompilerService.Instance.ParseFile(cpp.BackendClasses[i].XlangCode, cpp.BackendClasses[i].Classname);
+            //for (int i = 0; i < cpp.BackendClasses.Count; i++)
+            //{
+            //    CompilerService.Instance.ParseFile(cpp.BackendClasses[i].XlangCode, cpp.BackendClasses[i].Classname);
 
-            }
+            //}
 
-            foreach (string codefile in ProjectsManager.CurrentProject.CodeFiles)
-            {
-                CompilerService.Instance.ParseFile(System.IO.File.ReadAllText(codefile), System.IO.Path.GetFileName(codefile));
-            }
+            //foreach (string codefile in ProjectsManager.CurrentProject.CodeFiles)
+            //{
+            //    CompilerService.Instance.ParseFile(System.IO.File.ReadAllText(codefile), System.IO.Path.GetFileName(codefile));
+            //}
 
-            if (CompilerService.Instance.Errors.Count > 0)
-            {
-                return false;
-            }
+            //if (CompilerService.Instance.Errors.Count > 0)
+            //{
+            //    return false;
+            //}
 
-            CompilerService.Instance.CheckSemantics();
+            //CompilerService.Instance.CheckSemantics();
 
-            if (CompilerService.Instance.Errors.Count > 0)
-            {
-                return false;
-            }
+            //if (CompilerService.Instance.Errors.Count > 0)
+            //{
+            //    return false;
+            //}
 
-            List<ClassDefinition> classList = new List<ClassDefinition>();
+            //List<ClassDefinition> classList = new List<ClassDefinition>();
 
-            foreach (ClassDefinition classdef in CompilerService.Instance.ClassesList.Values)
-            {
-                classList.Add(classdef);
-            }
+            //foreach (ClassDefinition classdef in CompilerService.Instance.ClassesList.Values)
+            //{
+            //    classList.Add(classdef);
+            //}
 
-            cpp.Translate(classList);
-            cpp.Build();
+            //cpp.Translate(classList);
+            //cpp.Build();
             cpp.Run();
 
             return true;

@@ -14,13 +14,13 @@
                 <DoubleAnimation BeginTime="00:00:04" Duration="00:00:02" Storyboard.TargetName="backlightScaler" Storyboard.TargetProperty="ScaleY" From="0" To="3" />
                 <ColorAnimation BeginTime="00:00:05" Duration="00:00:02" Storyboard.TargetProperty="Background.Color" From="#F000" To="#0FFF" AccelerationRatio="1" />
                 <DoubleAnimation BeginTime="00:00:04" Duration="00:00:01.7" Storyboard.TargetName="backlight" Storyboard.TargetProperty="(Rectangle.Opacity)" From="0" To="1" AccelerationRatio="1" />
-                <ThicknessAnimation BeginTime="00:00:05.5" Duration="00:00:01" Storyboard.TargetName="XLogo" Storyboard.TargetProperty="(FrameworkElement.Margin)" From="0,0,0,0" To="200,0,-200,0" AccelerationRatio="0.4" DecelerationRatio="0.4" />
+                <ThicknessAnimation BeginTime="00:00:05.5" Duration="00:00:01" Storyboard.TargetName="XLogo" Storyboard.TargetProperty="(FrameworkElement.Margin)" From="0,0,0,0" To="200,0,-200,0" AccelerationRatio="0.4" DecelerationRatio="0.6" />
                 <ThicknessAnimation BeginTime="00:00:06" Duration="00:00:00.7" Storyboard.TargetName="welcomeLabel" Storyboard.TargetProperty="(Label.Margin)" From="100,0,-100,0" To="-200,0,200,0" DecelerationRatio="0.6" />
                 <DoubleAnimation BeginTime="00:00:06" Duration="00:00:00.7" Storyboard.TargetName="welcomeLabel" Storyboard.TargetProperty="(Label.Opacity)" From="0" To="1" />
-                <ThicknessAnimation BeginTime="00:00:09" Duration="00:00:00.5" Storyboard.TargetName="welcomeLabel" Storyboard.TargetProperty="(Label.Margin)" From="-200,0,200,0" To="-200,100,200,0" AccelerationRatio="1" />
+                <ThicknessAnimation BeginTime="00:00:09" Duration="00:00:00.5" Storyboard.TargetName="welcomeLabel" Storyboard.TargetProperty="(Label.Margin)" From="-200,0,200,0" To="-200,100,200,0" AccelerationRatio="0.5" />
                 <DoubleAnimation BeginTime="00:00:09" Duration="00:00:00.5" Storyboard.TargetName="welcomeLabel" Storyboard.TargetProperty="(Label.Opacity)" From="1" To="0" />
 
-                <ThicknessAnimation BeginTime="00:00:09" Duration="00:00:00.5" Storyboard.TargetName="recentProjectsContainer" Storyboard.TargetProperty="(Label.Margin)" From="-200,-100,200,0" To="-200,0,200,0" DecelerationRatio="1" />
+                <ThicknessAnimation BeginTime="00:00:09" Duration="00:00:00.5" Storyboard.TargetName="recentProjectsContainer" Storyboard.TargetProperty="(Label.Margin)" From="-200,-100,200,0" To="-200,0,200,0" DecelerationRatio="0.5" />
                 <DoubleAnimation BeginTime="00:00:09" Duration="00:00:00.5" Storyboard.TargetName="recentProjectsContainer" Storyboard.TargetProperty="(Label.Opacity)" From="0" To="1" />
             </Storyboard>
         </ResourceDictionary>

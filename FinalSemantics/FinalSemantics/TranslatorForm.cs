@@ -60,8 +60,8 @@
 
                 this.richTextBox2.Text = this.cpp.GeneratedCode.ToString();
 
-                this.cpp.Build();
-                this.cpp.Run();
+                //this.cpp.Build();
+                //this.cpp.Run();
             } else {
                 this.richTextBox2.Text = "Errors Found!" + Environment.NewLine + Environment.NewLine;
 

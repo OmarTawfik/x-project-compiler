@@ -104,5 +104,10 @@ namespace XIDE.Main_Window.CodeView
 
             ProjectsManager.CurrentProject.SaveProject();
         }
+
+        private void buildButton_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            ProjectsManager.BuildAndRunCurrentProject();
+        }
     }
 }

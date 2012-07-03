@@ -7,7 +7,7 @@
              mc:Ignorable="d"
              d:DesignHeight="85" d:DesignWidth="560" xmlns:my="clr-namespace:XIDE.Main_Window.Window_Buttons">
     <Grid>
-        <Border CornerRadius="15,15,0,0">
+        <Border CornerRadius="0,0,0,0">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                     <GradientStop Color="#EEE" Offset="0" />
@@ -15,7 +15,7 @@
                 </LinearGradientBrush>
             </Border.Background>
         </Border>
-        <Grid Margin="18,0,0,0" Width="200" Height="60" VerticalAlignment="Center" HorizontalAlignment="Left">
+        <Grid Margin="18,0,0,0" Width="170" Height="60" VerticalAlignment="Center" HorizontalAlignment="Left">
             <Rectangle RadiusX="10" RadiusY="10" Stroke="#888" StrokeThickness="1">
                 <Rectangle.Fill>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">

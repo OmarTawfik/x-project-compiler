@@ -11,6 +11,6 @@
         <Image x:Name="hoveredIcon" Margin="20,20,20,30" Visibility="Hidden"
                 MouseLeave="HoveredIcon_MouseLeave" MouseDown="HoveredIcon_MouseDown"/>
         <TextBlock x:Name="titleBlock"  TextAlignment="Center" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="15,0,15,4" />
-        <Image x:Name="DeleteButton"   HorizontalAlignment="Right" VerticalAlignment="Top" Height="20" Width="20" MouseDown="Button_Click" Margin="0,10,10,0" />
+        <Image x:Name="DeleteButton"   HorizontalAlignment="Right" VerticalAlignment="Top" Height="30" Width="30" MouseDown="Button_Click" Margin="0,10,10,0" />
     </Grid>
 </UserControl>

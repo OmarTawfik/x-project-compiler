@@ -21,5 +21,6 @@
         </Rectangle>
         <m:PlusButton HorizontalAlignment="Left" VerticalAlignment="Bottom" x:Name="addButton" Width="26" Height="26" Margin="3,0,0,3" MouseDown="plusButton1_MouseDown" />
         <m:PlusButton HorizontalAlignment="Right" VerticalAlignment="Bottom" x:Name="saveButton" Width="26" Height="26" Margin="0,0,3,3" MouseDown="saveButton_MouseDown" Icon="/XIDE;component/Main%20Window/CodeView/Images/Save.png" />
+        <m:PlusButton HorizontalAlignment="Right" VerticalAlignment="Bottom" x:Name="buildButton" Width="26" Height="26" Margin="0,0,30,3" Icon="/XIDE;component/Images/Build.png" MouseDown="buildButton_MouseDown" />
     </Grid>
 </UserControl>

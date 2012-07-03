@@ -110,15 +110,11 @@
                 this.AddDefaultConstructor(classes[i]);
             }
 
-            for (int i = 0; i < classes.Count; i++)
-            {
-                this.GenerateClassDeclaration(classes[i]);
-            }
+            classes.FindAll(x => x.IsBackend == true).ForEach(x => this.GenerateClassDeclaration(x));
+            classes.FindAll(x => x.IsBackend == true).ForEach(x => this.GenerateClassDefinition(x));
 
-            for (int i = 0; i < classes.Count; i++)
-            {
-                this.GenerateClassDefinition(classes[i]);
-            }
+            classes.FindAll(x => x.IsBackend == false).ForEach(x => this.GenerateClassDeclaration(x));
+            classes.FindAll(x => x.IsBackend == false).ForEach(x => this.GenerateClassDefinition(x));
 
             this.AppendLine("void _INIT_STATIC_CONSTRUCTORS()");
             this.StartBlock();
@@ -322,6 +318,11 @@
             if (node.IsBackend)
             {
                 if (node.IsPrimitive)
+                {
+                    return;
+                }
+
+                if (node.Name.Text.IndexOf("_list") > 0)
                 {
                     return;
                 }
@@ -1103,6 +1104,11 @@
                         {
                             if (field.Atoms[j].Value != null)
                             {
+                                if (this.IsList(field.Atoms[j].Value))
+                                {
+                                    continue;
+                                }
+
                                 this.StartLine();
                                 this.Append(field.Atoms[j].Name.Text + " = ");
                                 this.GenerateExpressionNode(field.Atoms[j].Value);
@@ -1318,6 +1324,16 @@
             }
 
             this.Append(")");
+        }
+
+        /// <summary>
+        /// Return a value indicating whether this type is a node or not.
+        /// </summary>
+        /// <param name="node">The node</param>
+        /// <returns>THE RETURN VALUE!</returns>
+        private bool IsList(ExpressionNode node)
+        {
+            return GetTypeOfNode(node).Name.Text.IndexOf("_list") >= 0;
         }
     }
 }

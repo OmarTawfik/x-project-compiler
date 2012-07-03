@@ -63,6 +63,10 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Main Window\BuildView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Main Window\CodeView\CodeFileItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -124,6 +128,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Compile Include="Helpers\Helpers.cs" />
+    <Compile Include="Main Window\BuildView.xaml.cs">
+      <DependentUpon>BuildView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Main Window\CodeView\CodeFileItem.xaml.cs">
       <DependentUpon>CodeFileItem.xaml</DependentUpon>
     </Compile>
@@ -228,6 +235,10 @@
   <ItemGroup>
     <Content Include="Binaries\ICSharpCode.AvalonEdit.dll" />
     <Content Include="Binaries\NAudio.dll" />
+    <Resource Include="Images\Build.png" />
+    <Resource Include="Images\Code.png" />
+    <Resource Include="Images\Sounds.png" />
+    <Resource Include="Images\Sprites.png" />
     <Resource Include="Images\Play.png" />
     <Resource Include="Images\MusicFile.png" />
     <Resource Include="Images\Delete.png" />
@@ -237,6 +248,16 @@
     <Resource Include="Images\ImagesIcon.png" />
     <Resource Include="Images\SoundsIcon.png" />
     <Resource Include="Main Window\CodeView\Images\Save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LanguageCompiler\LanguageCompiler.csproj">
+      <Project>{24ABB284-7316-48A4-9A7C-EBCB6362E481}</Project>
+      <Name>LanguageCompiler</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Translator\LanguageTranslator.csproj">
+      <Project>{3CDE0344-0BDE-4C4F-B350-D0C8EC4C4A33}</Project>
+      <Name>LanguageTranslator</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

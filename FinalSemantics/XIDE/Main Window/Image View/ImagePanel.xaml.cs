@@ -144,6 +144,7 @@
                     new ImageDisplay(ProjectsManager.CurrentProject.LoadSpriteFile(
                         ProjectsManager.CurrentProject.SpriteFiles[i])),
                     true);
+                NavigationWindow.CurrentNavigationWindow.CommitNavigation();
             }
         }
     }

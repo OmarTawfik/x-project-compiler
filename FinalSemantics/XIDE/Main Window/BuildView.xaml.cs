@@ -12,23 +12,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace XIDE.Main_Window.Image_View
+namespace XIDE.Main_Window
 {
     /// <summary>
-    /// Interaction logic for ImageDisplay.xaml
+    /// Interaction logic for BuildView.xaml
     /// </summary>
-    public partial class ImageDisplay : UserControl
+    public partial class BuildView : UserControl
     {
-        public ImageDisplay(BitmapImage image)
+        public BuildView()
         {
             InitializeComponent();
-            this.mainImage.Source = image;
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationWindow.CurrentNavigationWindow.PopView();
-            NavigationWindow.CurrentNavigationWindow.CommitNavigation();
         }
     }
 }
