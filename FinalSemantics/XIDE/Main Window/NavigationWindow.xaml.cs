@@ -52,7 +52,7 @@ namespace XIDE.Main_Window
         public NavigationWindow(FrameworkElement rootView, bool hideToolbar)
         {
             InitializeComponent();
-            this.xWindowBarButtonsList1.TargetedWindow = this;
+            //this.xWindowBarButtonsList1.TargetedWindow = this;
             this.navigationStack = new Stack<NavigationState>();
             this.navigationStack.Push(new NavigationState(rootView, hideToolbar));
             this.mainGrid.ClipToBounds = true;
@@ -66,11 +66,11 @@ namespace XIDE.Main_Window
             this.ViewCurrentView();
 
             xToolbarButton codeViewButton = new xToolbarButton();
-            codeViewButton.Icon = new BitmapImage(new Uri("/Images/CodeIcon.png", UriKind.Relative));
+            codeViewButton.Icon = new BitmapImage(new Uri("/Images/Code.png", UriKind.Relative));
             codeViewButton.SubView = new CodePanel();
 
             xToolbarButton imagesViewButton = new xToolbarButton();
-            imagesViewButton.Icon = new BitmapImage(new Uri("/Images/ImagesIcon.png", UriKind.Relative));
+            imagesViewButton.Icon = new BitmapImage(new Uri("/Images/Sprites.png", UriKind.Relative));
             imagesViewButton.SubView = new ImagePanel(
                 new BitmapImage(new Uri("/Images/Magnify.png", UriKind.Relative)),
                 new BitmapImage(new Uri("/Images/Add.png", UriKind.Relative)),
@@ -78,7 +78,7 @@ namespace XIDE.Main_Window
             ProjectsManager.CurrentProjectChanged += delegate { (imagesViewButton.SubView as ImagePanel).UpdateItems(); };
 
             xToolbarButton soundsViewButton = new xToolbarButton();
-            soundsViewButton.Icon = new BitmapImage(new Uri("/Images/SoundsIcon.png", UriKind.Relative));
+            soundsViewButton.Icon = new BitmapImage(new Uri("/Images/Sounds.png", UriKind.Relative));
             soundsViewButton.SubView = new SoundPanel(
                 new BitmapImage(new Uri("/Images/MusicFile.png", UriKind.Relative)),
                 new BitmapImage(new Uri("/Images/Play.png", UriKind.Relative)),
@@ -90,6 +90,7 @@ namespace XIDE.Main_Window
             buttonList.Add(codeViewButton);
             buttonList.Add(imagesViewButton);
             buttonList.Add(soundsViewButton);
+
             this.xToolBar1.ToolbarButtons = buttonList;
         }
 
