@@ -9,6 +9,8 @@
     using LanguageCompiler.Nodes.TopLevel;
     using LanguageCompiler.Semantics;
     using LanguageTranslator.Translators.CPP;
+    using System.Windows.Controls;
+    using XIDE.Main_Window;
 
     public struct ProjectData
     {
@@ -72,43 +74,61 @@
         public static bool BuildAndRunCurrentProject()
         {
             PCCPPTranslator cpp = new PCCPPTranslator();
-            //CompilerService.Instance.Clear();
+            CompilerService.Instance.Clear();
 
-            //for (int i = 0; i < cpp.BackendClasses.Count; i++)
-            //{
-            //    CompilerService.Instance.ParseFile(cpp.BackendClasses[i].XlangCode, cpp.BackendClasses[i].Classname);
+            for (int i = 0; i < cpp.BackendClasses.Count; i++)
+            {
+                CompilerService.Instance.ParseFile(cpp.BackendClasses[i].XlangCode, cpp.BackendClasses[i].Classname);
 
-            //}
+            }
 
-            //foreach (string codefile in ProjectsManager.CurrentProject.CodeFiles)
-            //{
-            //    CompilerService.Instance.ParseFile(System.IO.File.ReadAllText(codefile), System.IO.Path.GetFileName(codefile));
-            //}
+            foreach (string codefile in ProjectsManager.CurrentProject.CodeFiles)
+            {
+                CompilerService.Instance.ParseFile(System.IO.File.ReadAllText(codefile), System.IO.Path.GetFileName(codefile));
+            }
 
-            //if (CompilerService.Instance.Errors.Count > 0)
-            //{
-            //    return false;
-            //}
+            if (CompilerService.Instance.Errors.Count > 0)
+            {
+                ShowErrors();
+                return false;
+            }
 
-            //CompilerService.Instance.CheckSemantics();
+            CompilerService.Instance.CheckSemantics();
 
-            //if (CompilerService.Instance.Errors.Count > 0)
-            //{
-            //    return false;
-            //}
+            if (CompilerService.Instance.Errors.Count > 0)
+            {
+                ShowErrors();
+                return false;
+            }
 
-            //List<ClassDefinition> classList = new List<ClassDefinition>();
+            List<ClassDefinition> classList = new List<ClassDefinition>();
 
-            //foreach (ClassDefinition classdef in CompilerService.Instance.ClassesList.Values)
-            //{
-            //    classList.Add(classdef);
-            //}
+            foreach (ClassDefinition classdef in CompilerService.Instance.ClassesList.Values)
+            {
+                classList.Add(classdef);
+            }
 
-            //cpp.Translate(classList);
+            cpp.Translate(classList);
             //cpp.Build();
-            cpp.Run();
+            //cpp.Run();
 
             return true;
+        }
+
+        static void ShowErrors()
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("Build Started:" + Environment.NewLine + Environment.NewLine);
+
+            foreach (CompilerError e in CompilerService.Instance.Errors)
+            {
+                b.AppendLine(e.ToString());
+            }
+
+            b.AppendLine();
+
+            (NavigationWindow.CurrentNavigationWindow.xToolBar1.ToolbarButtons[3].SubView as TextBlock).Text = b.ToString();
+            NavigationWindow.CurrentNavigationWindow.xToolBar1.ViewButtonFromIndex(3);
         }
     }
 }

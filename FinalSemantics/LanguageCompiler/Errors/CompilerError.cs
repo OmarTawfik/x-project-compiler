@@ -79,7 +79,10 @@
         /// <returns>The message.</returns>
         public override string ToString()
         {
-            return this.message;
+            return string.Format("Error : From {0} to {1}: {2}.",
+                    this.StartingLocation.ToUiString(),
+                    this.EndingLocation.ToUiString(),
+                    this.Message);
         }
     }
 }

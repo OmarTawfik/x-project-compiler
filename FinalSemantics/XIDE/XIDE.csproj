@@ -235,6 +235,7 @@
   <ItemGroup>
     <Content Include="Binaries\ICSharpCode.AvalonEdit.dll" />
     <Content Include="Binaries\NAudio.dll" />
+    <Resource Include="Images\Error.png" />
     <Resource Include="Images\Build.png" />
     <Resource Include="Images\Code.png" />
     <Resource Include="Images\Sounds.png" />

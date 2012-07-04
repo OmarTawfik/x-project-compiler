@@ -86,10 +86,16 @@ namespace XIDE.Main_Window
                 new BitmapImage(new Uri("/Images/Delete.png", UriKind.Relative)));
             ProjectsManager.CurrentProjectChanged += delegate { (soundsViewButton.SubView as SoundPanel).UpdateItems(); };
 
+            xToolbarButton errorsViewButton = new xToolbarButton();
+            errorsViewButton.Icon = new BitmapImage(new Uri("/Images/Error.png", UriKind.Relative));
+            TextBlock block = new TextBlock();
+            errorsViewButton.SubView = block;
+
             List<xToolbarButton> buttonList = new List<xToolbarButton>();
             buttonList.Add(codeViewButton);
             buttonList.Add(imagesViewButton);
             buttonList.Add(soundsViewButton);
+            buttonList.Add(errorsViewButton);
 
             this.xToolBar1.ToolbarButtons = buttonList;
         }

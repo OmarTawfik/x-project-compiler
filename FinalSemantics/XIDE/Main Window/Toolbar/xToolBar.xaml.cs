@@ -51,6 +51,13 @@
                     button.MouseDown += this.ToolbarButton_MouseDown;
 	            }
             }
+
+            get { return this.toolbarButtons; }
+        }
+
+        public void ViewButtonFromIndex(int i)
+        {
+            this.ToolbarButton_MouseDown(this.toolbarButtons[i], null);
         }
 
         private void ToolbarButton_MouseDown(object sender, MouseButtonEventArgs e)
